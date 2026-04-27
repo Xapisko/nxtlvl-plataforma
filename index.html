@@ -533,7 +533,7 @@ select.status-select {
         <div class="perm-opt-sub">Cliente pode aprovar posts</div>
       </div>
     </div>
-    <div class="link-box" id="share-link">https://appnxt.jhonborges.com/biomexx/maio2026?token=bx8f92k</div>
+    <div class="link-box" id="share-link">https://appnxt.jhonborges.com/?token=bx8f92k</div>
     <div style="display:flex;gap:10px;">
       <button class="action-btn primary" style="flex:1;" onclick="copyLink()">Copiar link</button>
       <button class="action-btn" onclick="closeModal()">Fechar</button>
@@ -2007,8 +2007,8 @@ function setPerm(el, type) {
   el.classList.add('active');
   const link = document.getElementById('share-link');
   link.textContent = type === 'view'
-    ? 'https://appnxt.jhonborges.com/biomexx/maio2026?token=bx8f92k&view=only'
-    : 'https://appnxt.jhonborges.com/biomexx/maio2026?token=bx8f92k&perm=approve';
+    ? 'https://appnxt.jhonborges.com/?token=bx8f92k&view=only'
+    : 'https://appnxt.jhonborges.com/?token=bx8f92k&perm=approve';
 }
 
 function copyLink() {
@@ -2036,7 +2036,7 @@ function selectClient(id) {
   const c = CLIENTES[id];
   ACTIVE_POSTS = c.posts;
   document.getElementById('client-name-top').textContent = c.nome;
-  document.getElementById('share-link').textContent = `https://appnxt.jhonborges.com/${id}/${c.mes.toLowerCase().replace(' ','/')}?token=${c.token}`;
+  document.getElementById('share-link').textContent = 'https://appnxt.jhonborges.com/?token=' + c.token;
   openCard = null;
   openTab = {};
   currentFilter = 'todos';
@@ -2212,7 +2212,7 @@ function selectClientDyn(id, el) {
   var c = CLIENTES[id];
   ACTIVE_POSTS = c.posts;
   document.getElementById('client-name-top').textContent = c.nome;
-  document.getElementById('share-link').textContent = 'https://appnxt.jhonborges.com/'+id+'/'+c.mes.toLowerCase().replace(' ','/')+'?token='+c.token;
+  document.getElementById('share-link').textContent = 'https://appnxt.jhonborges.com/?token='+c.token;
   openCard = null; openTab = {}; currentFilter = 'todos';
   document.querySelectorAll('.view-btn').forEach(function(b,i){ b.classList.toggle('active',i===0); });
   renderPosts(); updateStats();
@@ -2371,7 +2371,7 @@ function gerarPDF() {
 // ============================================================
 // DETECÇÃO DE ACESSO DO CLIENTE POR TOKEN
 // ============================================================
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
   var params = new URLSearchParams(window.location.search);
   var token = params.get('token');
   if (!token) return; // Acesso da agência — interface normal
@@ -2401,7 +2401,7 @@ function gerarPDF() {
   // Renderizar painel exclusivo do cliente
   var panel = document.createElement('div');
   panel.id = 'client-panel';
-  panel.style.cssText = 'min-height:100vh;background:#0a0a0f;font-family:"DM Sans",sans-serif;color:#f0f0f5;';
+  panel.style.cssText = 'position:fixed;inset:0;overflow-y:auto;z-index:9999;background:#0a0a0f;font-family:"DM Sans",sans-serif;color:#f0f0f5;';
   
   var posts = clientData.posts;
   var isApproveMode = params.get('perm') === 'approve';
@@ -2598,7 +2598,7 @@ function gerarPDF() {
     setTimeout(function(){ document.body.removeChild(t); }, 2500);
   }
 
-})();
+});
 
 
 </script>
