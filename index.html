@@ -2051,16 +2051,23 @@ function renderStories() {
   grid.innerHTML = html;
 }
 
-function openModal() { document.getElementById('modal').classList.add('open'); }
+function openModal() {
+  const token = CLIENTES[currentClient].token;
+  document.getElementById('share-link').textContent = 'https://appnxt.jhonborges.com/?token=' + token;
+  // Reset permissão para "visualizar" ao abrir
+  document.querySelectorAll('.perm-opt').forEach((o,i) => o.classList.toggle('active', i===0));
+  document.getElementById('modal').classList.add('open');
+}
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
 function setPerm(el, type) {
   document.querySelectorAll('.perm-opt').forEach(o => o.classList.remove('active'));
   el.classList.add('active');
+  const token = CLIENTES[currentClient].token;
   const link = document.getElementById('share-link');
   link.textContent = type === 'view'
-    ? 'https://appnxt.jhonborges.com/?token=bx8f92k&view=only'
-    : 'https://appnxt.jhonborges.com/?token=bx8f92k&perm=approve';
+    ? 'https://appnxt.jhonborges.com/?token=' + token
+    : 'https://appnxt.jhonborges.com/?token=' + token + '&perm=approve';
 }
 
 function copyLink() {
