@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NXTLVL — Plataforma de Gestão de Conteúdo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #18181f;
+  --bg4: #1e1e28;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f5;
+  --text2: #9090a8;
+  --text3: #5a5a72;
+  --accent: #aaff00;
+  --accent2: #7c3aed;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --teal: #14b8a6;
+  --pink: #ec4899;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0; width: 240px;
+  background: var(--bg2); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 100; padding: 0;
+}
+.sidebar-logo {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid var(--border);
+  background: #0a0a0f;
+}
+.logo-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+.sidebar-section { padding: 16px 12px 8px; }
+.sidebar-section-label { font-size: 10px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 8px; margin-bottom: 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+  border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; color: var(--text2);
+  transition: all 0.15s; margin-bottom: 2px;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active { background: rgba(170,255,0,0.10); color: var(--accent); }
+.nav-icon { width: 16px; height: 16px; opacity: 0.7; }
+.nav-item.active .nav-icon { opacity: 1; }
+
+.client-list { padding: 0 12px 12px; flex: 1; overflow-y: auto; }
+.client-label { font-size: 10px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 8px; margin-bottom: 8px; }
+.client-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+  border-radius: var(--radius-sm); cursor: pointer; margin-bottom: 2px;
+  transition: all 0.15s; border: 1px solid transparent;
+}
+.client-item:hover { background: var(--bg3); }
+.client-item.active { background: var(--bg3); border-color: var(--border2); }
+.client-avatar {
+  width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.client-name { font-size: 12px; color: var(--text2); }
+.client-item.active .client-name { color: var(--text); }
+
+.sidebar-footer { padding: 16px; border-top: 1px solid var(--border); }
+.share-btn {
+  width: 100%; padding: 10px; background: var(--accent); color: #0a0a0f;
+  border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: opacity 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.share-btn:hover { opacity: 0.85; }
+
+/* MAIN */
+.main { margin-left: 240px; min-height: 100vh; }
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.client-badge {
+  display: flex; align-items: center; gap: 8px; padding: 6px 12px;
+  background: var(--bg3); border: 1px solid var(--border2); border-radius: 99px;
+}
+.client-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.client-badge-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.topbar-month { font-size: 13px; color: var(--text2); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.tab-btn {
+  padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border); background: transparent;
+  color: var(--text2); font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+}
+.tab-btn:hover { border-color: var(--border2); color: var(--text); }
+.tab-btn.active { background: var(--accent); border-color: var(--accent); color: #0a0a0f; }
+
+/* CONTENT */
+.content { padding: 32px; }
+
+/* STATS ROW */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.stat-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.stat-card.blue::before { background: var(--accent); }
+.stat-card.green::before { background: var(--green); }
+.stat-card.amber::before { background: var(--amber); }
+.stat-card.teal::before { background: var(--teal); }
+.stat-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.stat-label { font-size: 12px; color: var(--text2); }
+
+/* CALENDAR */
+.calendar-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 32px; }
+.calendar-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.calendar-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cal-day-label { padding: 10px 0; text-align: center; font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); }
+.cal-cell {
+  min-height: 80px; padding: 8px; border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border); position: relative; cursor: pointer;
+  transition: background 0.1s;
+}
+.cal-cell:hover { background: var(--bg3); }
+.cal-cell.empty { background: var(--bg); cursor: default; }
+.cal-cell.empty:hover { background: var(--bg); }
+.cal-cell:nth-child(7n) { border-right: none; }
+.cal-num { font-size: 12px; color: var(--text3); margin-bottom: 4px; font-weight: 500; }
+.cal-cell.has-post .cal-num { color: var(--text); }
+.cal-post-dot {
+  padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: 500;
+  margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  cursor: pointer;
+}
+.dot-blue { background: rgba(170,255,0,0.18); color: #3d6600; }
+.dot-teal { background: rgba(20,184,166,0.18); color: #34d399; }
+.dot-amber { background: rgba(245,158,11,0.18); color: #fbbf24; }
+.dot-pink { background: rgba(236,72,153,0.18); color: #f472b6; }
+.dot-green { background: rgba(34,197,94,0.18); color: #4ade80; }
+
+/* POSTS LIST */
+.posts-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.posts-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.filter-row { display: flex; gap: 8px; }
+.filter-btn {
+  padding: 5px 12px; border-radius: 99px; font-size: 11px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border); background: transparent;
+  color: var(--text2); font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--border2); color: var(--text); }
+.filter-btn.active { background: var(--bg3); border-color: var(--border2); color: var(--text); }
+
+.post-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s;
+}
+.post-card:hover { border-color: var(--border2); }
+.post-card-header {
+  padding: 16px 20px; display: flex; align-items: flex-start; gap: 16px;
+  cursor: pointer;
+}
+.post-date-block { min-width: 44px; text-align: center; }
+.post-day-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); line-height: 1; }
+.post-month { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+.post-weekday { font-size: 10px; color: var(--text3); }
+.post-main { flex: 1; }
+.post-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.tag { padding: 2px 9px; border-radius: 99px; font-size: 10px; font-weight: 500; }
+.tag-edu { background: rgba(170,255,0,0.15); color: #5a8a00; }
+.tag-inst { background: rgba(34,197,94,0.15); color: #4ade80; }
+.tag-eng { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.tag-prova { background: rgba(124,58,237,0.15); color: #a78bfa; }
+.tag-oferta { background: rgba(236,72,153,0.15); color: #f472b6; }
+.tag-data { background: rgba(20,184,166,0.15); color: #34d399; }
+.tag-format { background: var(--bg3); color: var(--text2); border: 1px solid var(--border); }
+.post-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+.post-desc-preview { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.post-status { display: flex; align-items: center; gap: 6px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-label { font-size: 11px; }
+.status-planejado .status-dot { background: var(--amber); }
+.status-planejado .status-label { color: var(--amber); }
+.status-aprovado .status-dot { background: var(--green); }
+.status-aprovado .status-label { color: var(--green); }
+.status-publicado .status-dot { background: var(--teal); }
+.status-publicado .status-label { color: var(--teal); }
+.expand-icon { color: var(--text3); font-size: 18px; transition: transform 0.2s; align-self: center; }
+.post-card.open .expand-icon { transform: rotate(180deg); }
+
+.post-detail {
+  display: none; border-top: 1px solid var(--border); background: var(--bg3);
+}
+.post-card.open .post-detail { display: block; }
+.detail-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.detail-tab {
+  padding: 12px 20px; font-size: 12px; font-weight: 500; color: var(--text2);
+  cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s;
+}
+.detail-tab:hover { color: var(--text); }
+.detail-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.detail-panel { padding: 20px; display: none; }
+.detail-panel.active { display: block; }
+
+.briefing-section { margin-bottom: 20px; }
+.briefing-label { font-size: 10px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+.briefing-text { font-size: 13px; color: var(--text2); line-height: 1.7; }
+
+.slide-list { list-style: none; }
+.slide-row { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.slide-row:last-child { border-bottom: none; }
+.slide-badge { background: rgba(170,255,0,0.15); color: #5a8a00; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; min-width: 32px; text-align: center; height: fit-content; }
+.slide-content { font-size: 12px; color: var(--text2); line-height: 1.55; }
+.slide-content strong { color: var(--text); font-weight: 500; }
+
+.arte-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.arte-item { background: var(--bg4); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+.arte-item-label { font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+.arte-item-val { font-size: 12px; color: var(--text); font-weight: 500; }
+.cor { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 4px; }
+
+.legenda-box {
+  background: var(--bg4); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 16px; font-size: 13px; color: var(--text2); line-height: 1.75;
+  white-space: pre-wrap; font-family: 'DM Sans', sans-serif;
+}
+.hashtags { color: var(--accent); font-size: 12px; margin-top: 10px; }
+
+.copy-btn {
+  margin-top: 10px; padding: 7px 14px; background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); color: var(--text2); font-size: 12px; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; transition: all 0.15s;
+}
+.copy-btn:hover { background: var(--bg4); color: var(--text); }
+
+.action-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.action-btn {
+  padding: 8px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border2); background: var(--bg4);
+  color: var(--text2); font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+}
+.action-btn:hover { background: rgba(170,255,0,0.1); border-color: var(--accent); color: var(--accent); }
+.action-btn.primary { background: var(--accent); border-color: var(--accent); color: #0a0a0f; }
+.action-btn.primary:hover { opacity: 0.85; }
+
+/* MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+  z-index: 200; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg2); border: 1px solid var(--border2); border-radius: 16px;
+  padding: 32px; max-width: 480px; width: 90%; position: relative;
+}
+.modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; line-height: 1.6; }
+.link-box {
+  background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  padding: 12px 16px; font-size: 13px; color: var(--accent); font-family: 'DM Sans', sans-serif;
+  word-break: break-all; margin-bottom: 16px;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px; background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text2); width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+  font-size: 16px; display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { color: var(--text); }
+.perm-row { display: flex; gap: 10px; margin-bottom: 20px; }
+.perm-opt {
+  flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; text-align: center; transition: all 0.15s;
+}
+.perm-opt:hover { border-color: var(--border2); }
+.perm-opt.active { border-color: var(--accent); background: rgba(170,255,0,0.08); }
+.perm-opt-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.perm-opt-sub { font-size: 11px; color: var(--text3); }
+
+/* STORIES SECTION */
+.stories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.story-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; cursor: pointer; transition: border-color 0.15s;
+}
+.story-card:hover { border-color: var(--border2); }
+.story-num { font-size: 10px; color: var(--text3); margin-bottom: 8px; }
+.story-type { font-size: 11px; font-weight: 500; margin-bottom: 6px; }
+.story-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; }
+
+/* STATUS CHANGE */
+select.status-select {
+  background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 12px;
+  padding: 5px 10px; cursor: pointer; outline: none;
+}
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--text); padding: 12px 20px; border-radius: var(--radius-sm); font-size: 13px;
+  transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 300;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* VIEW TOGGLE */
+.view-toggle { display: flex; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.view-btn { padding: 6px 12px; font-size: 12px; cursor: pointer; border: none; background: transparent; color: var(--text2); font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+.view-btn.active { background: var(--bg4); color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <img src="data:image/png;base64,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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf/2Q==" alt="nextlvl" style="width:148px;height:auto;display:block;margin-bottom:6px;">
+    <div class="logo-sub">Plataforma de Gestão de Conteúdo</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Menu</div>
+    <div class="nav-item active" onclick="setView('posts')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+      Posts & Briefings
+    </div>
+    <div class="nav-item" onclick="setView('calendario')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 2v2M11 2v2M2 7h12"/></svg>
+      Calendário
+    </div>
+    <div class="nav-item" onclick="setView('stories')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="1" width="8" height="14" rx="2"/><path d="M6 5h4M6 8h4M6 11h2"/></svg>
+      Stories
+    </div>
+  </div>
+
+  <div class="client-list">
+    <div class="client-label">Clientes</div>
+    <div class="client-item active" onclick="selectClient('biomexx')">
+      <div class="client-avatar" style="background:rgba(170,255,0,0.18);color:#aaff00;">BX</div>
+      <div class="client-name">Biomexx</div>
+    </div>
+    <div class="client-item" onclick="selectClient('equipmed')">
+      <div class="client-avatar" style="background:rgba(37,99,235,0.25);color:#60a5fa;">EM</div>
+      <div class="client-name">Equipmed</div>
+    </div>
+    <div class="client-item" onclick="selectClient('gestec')">
+      <div class="client-avatar" style="background:rgba(15,23,42,0.3);color:#94a3b8;">GT</div>
+      <div class="client-name">Gestec</div>
+    </div>
+    <div class="client-item" onclick="selectClient('novo')">
+      <div class="client-avatar" style="background:var(--bg4);color:var(--text3);font-size:18px;font-weight:300;">+</div>
+      <div class="client-name" style="color:var(--text3);">Adicionar cliente</div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <button class="share-btn" onclick="openModal()">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#0a0a0f" stroke-width="1.5"><circle cx="12" cy="3" r="1.5"/><circle cx="12" cy="13" r="1.5"/><circle cx="4" cy="8" r="1.5"/><path d="M10.5 3.9L5.5 7.1M5.5 8.9l5 3.2"/></svg>
+      Compartilhar com cliente
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="client-badge">
+        <div class="client-badge-dot"></div>
+        <div class="client-badge-name" id="client-name-top">Biomexx</div>
+      </div>
+      <div class="topbar-month">Maio 2026</div>
+    </div>
+    <div class="topbar-right">
+      <div class="view-toggle">
+        <button class="view-btn active" onclick="setTabFilter('todos')">Todos</button>
+        <button class="view-btn" onclick="setTabFilter('planejado')">Planejados</button>
+        <button class="view-btn" onclick="setTabFilter('aprovado')">Aprovados</button>
+        <button class="view-btn" onclick="setTabFilter('publicado')">Publicados</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card blue">
+        <div class="stat-val" id="stat-total">13</div>
+        <div class="stat-label">Posts planejados em maio</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-val" id="stat-planejado">13</div>
+        <div class="stat-label">Aguardando aprovação</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-val" id="stat-aprovado">0</div>
+        <div class="stat-label">Aprovados pelo cliente</div>
+      </div>
+      <div class="stat-card teal">
+        <div class="stat-val" id="stat-publicado">0</div>
+        <div class="stat-label">Publicados</div>
+      </div>
+    </div>
+
+    <!-- CALENDAR VIEW -->
+    <div id="view-calendario" style="display:none;">
+      <div class="calendar-wrap">
+        <div class="calendar-header">
+          <div class="calendar-title">Maio 2026</div>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+      </div>
+    </div>
+
+    <!-- STORIES VIEW -->
+    <div id="view-stories" style="display:none;">
+      <div class="posts-header">
+        <div class="posts-title">Direcionamento de Stories — Maio 2026</div>
+      </div>
+      <div class="stories-grid" id="stories-grid"></div>
+    </div>
+
+    <!-- POSTS VIEW -->
+    <div id="view-posts">
+      <div class="posts-header">
+        <div class="posts-title">Posts do mês</div>
+        <div class="filter-row" id="filter-row"></div>
+      </div>
+      <div id="posts-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL COMPARTILHAMENTO -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title">Compartilhar com cliente</div>
+    <div class="modal-sub">Envie este link para o cliente acompanhar o planejamento de conteúdo em tempo real.</div>
+    <div class="perm-row">
+      <div class="perm-opt active" onclick="setPerm(this,'view')">
+        <div class="perm-opt-title">Somente visualizar</div>
+        <div class="perm-opt-sub">Cliente vê tudo, mas não edita</div>
+      </div>
+      <div class="perm-opt" onclick="setPerm(this,'approve')">
+        <div class="perm-opt-title">Visualizar + Aprovar</div>
+        <div class="perm-opt-sub">Cliente pode aprovar posts</div>
+      </div>
+    </div>
+    <div class="link-box" id="share-link">https://nxtlvl.app/biomexx/maio2026?token=bx8f92k</div>
+    <div style="display:flex;gap:10px;">
+      <button class="action-btn primary" style="flex:1;" onclick="copyLink()">Copiar link</button>
+      <button class="action-btn" onclick="closeModal()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const POSTS = [
+  {
+    id: 1, dia: 5, semana: 1, mes: 'mai', diasem: 'Ter',
+    tipo: ['data', 'edu'], formato: 'Carrossel',
+    titulo: 'Dia Mundial da Higiene das Mãos',
+    desc: 'Conectar a data com o papel da CME na cadeia de segurança hospitalar.',
+    status: 'planejado',
+    objetivo: 'Aproveitar a data comemorativa para posicionar a Biomexx dentro da cadeia de segurança hospitalar, educando sobre o papel da CME além da higiene das mãos. Topo de funil, alcance orgânico elevado.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "05/05 — A segurança começa antes da cirurgia." Fundo azul royal sólido, headline bold branca, logo Biomexx.' },
+      { num: '02', texto: '<strong>Contexto:</strong> "Sabia que a higiene das mãos é só uma parte da cadeia de segurança do paciente?" Texto + ícone. Fundo branco.' },
+      { num: '03', texto: '<strong>Dado de impacto:</strong> "Segundo a OMS, infecções ligadas a falhas na esterilização matam milhares por ano." Destaque em azul.' },
+      { num: '04', texto: '<strong>Papel da CME:</strong> "A CME garante que cada instrumento chegue ao paciente 100% seguro." Fundo azul + ícone.' },
+      { num: '05', texto: '<strong>CTA:</strong> "A Biomexx cuida do que você não vê para que o paciente esteja sempre protegido." Logo + "Conheça aqui".' },
+    ],
+    arte: [
+      { label: 'Fundo capa', val: '● Azul royal #185FA5' },
+      { label: 'Texto capa', val: '● Branco puro' },
+      { label: 'Slides internos', val: '● Fundo branco' },
+      { label: 'Destaque', val: '● Ciano/teal #14b8a6' },
+      { label: 'Tipografia', val: 'Bold grande capa, regular internos' },
+      { label: 'Elementos', val: 'Ícone de mãos / CME, linha teal' },
+    ],
+    legenda: `05/05 — Dia Mundial da Higiene das Mãos.\n\nLavar as mãos salva vidas. Mas a segurança do paciente vai muito além disso.\n\nAntes de qualquer procedimento, existe um processo invisível que garante que cada instrumento esteja 100% esterilizado e seguro. Esse processo é a CME — e é o que a Biomexx faz com excelência todos os dias.\n\nSegurança não é detalhe. É obrigação.\n\nFale com a gente e conheça nossas soluções.`,
+    hashtags: '#HigieneDasMãos #CME #Esterilização #SegurançaDoPaciente #Biomexx #SaúdeHospitalar',
+    stories: [
+      { tipo: 'Enquete', desc: 'Você sabia que a CME é a 1ª linha de defesa do paciente? Sim / Não sabia' },
+      { tipo: 'CTA', desc: 'Swipe up ou link na bio para falar com a equipe Biomexx' },
+    ]
+  },
+  {
+    id: 2, dia: 7, semana: 1, mes: 'mai', diasem: 'Qui',
+    tipo: ['inst'], formato: 'Carrossel',
+    titulo: 'O que torna a gestão Biomexx diferente?',
+    desc: 'Posicionamento institucional listando os diferenciais competitivos da Biomexx.',
+    status: 'planejado',
+    objetivo: 'Posicionamento de marca e diferenciação competitiva. Reforçar os diferenciais da Biomexx para gestores hospitalares que estão avaliando fornecedores. Meio de funil.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "O que torna a gestão Biomexx diferente?" Foto profissional com overlay azul + headline bold branca.' },
+      { num: '02', texto: '<strong>Diferencial 1:</strong> "Tecnologia de ponta — Laboratório no maior centro tecnológico do Nordeste, em Campina Grande." Ícone + fundo branco.' },
+      { num: '03', texto: '<strong>Diferencial 2:</strong> "Equipe altamente especializada — Treinamento contínuo e protocolos de excelência em cada etapa."' },
+      { num: '04', texto: '<strong>Diferencial 3:</strong> "Frota veicular própria — Suporte imediato e logística ágil para hospitais e clínicas."' },
+      { num: '05', texto: '<strong>Diferencial 4:</strong> "Soluções personalizadas — Esterilização, locação de CME e consultoria sob medida."' },
+      { num: '06', texto: '<strong>CTA:</strong> "Sua instituição merece o melhor em esterilização." Logo + "Conheça aqui" + WhatsApp.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Foto real equipe + overlay azul #185FA5' },
+      { label: 'Slides internos', val: 'Fundo branco + ícone azul + texto escuro' },
+      { label: 'CTA final', val: 'Fundo azul sólido + branco + logo' },
+      { label: 'Ícones', val: 'Linha fina, flat, azul ou teal' },
+      { label: 'Referência', val: 'Estilo "gestão Biomexx diferente" já validado no feed' },
+      { label: 'Tipografia', val: 'Syne bold na capa, DM Sans nos internos' },
+    ],
+    legenda: `Tecnologia, equipe e compromisso. É isso que entregamos em cada processo.\n\nA Biomexx não é só uma empresa de esterilização. Somos parceiros estratégicos das instituições de saúde que entendem que segurança não pode ser deixada ao acaso.\n\nCom laboratório próprio no maior centro tecnológico do Nordeste, frota veicular exclusiva e equipe altamente treinada, garantimos excelência do início ao fim.\n\nQuer conhecer como a Biomexx pode transformar a CME da sua instituição?\n\nFale com a gente. O link está na bio.`,
+    hashtags: '#Biomexx #GestãoCME #Esterilização #SaúdeHospitalar #CentralDeMaterial #QualidadeHospitalar',
+    stories: [
+      { tipo: 'Carrossel story', desc: 'Compartilhar slides do carrossel nos stories com sticker "arraste para ver mais"' },
+      { tipo: 'Enquete', desc: 'Qual diferencial mais importa pra você? Tecnologia / Equipe / Logística / Personalização' },
+    ]
+  },
+  {
+    id: 3, dia: 9, semana: 1, mes: 'mai', diasem: 'Sáb',
+    tipo: ['edu'], formato: 'Reels',
+    titulo: 'Erros que comprometem a esterilização',
+    desc: 'Reels com profissional da Biomexx apontando os 3 principais erros em CME.',
+    status: 'planejado',
+    objetivo: 'Alcance orgânico via Reels. Conteúdo educativo de alto valor percebido para profissionais de saúde. Aumentar seguidores e gerar salvamentos. Topo de funil.',
+    slides: [
+      { num: '0–3s', texto: '<strong>Gancho:</strong> Profissional olha para câmera. Texto em tela: "3 erros que comprometem a esterilização hospitalar." Corte rápido.' },
+      { num: '4–12s', texto: '<strong>Erro 1:</strong> "Não validar o ciclo de esterilização. Sem validação, você não tem segurança — tem suposição." Texto: "Erro 1: ciclo não validado."' },
+      { num: '13–22s', texto: '<strong>Erro 2:</strong> "Ignorar a rastreabilidade dos materiais. Sem rastrear, você perde o controle de tudo que passa pela CME." Texto: "Erro 2: sem rastreabilidade."' },
+      { num: '23–33s', texto: '<strong>Erro 3:</strong> "Subestimar o treinamento da equipe. Processo certo com equipe despreparada não funciona." Texto: "Erro 3: equipe sem treinamento."' },
+      { num: '34–40s', texto: '<strong>CTA:</strong> "Se sua CME comete algum desses erros, a Biomexx pode ajudar. Clica no link da bio." Logo + "Conheça aqui".' },
+    ],
+    arte: [
+      { label: 'Duração', val: '30 a 45 segundos' },
+      { label: 'Formato', val: 'Vertical 9:16, legendado' },
+      { label: 'Apresentador', val: 'Profissional em uniforme Biomexx' },
+      { label: 'Texto em tela', val: 'Font bold branca, barra azul inferior' },
+      { label: 'Corte', val: 'Dinâmico a cada ponto, sem pausa longa' },
+      { label: 'Trilha', val: 'Instrumental leve, sem letra' },
+    ],
+    legenda: `Esses erros acontecem em CMEs do Brasil inteiro. E muitas vezes passam despercebidos.\n\nCiclo sem validação, falta de rastreabilidade e equipe sem treinamento são as principais causas de falha em processos de esterilização hospitalar.\n\nA Biomexx existe para corrigir isso — com tecnologia, treinamento e suporte especializado.\n\nSalva esse post e compartilha com quem trabalha na área.\n\nQuer uma avaliação da sua CME? Fala com a gente pelo link na bio.`,
+    hashtags: '#CME #Esterilização #GestãoHospitalar #SegurançaDoPaciente #Biomexx #CentralDeMaterial #Reels',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: 'Compartilhar o Reels nos stories com a caixinha de perguntas: "Sua CME tem algum desses erros?"' },
+      { tipo: 'CTA direto', desc: 'Story simples: "Assistiu o Reels? Fala com a gente e veja como a Biomexx resolve." + link WhatsApp' },
+    ]
+  },
+  {
+    id: 4, dia: 12, semana: 2, mes: 'mai', diasem: 'Ter',
+    tipo: ['data'], formato: 'Foto',
+    titulo: 'Dia do Enfermeiro — 12 de maio',
+    desc: 'Homenagem conectando a data ao papel da CME no suporte à enfermagem.',
+    status: 'planejado',
+    objetivo: 'Aproveitar data de alto engajamento para humanizar a marca e conectar com profissionais de enfermagem que são tomadores de decisão na área de CME.',
+    slides: [
+      { num: '01', texto: '<strong>Post único:</strong> Foto de profissional de enfermagem em ambiente hospitalar. Sobreposição com mensagem de homenagem.' },
+      { num: 'Copy', texto: 'Headline: "12/05 — Dia do Enfermeiro. A segurança do paciente tem nome. E passa pela sua dedicação." Fundo azul ou foto + overlay.' },
+    ],
+    arte: [
+      { label: 'Formato', val: 'Post estático ou foto real' },
+      { label: 'Paleta', val: 'Azul #185FA5 + branco + detalhe teal' },
+      { label: 'Tom', val: 'Emocional, de gratidão e valorização' },
+      { label: 'Logo', val: 'Biomexx no rodapé com tagline' },
+      { label: 'Referência', val: 'Estilo posts de data comemorativa do feed atual' },
+      { label: 'Tipografia', val: 'Bold na headline, regular no corpo' },
+    ],
+    legenda: `12/05 — Dia do Enfermeiro.\n\nPor trás de cada vida salva, existe uma equipe incansável. E a segurança do paciente começa muito antes do procedimento — começa na CME, onde cada instrumento é esterilizado com o cuidado que você merece.\n\nParabéns a todos os profissionais de enfermagem que fazem a diferença todos os dias.\n\nA Biomexx está aqui para garantir que você tenha sempre o melhor suporte.`,
+    hashtags: '#DiaDaEnfermagem #Enfermeiro #SaúdeHospitalar #CME #Biomexx #12deMaio #EnfermagemBrasileira',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story com fundo azul e frase de homenagem direta à enfermagem' },
+      { tipo: 'Enquete', desc: 'Você trabalha na área de enfermagem? Sim / Sou gestor / Outra área' },
+    ]
+  },
+  {
+    id: 5, dia: 14, semana: 2, mes: 'mai', diasem: 'Qui',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'VH2O2 vs. Vapor saturado: quando usar cada método?',
+    desc: 'Carrossel técnico comparativo entre os dois principais métodos de esterilização.',
+    status: 'planejado',
+    objetivo: 'Posicionar a Biomexx como referência técnica para gestores de CME. Conteúdo baseado no artigo do blog. Alcança tomadores de decisão técnica em hospitais e clínicas.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "VH2O2 ou Vapor Saturado? Saiba quando usar cada método na sua CME." Fundo azul bold.' },
+      { num: '02', texto: '<strong>VH2O2:</strong> Indicações, vantagens e limitações. Ícone de equipamento sensível à temperatura. Fundo branco.' },
+      { num: '03', texto: '<strong>Vapor Saturado (VAT):</strong> Indicações, vantagens e limitações. Ícone de autoclave. Fundo branco.' },
+      { num: '04', texto: '<strong>Comparativo:</strong> Tabela ou infográfico lado a lado. Destaque em azul e teal.' },
+      { num: '05', texto: '<strong>Quando usar cada um:</strong> Fluxograma decisório simples. Visual clean.' },
+      { num: '06', texto: '<strong>CTA:</strong> "Não tem certeza qual método é ideal para sua CME? A Biomexx faz essa avaliação." + WhatsApp.' },
+    ],
+    arte: [
+      { label: 'Estilo', val: 'Técnico, limpo, informativo' },
+      { label: 'Capa', val: 'Fundo azul royal + headline bold branca' },
+      { label: 'Internos', val: 'Fundo branco + ícones azul/teal' },
+      { label: 'Comparativo', val: 'Tabela com destaques coloridos por método' },
+      { label: 'CTA', val: 'Fundo azul sólido + logo + WhatsApp' },
+      { label: 'Ref. blog', val: 'Baseado no artigo VH2O2 publicado em março/26' },
+    ],
+    legenda: `Na hora de escolher o método de esterilização certo, não existe "um tamanho para todos".\n\nO peróxido de hidrogênio vaporizado (VH2O2) e o vapor saturado sob pressão (VAT) têm indicações diferentes — e escolher errado pode comprometer a segurança dos seus instrumentos e dos seus pacientes.\n\nNo carrossel de hoje, explicamos quando usar cada um.\n\nSalva esse post para consultar sempre que precisar.\n\nDúvidas sobre a sua CME? Fala com a gente pelo link na bio.`,
+    hashtags: '#CME #Esterilização #VH2O2 #VaporSaturado #GestãoHospitalar #Biomexx #CentralDeMaterial #ConteúdoTécnico',
+    stories: [
+      { tipo: 'Quiz', desc: '"Qual método você usa na sua CME?" VH2O2 / Vapor Saturado / Ambos / Não sei' },
+      { tipo: 'Compartilhar carrossel', desc: 'Slides do carrossel nos stories com CTA "arraste para ver completo"' },
+    ]
+  },
+  {
+    id: 6, dia: 16, semana: 2, mes: 'mai', diasem: 'Sáb',
+    tipo: ['eng'], formato: 'Carrossel',
+    titulo: 'Checklist da CME segura — 5 perguntas para hoje',
+    desc: 'Checklist interativo para gestores avaliarem a segurança da sua CME.',
+    status: 'planejado',
+    objetivo: 'Gerar salvamentos e compartilhamentos. Qualificar leads de forma orgânica. O checklist faz o gestor se autoanalisar e sentir necessidade de contato com a Biomexx.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "Checklist da CME Segura: 5 perguntas para responder hoje." Ícone de checklist. Fundo azul.' },
+      { num: '02–06', texto: '<strong>1 pergunta por slide:</strong> Ex: "Sua equipe passou por treinamento nos últimos 6 meses?" / "Você tem rastreabilidade total dos materiais?" / "Os ciclos são validados regularmente?" / "Você usa o método de esterilização correto para cada instrumento?" / "Você tem um parceiro técnico de suporte imediato?"' },
+      { num: '07', texto: '<strong>CTA:</strong> "Respondeu não para alguma? A Biomexx pode ajudar. Fale com a nossa equipe." + WhatsApp.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul sólido + ícone checklist + headline bold' },
+      { label: 'Slides de pergunta', val: 'Fundo branco + ícone + pergunta em destaque + ✓ e ✗ visuais' },
+      { label: 'Tipografia', val: 'Pergunta em bold grande, resposta em regular' },
+      { label: 'Cores destaque', val: 'Verde para sim, vermelho suave para não' },
+      { label: 'CTA', val: 'Fundo azul + "Fale com a gente" + logo' },
+      { label: 'Salvamento', val: 'Incentivar salvar o post na legenda' },
+    ],
+    legenda: `Salva esse post antes de continuar lendo.\n\nEssas 5 perguntas podem revelar falhas que você nem sabia que existiam na sua CME — e que colocam em risco a segurança dos seus pacientes.\n\nSe você respondeu NÃO para alguma delas, não deixe para depois. Cada dia sem ajuste é um risco a mais.\n\nA Biomexx oferece consultoria, treinamento e soluções completas para deixar sua CME operando com excelência.\n\nFala com a gente. O link está na bio.`,
+    hashtags: '#CME #GestãoHospitalar #Checklist #SegurançaDoPaciente #Biomexx #Esterilização #CentralDeMaterial',
+    stories: [
+      { tipo: 'Enquete interativa', desc: '"Você conseguiu marcar TODOS como sim?" Sim, tudo certo! / Não, preciso de ajuda' },
+      { tipo: 'CTA', desc: 'Respondeu não? Arrasta pra cima e fala com a Biomexx agora.' },
+    ]
+  },
+  {
+    id: 7, dia: 19, semana: 3, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Reels',
+    titulo: 'Uma falha na CME pode custar vidas',
+    desc: 'Reels de impacto com profissional apresentando os riscos de falha na esterilização.',
+    status: 'planejado',
+    objetivo: 'Alcance orgânico via Reels. Conteúdo de alto impacto emocional para profissionais de saúde e gestores. Gera urgência de ação.',
+    slides: [
+      { num: '0–4s', texto: '<strong>Gancho:</strong> "Uma falha na Central de Material pode custar uma vida. Você sabe o que protege sua CME?" Texto em tela sobre profissional.' },
+      { num: '5–15s', texto: '<strong>Risco 1:</strong> "Instrumento mal esterilizado → infecção hospitalar → complicação no pós-operatório." Dado de impacto na tela.' },
+      { num: '16–25s', texto: '<strong>Risco 2:</strong> "Processo sem rastreabilidade → impossível identificar a falha → responsabilidade jurídica do hospital."' },
+      { num: '26–35s', texto: '<strong>Risco 3:</strong> "Equipe sem treinamento → erros evitáveis → retrabalho e custo operacional elevado."' },
+      { num: '36–42s', texto: '<strong>CTA:</strong> "A Biomexx garante que isso não aconteça na sua instituição. Clica no link da bio."' },
+    ],
+    arte: [
+      { label: 'Duração', val: '40 a 45 segundos' },
+      { label: 'Tom', val: 'Sério, direto, de alerta responsável' },
+      { label: 'Cenário', val: 'Laboratório CME ou ambiente hospitalar limpo' },
+      { label: 'Texto em tela', val: 'Bold branco, barra azul, dados numéricos em destaque' },
+      { label: 'Corte', val: 'Dinâmico, sem pausa. Urgência no ritmo.' },
+      { label: 'Trilha', val: 'Instrumental mais sério, sem letra' },
+    ],
+    legenda: `O que acontece quando a CME falha?\n\nInfecção hospitalar. Complicação cirúrgica. Risco jurídico. Prejuízo financeiro.\n\nE na maioria dos casos, uma falha invisível no processo de esterilização é a causa raiz.\n\nA Biomexx existe para que isso nunca aconteça na sua instituição — com tecnologia de ponta, equipe especializada e suporte contínuo.\n\nCome sua gestão de CME está hoje? Fala com a gente e descubra como elevar o nível de segurança da sua central.`,
+    hashtags: '#CME #SegurançaHospitalar #Esterilização #GestãoHospitalar #Biomexx #InfecçãoHospitalar #Reels',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: 'Reels nos stories com texto: "Você sabia disso? Assista até o final."' },
+      { tipo: 'CTA urgência', desc: '"Sua CME está protegida? Fala com a Biomexx." + botão WhatsApp' },
+    ]
+  },
+  {
+    id: 8, dia: 21, semana: 3, mes: 'mai', diasem: 'Qui',
+    tipo: ['oferta'], formato: 'Carrossel',
+    titulo: 'Locação de CME: suporte completo e frota própria',
+    desc: 'Apresentação consultiva do serviço de locação de CME da Biomexx.',
+    status: 'planejado',
+    objetivo: 'Apresentar o serviço de locação de forma consultiva e gerar leads qualificados. Fundo de funil.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "Locação de CME: a solução que hospitais não sabiam que precisavam." Fundo azul bold.' },
+      { num: '02', texto: '<strong>O que é:</strong> Explicação simples e direta do serviço de locação completa de CME.' },
+      { num: '03', texto: '<strong>Vantagem 1:</strong> "Frota veicular própria — suporte imediato onde você precisar."' },
+      { num: '04', texto: '<strong>Vantagem 2:</strong> "Time técnico especializado disponível para sua instituição."' },
+      { num: '05', texto: '<strong>Vantagem 3:</strong> "Custo previsível e sem investimento em infraestrutura."' },
+      { num: '06', texto: '<strong>CTA:</strong> "Solicite uma avaliação gratuita." Logo + WhatsApp + "Conheça aqui".' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul royal bold + headline impactante' },
+      { label: 'Slides internos', val: 'Ícone + benefício em destaque + fundo branco' },
+      { label: 'CTA', val: 'Azul sólido + logo + botão WhatsApp visível' },
+      { label: 'Ícones', val: 'Flat, linha fina, cor azul ou teal' },
+      { label: 'Tom', val: 'Consultivo, não agressivo. Foco no benefício.' },
+      { label: 'Referência', val: 'Estilo "Gestão Terceirizada de CME" do feed atual' },
+    ],
+    legenda: `Sua instituição ainda gerencia a CME sozinha?\n\nA locação de CME da Biomexx entrega uma central de material e esterilização completa — com equipe, equipamentos, frota própria e suporte técnico continuado — sem que você precise investir em infraestrutura.\n\nMais segurança. Menos custo fixo. Mais foco no que realmente importa: o cuidado com o paciente.\n\nQuer saber como funciona na prática?\n\nFala com a nossa equipe. Fazemos uma avaliação gratuita da sua necessidade.`,
+    hashtags: '#LocaçãoCME #GestãoHospitalar #CME #Biomexx #SaúdeHospitalar #TerceirizaçãoCME #CentralDeMaterial',
+    stories: [
+      { tipo: 'Pergunta', desc: '"Você sabia que é possível terceirizar toda a gestão da CME?" Sim / Nunca tinha ouvido falar' },
+      { tipo: 'CTA direto', desc: '"Quer saber como funciona? Arrasta pra cima e fala com a Biomexx." + link WhatsApp' },
+    ]
+  },
+  {
+    id: 9, dia: 23, semana: 3, mes: 'mai', diasem: 'Sáb',
+    tipo: ['inst'], formato: 'Foto',
+    titulo: 'Por trás de cada esterilização, existe uma equipe',
+    desc: 'Foto de equipe ou bastidores humanizando a marca Biomexx.',
+    status: 'planejado',
+    objetivo: 'Humanizar a marca, gerar identificação e conexão emocional com o público. Reforçar o pilar "equipe comprometida" do posicionamento.',
+    slides: [
+      { num: 'Post único', texto: 'Foto real da equipe Biomexx — no laboratório, em campo ou em reunião. Sobreposição leve com texto de posicionamento.' },
+      { num: 'Copy', texto: 'Headline: "Por trás de cada esterilização, existe uma equipe que não abre mão da excelência." Fundo com foto + overlay azul leve.' },
+    ],
+    arte: [
+      { label: 'Foto', val: 'Real, da equipe Biomexx em ambiente de trabalho' },
+      { label: 'Overlay', val: 'Azul semitransparente sobre foto para destacar texto' },
+      { label: 'Texto', val: 'Branco bold, headline + tagline menor' },
+      { label: 'Logo', val: 'Biomexx no canto inferior com tagline' },
+      { label: 'Tom', val: 'Orgulho, propósito, humanidade' },
+      { label: 'Referência', val: 'Fotos de equipe já publicadas no feed — mesmo estilo' },
+    ],
+    legenda: `Cada processo tem um nome por trás.\n\nNa Biomexx, nossa equipe é formada por profissionais altamente treinados que entendem que esterilização não é uma etapa — é uma responsabilidade.\n\nTodos os dias, eles garantem que hospitais, clínicas e centros cirúrgicos operem com a segurança que os pacientes merecem.\n\nOrgulho de cada um que faz parte dessa equipe.`,
+    hashtags: '#TimeBiomexx #CME #Esterilização #Equipe #SaúdeHospitalar #Biomexx #GestãoHospitalar',
+    stories: [
+      { tipo: 'Bastidores', desc: 'Stories mostrando o dia a dia da equipe — momentos reais, autênticos' },
+      { tipo: 'Apresentação', desc: '"Você conhece nossa equipe? Deixa um ❤ nos stories e apresentamos alguém do time."' },
+    ]
+  },
+  {
+    id: 10, dia: 26, semana: 4, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Rastreabilidade na CME: por que ela é essencial?',
+    desc: 'Carrossel educativo aprofundando o conceito de rastreabilidade e sua obrigatoriedade.',
+    status: 'planejado',
+    objetivo: 'Reforçar autoridade técnica em tema já validado no feed. Educação de tomadores de decisão sobre obrigatoriedade e impacto da rastreabilidade.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "Rastreabilidade: por que ela é essencial na sua CME?" Fundo escuro/azul + headline bold.' },
+      { num: '02', texto: '<strong>O que é:</strong> Definição simples de rastreabilidade na CME e o que ela monitora.' },
+      { num: '03', texto: '<strong>Exigência legal:</strong> Normas e regulamentações que tornam a rastreabilidade obrigatória.' },
+      { num: '04', texto: '<strong>Riscos sem rastreabilidade:</strong> O que acontece quando não há controle. Dados de impacto.' },
+      { num: '05', texto: '<strong>Como implementar:</strong> Passos básicos para começar. Papel da consultoria Biomexx.' },
+      { num: '06', texto: '<strong>CTA:</strong> "Precisa implementar rastreabilidade na sua CME? A Biomexx tem a solução." + WhatsApp.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Fundo escuro (navy) ou azul royal + texto bold branco' },
+      { label: 'Internos', val: 'Fundo branco + ícones + destaques coloridos' },
+      { label: 'Dados', val: 'Números em destaque azul ou teal, tamanho grande' },
+      { label: 'Ícones', val: 'Flat, linha fina — barcode, checklist, hospital' },
+      { label: 'Ref. feed', val: 'Estilo "Rastreabilidade" já publicado — atualizar com mais profundidade' },
+      { label: 'CTA', val: 'Azul sólido + logo + WhatsApp' },
+    ],
+    legenda: `Você sabe o que acontece com cada instrumento que passa pela sua CME?\n\nA rastreabilidade não é apenas uma boa prática — é uma exigência regulatória. E hospitais sem controle de rastreabilidade estão expostos a riscos jurídicos, operacionais e, acima de tudo, à segurança dos pacientes.\n\nNo carrossel de hoje, explicamos o que é, por que é obrigatório e como implementar.\n\nSalva para consultar e compartilha com quem precisa ver isso.`,
+    hashtags: '#Rastreabilidade #CME #GestãoHospitalar #Biomexx #CentralDeMaterial #SegurançaDoPaciente #Esterilização',
+    stories: [
+      { tipo: 'Quiz', desc: '"Sua CME já tem rastreabilidade implementada?" Sim, completo / Parcialmente / Ainda não' },
+      { tipo: 'CTA', desc: '"Ainda não? A gente pode ajudar. Arrasta e fala com a Biomexx."' },
+    ]
+  },
+  {
+    id: 11, dia: 28, semana: 4, mes: 'mai', diasem: 'Qui',
+    tipo: ['oferta'], formato: 'Reels',
+    titulo: 'Sua CME está pronta para os desafios de 2026?',
+    desc: 'Reels consultivo com profissional apresentando os desafios atuais e como a Biomexx resolve.',
+    status: 'planejado',
+    objetivo: 'Geração de lead qualificado via Reels. Cria urgência e direciona para contato. Fundo de funil.',
+    slides: [
+      { num: '0–5s', texto: '<strong>Gancho:</strong> "2026 chegou com novos desafios para as CMEs. Sua central está preparada?" Texto em tela, tom direto.' },
+      { num: '6–18s', texto: '<strong>Desafio 1:</strong> "Exigências regulatórias mais rígidas — rastreabilidade e validação de ciclos são obrigatórios."' },
+      { num: '19–30s', texto: '<strong>Desafio 2:</strong> "Pressão por redução de custos sem abrir mão da segurança — locação e terceirização como saída."' },
+      { num: '31–40s', texto: '<strong>Solução Biomexx:</strong> "A Biomexx oferece tudo que sua CME precisa para 2026: tecnologia, treinamento e suporte."' },
+      { num: '41–45s', texto: '<strong>CTA:</strong> "Fala com a gente e faça uma avaliação gratuita da sua CME." + WhatsApp na tela.' },
+    ],
+    arte: [
+      { label: 'Duração', val: '40 a 45 segundos' },
+      { label: 'Apresentador', val: 'Profissional Biomexx em uniforme, fundo laboratório' },
+      { label: 'Texto em tela', val: 'Subtítulos bold + dados em destaque amarelo ou teal' },
+      { label: 'Tom', val: 'Consultivo, parceiro, seguro. Não alarmista.' },
+      { label: 'Trilha', val: 'Instrumental moderno e leve' },
+      { label: 'Encerramento', val: 'Logo animado + "Fale com a Biomexx" + número WhatsApp' },
+    ],
+    legenda: `O que muda na gestão de CME em 2026?\n\nExigências regulatórias mais rigorosas, pressão por eficiência e equipes que precisam de atualização constante. Os desafios existem — mas também existem soluções.\n\nA Biomexx está pronta para ser o parceiro estratégico da sua CME neste ano. Da tecnologia ao treinamento, do suporte imediato à consultoria personalizada.\n\nFaz uma avaliação gratuita da sua central com a gente. O link está na bio.`,
+    hashtags: '#CME2026 #GestãoCME #Biomexx #Esterilização #SaúdeHospitalar #Reels #CentralDeMaterial',
+    stories: [
+      { tipo: 'Enquete', desc: '"Como está sua CME para 2026?" Preparada / Precisa melhorar / Preciso de ajuda' },
+      { tipo: 'CTA final', desc: '"Quer uma avaliação gratuita? Arrasta e fala com a Biomexx." + WhatsApp' },
+    ]
+  },
+  {
+    id: 12, dia: 30, semana: 4, mes: 'mai', diasem: 'Sáb',
+    tipo: ['oferta'], formato: 'Carrossel',
+    titulo: 'Consultoria em CME: capacite sua equipe conosco',
+    desc: 'Apresentar o serviço de consultoria e treinamento com foco em diferenciais.',
+    status: 'planejado',
+    objetivo: 'Gerar leads para o serviço de consultoria. Fundo de funil com abordagem educativa.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "Consultoria em CME: capacite sua equipe com quem entende do assunto." Fundo azul.' },
+      { num: '02', texto: '<strong>O problema:</strong> "Equipe sem treinamento atualizado é a principal causa de falha em CMEs."' },
+      { num: '03', texto: '<strong>O que a Biomexx oferece:</strong> Treinamentos personalizados, consultoria in loco, capacitação de equipes.' },
+      { num: '04', texto: '<strong>Diferenciais:</strong> Metodologia própria, laboratório de treinamento, equipe com certificação.' },
+      { num: '05', texto: '<strong>Para quem é:</strong> Hospitais, clínicas, centros cirúrgicos e gestores de CME.' },
+      { num: '06', texto: '<strong>CTA:</strong> "Agende uma consultoria. Primeiro atendimento gratuito." + WhatsApp.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul royal + headline bold branca' },
+      { label: 'Internos', val: 'Fundo branco + ícones de formação e capacitação' },
+      { label: 'Destaques', val: 'Azul e teal para pontos-chave' },
+      { label: 'CTA', val: 'Fundo azul + "Primeiro atendimento gratuito" em destaque' },
+      { label: 'Tom', val: 'Autoridade técnica + acessibilidade' },
+      { label: 'Logo', val: 'Biomexx + tagline em todos os slides' },
+    ],
+    legenda: `A excelência na CME começa com uma equipe bem treinada.\n\nA Biomexx oferece consultoria personalizada e treinamentos desenvolvidos por especialistas — direto na sua instituição ou no nosso Centro de Tecnologia e Treinamento em Campina Grande.\n\nNosso objetivo é simples: fazer com que sua equipe opere com segurança, eficiência e total conformidade com as normas do setor.\n\nO primeiro atendimento é gratuito. Fala com a gente pelo link na bio.`,
+    hashtags: '#ConsultoriaCME #TreinamentoCME #Biomexx #GestãoHospitalar #CME #CapacitaçãoHospitalar #Esterilização',
+    stories: [
+      { tipo: 'Pergunta', desc: '"Sua equipe de CME passou por treinamento nos últimos 6 meses?" Sim / Não / Preciso organizar isso' },
+      { tipo: 'CTA', desc: '"A Biomexx pode ajudar. Swipe up e agende sua consultoria gratuita."' },
+    ]
+  },
+  {
+    id: 13, dia: 31, semana: 5, mes: 'mai', diasem: 'Dom',
+    tipo: ['inst'], formato: 'Reels',
+    titulo: 'Maio chegando ao fim. Excelência que ficou.',
+    desc: 'Reels de encerramento do mês com posicionamento e teaser sutil de junho.',
+    status: 'planejado',
+    objetivo: 'Encerrar o mês reforçando valores e posicionamento. Manter o vínculo emocional com seguidores e criar antecipação para junho.',
+    slides: [
+      { num: '0–5s', texto: '<strong>Abertura:</strong> Imagens do mês — equipe, laboratório, equipamentos. Frase: "Maio chegando ao fim."' },
+      { num: '6–18s', texto: '<strong>Reflexão:</strong> "Mais um mês garantindo que cada esterilização foi feita com a máxima segurança. Isso é o que nos move." Voz em off ou texto em tela.' },
+      { num: '19–28s', texto: '<strong>Reconhecimento:</strong> "Obrigado a todos os profissionais de saúde que confiam na Biomexx para cuidar do que os pacientes não veem."' },
+      { num: '29–35s', texto: '<strong>Teaser:</strong> "Em junho, novidades chegando. Fica ligado." Texto em tela sobre logo Biomexx.' },
+    ],
+    arte: [
+      { label: 'Formato', val: 'Reels 30–40s, mais lento e emocional' },
+      { label: 'Imagens', val: 'Compilado do mês — fotos e vídeos reais' },
+      { label: 'Texto em tela', val: 'Elegante, tamanho médio, centralizado' },
+      { label: 'Trilha', val: 'Instrumental emocional, levemente inspiracional' },
+      { label: 'Encerramento', val: 'Logo Biomexx com tagline + "Até junho"' },
+      { label: 'Tom', val: 'Gratidão, propósito, leveza' },
+    ],
+    legenda: `Maio chegando ao fim.\n\nForam semanas de muito trabalho, aprendizado e — acima de tudo — compromisso com a segurança de quem mais importa: os pacientes.\n\nObrigado a cada profissional de saúde que confia na Biomexx para cuidar do que ninguém vê. Vocês fazem a diferença.\n\nEm junho, tem novidade chegando. Fique ligado.`,
+    hashtags: '#Biomexx #CME #Esterilização #MaioCME #AteJunho #SaúdeHospitalar #GestãoHospitalar',
+    stories: [
+      { tipo: 'Retrospectiva', desc: 'Stories com os melhores momentos do mês — equipe, conteúdo, bastidores' },
+      { tipo: 'Teaser junho', desc: '"Algo novo chega em junho. Você vai querer saber." Com contagem regressiva.' },
+    ]
+  }
+];
+
+
+const POSTS_EQUIPMED = [
+  {
+    id: 101, dia: 5, semana: 1, mes: 'mai', diasem: 'Ter',
+    tipo: ['data', 'edu'], formato: 'Carrossel',
+    titulo: 'Dia Mundial da Higiene das Mãos — e o que vem antes disso',
+    desc: 'Conectar a data ao papel dos equipamentos e processos da CME como base da segurança hospitalar.',
+    status: 'planejado',
+    objetivo: 'Aproveitar data de alto engajamento para posicionar a Equipmed como referência em equipamentos e processos CME. Tom técnico com autoridade de +35 anos de mercado. Topo de funil.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "05/05 — Higiene das mãos começa muito antes da cirurgia." Fundo azul navy bold, headline branca, logo Equipmed.' },
+      { num: '02', texto: '<strong>Contexto:</strong> "A higiene das mãos protege. Mas quem protege o instrumento que o cirurgião vai usar?" Fundo branco + ícone.' },
+      { num: '03', texto: '<strong>O papel da CME:</strong> "Todo equipamento precisa de esterilização precisa, rastreada e conforme normas ANVISA." Destaque azul elétrico.' },
+      { num: '04', texto: '<strong>Equipmed:</strong> "+35 anos garantindo que cada equipamento chegue ao procedimento com segurança total." Foto real + overlay azul.' },
+      { num: '05', texto: '<strong>CTA:</strong> "Sua CME tem os equipamentos certos para essa responsabilidade? Fale com a Equipmed." Logo + WhatsApp.' },
+    ],
+    arte: [
+      { label: 'Fundo capa', val: 'Azul navy #1e3a8a + headline bold branca' },
+      { label: 'Slides internos', val: 'Fundo branco + ícone azul elétrico' },
+      { label: 'Elemento gráfico', val: 'Círculo azul elétrico recorrente do feed' },
+      { label: 'Destaque', val: 'Azul elétrico #2563eb nos dados-chave' },
+      { label: 'Tipografia', val: 'Bold grande capa, regular nos internos' },
+      { label: 'Logo', val: 'Equipmed azul no rodapé de cada slide' },
+    ],
+    legenda: `05/05 — Dia Mundial da Higiene das Mãos.\n\nA higiene das mãos salva vidas. Mas antes do profissional de saúde entrar em contato com o paciente, existe uma cadeia invisível que começa na CME.\n\nCada equipamento, cada instrumental, cada material precisa chegar ao procedimento com segurança total — esterilizado, rastreado e em conformidade com as normas.\n\nHá mais de 35 anos, a Equipmed garante que essa cadeia funcione com excelência.\n\nSua CME tem os equipamentos certos para essa responsabilidade?`,
+    hashtags: '#HigieneDasMãos #CME #Esterilização #EquipMed #SaúdeHospitalar #SegurançaDoPaciente #GestãoHospitalar',
+    stories: [
+      { tipo: 'Enquete', desc: '"Você sabia que a segurança do paciente começa antes da cirurgia, na CME?" Sabia / Não tinha pensado nisso' },
+      { tipo: 'CTA', desc: '"Sua CME está equipada para isso? Arrasta e fala com a Equipmed."' },
+    ]
+  },
+  {
+    id: 102, dia: 7, semana: 1, mes: 'mai', diasem: 'Qui',
+    tipo: ['edu'], formato: 'Reels',
+    titulo: 'CME eficiente não é custo. É vantagem competitiva.',
+    desc: 'Reels com porta-voz aprofundando o tema já validado no feed da Equipmed.',
+    status: 'planejado',
+    objetivo: 'Alcance orgânico com Reels. Tema já validado no feed com alta performance. Reforça posicionamento consultivo e gera autoridade junto a gestores hospitalares.',
+    slides: [
+      { num: '0–4s', texto: '<strong>Gancho:</strong> Porta-voz olha para câmera: "Você ainda trata a CME como um custo operacional? Preciso te mostrar um dado." Texto em tela: fundo azul.' },
+      { num: '5–15s', texto: '<strong>Dado 1:</strong> "Hospitais com CME bem gerida reduzem em até 30% as complicações pós-cirúrgicas. Isso se chama vantagem competitiva."' },
+      { num: '16–26s', texto: '<strong>Dado 2:</strong> "Equipamento sem manutenção, sem rastreabilidade e sem gestão custa muito mais do que parece. No retrabalho, na auditoria, na segurança."' },
+      { num: '27–36s', texto: '<strong>Virada:</strong> "CME eficiente não é despesa. É o que diferencia hospitais que crescem dos que só sobrevivem."' },
+      { num: '37–42s', texto: '<strong>CTA:</strong> "A Equipmed pode mostrar isso na prática para a sua instituição. Link na bio." Logo + WhatsApp na tela.' },
+    ],
+    arte: [
+      { label: 'Duração', val: '40 a 45 segundos' },
+      { label: 'Apresentador', val: 'Porta-voz feminina em uniforme Equipmed' },
+      { label: 'Texto em tela', val: 'Bold branca sobre barra azul navy na base' },
+      { label: 'Corte', val: 'Dinâmico a cada ponto — ritmo consultivo mas direto' },
+      { label: 'Trilha', val: 'Instrumental corporativo, sem letra' },
+      { label: 'Referência', val: 'Estilo Reels já publicados no feed — mesmo enquadramento' },
+    ],
+    legenda: `"CME eficiente não é custo. É vantagem competitiva."\n\nEssa frase resume tudo que vemos no dia a dia: instituições que investem em gestão de CME têm menos complicações, menos retrabalho e mais resultados.\n\nE as que tratam a CME como despesa secundária? Pagam o preço em auditoria, segurança e reputação.\n\nHá mais de 35 anos, a Equipmed ajuda hospitais e clínicas a transformar a CME em diferencial competitivo.\n\nQuer ver como isso funciona na prática? Fala com a gente pelo link na bio.`,
+    hashtags: '#CME #GestãoHospitalar #EquipMed #Esterilização #VantagemCompetitiva #SaúdeHospitalar #Reels',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: 'Reels nos stories com pergunta: "Você ainda trata a CME como custo?"' },
+      { tipo: 'Enquete', desc: '"Como sua instituição trata a CME?" Investimento estratégico / Custo necessário / Ainda não sei' },
+    ]
+  },
+  {
+    id: 103, dia: 9, semana: 1, mes: 'mai', diasem: 'Sáb',
+    tipo: ['oferta'], formato: 'Carrossel',
+    titulo: 'Comodato de equipamentos: tecnologia sempre atualizada, sem investimento inicial',
+    desc: 'Apresentação consultiva do serviço de comodato e locação de equipamentos CME.',
+    status: 'planejado',
+    objetivo: 'Gerar leads qualificados para o serviço de comodato. Fundo de funil. Gestores que buscam redução de custo fixo com modernização de equipamentos.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "Equipamento certo muda o resultado da sua CME." Headline já validada no feed. Fundo azul navy.' },
+      { num: '02', texto: '<strong>O problema:</strong> "Equipamentos desatualizados geram retrabalho, falhas e não conformidade com ANVISA." Dado de impacto.' },
+      { num: '03', texto: '<strong>O que é comodato:</strong> "Com a Equipmed, você usa equipamentos de ponta sem custo de aquisição." Explicação simples.' },
+      { num: '04', texto: '<strong>O que está incluído:</strong> Tecnologia atualizada + manutenção contínua + suporte técnico especializado + conformidade garantida.' },
+      { num: '05', texto: '<strong>Para quem é:</strong> Hospitais, clínicas e centros cirúrgicos que precisam de modernidade sem alto investimento inicial.' },
+      { num: '06', texto: '<strong>CTA:</strong> "Solicite uma avaliação gratuita. A Equipmed dimensiona a solução ideal para sua CME." WhatsApp + logo.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul navy bold + headline impactante branca' },
+      { label: 'Slides internos', val: 'Fundo branco + ícone azul + texto escuro' },
+      { label: 'Elemento gráfico', val: 'Círculo azul elétrico característico do feed' },
+      { label: 'CTA', val: 'Fundo azul sólido + logo Equipmed + WhatsApp' },
+      { label: 'Foto', val: 'Equipamentos reais da Equipmed em uso na CME' },
+      { label: 'Tom', val: 'Consultivo. Benefício em primeiro lugar, não o produto.' },
+    ],
+    legenda: `Sua CME ainda opera com equipamentos desatualizados?\n\nEquipamento antigo significa mais falhas, mais manutenção corretiva e mais risco de não conformidade com as normas da ANVISA.\n\nCom o comodato da Equipmed, sua instituição tem acesso à tecnologia de ponta, manutenção contínua e suporte técnico especializado — sem custo de aquisição.\n\nVocê foca no que importa. A gente cuida dos equipamentos.\n\nSolicite uma avaliação gratuita pelo link na bio.`,
+    hashtags: '#Comodato #EquipMed #CME #EquipamentosHospitalares #GestãoCME #SaúdeHospitalar #CentralDeMaterial',
+    stories: [
+      { tipo: 'Enquete', desc: '"Sua CME usa equipamentos atualizados?" Sim, modernos / Precisamos atualizar / Não sei avaliar' },
+      { tipo: 'CTA', desc: '"Quer saber como o comodato Equipmed funciona? Arrasta e fala com a gente."' },
+    ]
+  },
+  {
+    id: 104, dia: 12, semana: 2, mes: 'mai', diasem: 'Ter',
+    tipo: ['data'], formato: 'Foto',
+    titulo: 'Dia do Enfermeiro — quem cuida merece o melhor suporte',
+    desc: 'Homenagem conectando a data ao papel dos equipamentos Equipmed no suporte à enfermagem.',
+    status: 'planejado',
+    objetivo: 'Engajamento em data de alto volume. Humanizar a marca e conectar com profissionais de enfermagem que são influenciadores na decisão de compra de CME.',
+    slides: [
+      { num: 'Post único', texto: 'Foto real de profissional de enfermagem em ambiente hospitalar. Sobreposição com mensagem de homenagem e logo Equipmed.' },
+      { num: 'Headline', texto: '"12/05 — Dia do Enfermeiro. Quem cuida de todos merece o melhor suporte — e começa com equipamentos que não falham."' },
+    ],
+    arte: [
+      { label: 'Formato', val: 'Post estático — foto real de profissional' },
+      { label: 'Paleta', val: 'Azul navy + branco + detalhe azul elétrico' },
+      { label: 'Overlay', val: 'Azul semitransparente sobre foto para texto' },
+      { label: 'Tom', val: 'Emocional, gratidão, valorização profissional' },
+      { label: 'Logo', val: 'Equipmed azul no rodapé' },
+      { label: 'Referência', val: 'Fotos de profissionais já publicadas — mesmo estilo' },
+    ],
+    legenda: `12/05 — Dia do Enfermeiro.\n\nPor trás de cada paciente cuidado, existe um profissional que não para.\n\nE quem cuida de quem cuida? A Equipmed acredita que profissionais de enfermagem merecem equipamentos que funcionam, processos que protegem e uma CME que não falha.\n\nParabéns a todos que fazem a diferença nos hospitais e clínicas do Brasil todos os dias.`,
+    hashtags: '#DiaDaEnfermagem #Enfermeiro #12deMaio #EquipMed #SaúdeHospitalar #CME #EnfermagemBrasileira',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story azul com frase de homenagem à enfermagem e logo Equipmed' },
+      { tipo: 'Caixinha', desc: '"Conta pra gente: qual é o maior desafio da sua CME hoje?" — caixinha de perguntas' },
+    ]
+  },
+  {
+    id: 105, dia: 14, semana: 2, mes: 'mai', diasem: 'Qui',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'O que acontece com um instrumental antes de chegar ao centro cirúrgico?',
+    desc: 'Carrossel educativo baseado no artigo do blog da Equipmed. Fluxo completo da CME.',
+    status: 'planejado',
+    objetivo: 'Alto potencial de salvamento e compartilhamento. Tema baseado no artigo do blog. Educa gestores e profissionais de saúde sobre o papel crítico da CME no fluxo hospitalar.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "O que acontece com um instrumental antes de chegar ao centro cirúrgico?" Headline baseada no artigo do blog. Fundo azul.' },
+      { num: '02', texto: '<strong>Etapa 1 — Recebimento:</strong> "O instrumental chega sujo do procedimento. Começa aqui a responsabilidade da CME."' },
+      { num: '03', texto: '<strong>Etapa 2 — Limpeza:</strong> "Limpeza manual ou termodesinfectora — o primeiro passo para eliminar a carga microbiana."' },
+      { num: '04', texto: '<strong>Etapa 3 — Inspeção:</strong> "Cada peça é inspecionada. Instrumental com defeito não segue para esterilização."' },
+      { num: '05', texto: '<strong>Etapa 4 — Esterilização:</strong> "Método escolhido conforme o tipo de material. Tudo rastreado e documentado."' },
+      { num: '06', texto: '<strong>Etapa 5 — Distribuição:</strong> "Só então o instrumental chega ao centro cirúrgico — seguro, rastreado e pronto para uso."' },
+      { num: '07', texto: '<strong>CTA:</strong> "Cada etapa exige equipamento correto. A Equipmed tem tudo para sua CME." WhatsApp + logo.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul navy + headline bold branca + logo' },
+      { label: 'Etapas', val: 'Numeração em destaque azul elétrico + ícone por etapa' },
+      { label: 'Fundo internos', val: 'Branco + linha de progresso azul no topo' },
+      { label: 'Foto', val: 'Foto real de instrumental ou CME da Equipmed' },
+      { label: 'Tipografia', val: 'Título bold, descrição em regular 13px' },
+      { label: 'Referência', val: 'Baseado no artigo publicado em março/26' },
+    ],
+    legenda: `Você sabe o que acontece com um instrumental cirúrgico antes de chegar às mãos do cirurgião?\n\nO caminho é longo — e cada etapa precisa de equipamento correto, processo rastreado e equipe treinada.\n\nRecebimento → Limpeza → Inspeção → Esterilização → Distribuição.\n\nQualquer falha nessa cadeia coloca em risco a segurança do paciente.\n\nA Equipmed tem os equipamentos e a expertise para garantir que cada etapa funcione com excelência.\n\nSalva esse post para consultar sempre que precisar.`,
+    hashtags: '#CME #Esterilização #InstrumentalCirúrgico #GestãoCME #EquipMed #SaúdeHospitalar #CentroCirúrgico',
+    stories: [
+      { tipo: 'Compartilhar carrossel', desc: 'Slides do carrossel nos stories com "Você sabia de todas essas etapas?"' },
+      { tipo: 'Quiz', desc: '"Quantas etapas tem o fluxo da CME?" 3 / 5 / 7 / Não sei — resposta revelada no próximo story' },
+    ]
+  },
+  {
+    id: 106, dia: 16, semana: 2, mes: 'mai', diasem: 'Sáb',
+    tipo: ['eng'], formato: 'Carrossel',
+    titulo: 'Sua CME sobreviveria a uma auditoria surpresa?',
+    desc: 'Carrossel com perguntas provocativas sobre conformidade, rastreabilidade e processos.',
+    status: 'planejado',
+    objetivo: 'Alto engajamento e geração de leads qualificados. Tema já validado no feed. Gestor que se vê na situação naturalmente busca contato.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "Sua CME sobreviveria a uma auditoria surpresa?" Headline provocativa. Fundo azul elétrico sólido.' },
+      { num: '02', texto: '<strong>Pergunta 1:</strong> "Você tem rastreabilidade completa de todos os materiais processados?" Ícone + opções Sim / Não.' },
+      { num: '03', texto: '<strong>Pergunta 2:</strong> "Seus equipamentos têm manutenção e calibração em dia?" Ícone + opções.' },
+      { num: '04', texto: '<strong>Pergunta 3:</strong> "Sua equipe passou por treinamento nos últimos 12 meses?" Ícone + opções.' },
+      { num: '05', texto: '<strong>Pergunta 4:</strong> "Você tem documentação de todos os ciclos de esterilização?" Ícone + opções.' },
+      { num: '06', texto: '<strong>Pergunta 5:</strong> "Seus processos estão em conformidade com as normas ANVISA vigentes?" Ícone + opções.' },
+      { num: '07', texto: '<strong>CTA:</strong> "Respondeu não para alguma? A Equipmed resolve. Fale com nossa equipe agora." WhatsApp + logo.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul elétrico sólido + headline branca bold — impacto máximo' },
+      { label: 'Slides pergunta', val: 'Fundo branco + ícone azul + opções Sim/Não visuais' },
+      { label: 'Elemento', val: 'Círculo azul do feed como separador de seção' },
+      { label: 'CTA', val: 'Azul navy + headline urgência + WhatsApp visível' },
+      { label: 'Referência', val: 'Tema "auditoria surpresa" já publicado — versão aprofundada' },
+      { label: 'Salvamento', val: 'Incentivar salvar e compartilhar na legenda' },
+    ],
+    legenda: `Se um auditor chegasse agora na sua CME, você estaria tranquilo?\n\nRastreabilidade completa. Equipamentos calibrados. Equipe treinada. Documentação em dia. Conformidade ANVISA.\n\nEssas 5 perguntas revelam o nível real de maturidade da sua central — e onde estão os riscos que você ainda não viu.\n\nSalva esse post, responde com honestidade e me conta nos comentários: passou em tudo?\n\nSe não, fala com a Equipmed. A gente ajuda a resolver cada ponto.`,
+    hashtags: '#CME #Auditoria #ANVISA #GestãoCME #EquipMed #Rastreabilidade #SaúdeHospitalar #Conformidade',
+    stories: [
+      { tipo: 'Enquete', desc: '"Sua CME passaria em uma auditoria surpresa hoje?" Sim, tranquilo / Precisaria melhorar / Não tenho certeza' },
+      { tipo: 'CTA', desc: '"Respondeu não? A Equipmed pode ajudar. Arrasta e fala com a gente."' },
+    ]
+  },
+  {
+    id: 107, dia: 19, semana: 3, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Reels',
+    titulo: 'Sua CME pode estar perdendo dinheiro e você não percebeu',
+    desc: 'Reels com porta-voz sobre os custos invisíveis da má gestão de CME.',
+    status: 'planejado',
+    objetivo: 'Alcance orgânico e qualificação de lead. Tema já validado no feed com alta performance. Cria urgência de ação e posiciona a Equipmed como solução estratégica.',
+    slides: [
+      { num: '0–4s', texto: '<strong>Gancho:</strong> "Sua CME pode estar custando muito mais do que deveria — e o problema está onde você menos espera." Texto em tela, corte direto.' },
+      { num: '5–15s', texto: '<strong>Custo 1:</strong> "Manutenção corretiva custa até 3x mais que preventiva. Equipamento que quebra para operação é prejuízo imediato."' },
+      { num: '16–26s', texto: '<strong>Custo 2:</strong> "Retrabalho por falha no processo de esterilização: tempo de equipe, material descartado e risco de infecção hospitalar."' },
+      { num: '27–36s', texto: '<strong>Custo 3:</strong> "Não conformidade ANVISA: multas, embargos e danos à reputação. Um custo que nenhuma instituição quer pagar."' },
+      { num: '37–42s', texto: '<strong>CTA:</strong> "A Equipmed faz uma análise gratuita da sua CME. Descubra onde está o desperdício. Link na bio."' },
+    ],
+    arte: [
+      { label: 'Duração', val: '40 a 45 segundos' },
+      { label: 'Apresentador', val: 'Porta-voz feminina em uniforme Equipmed' },
+      { label: 'Dados em tela', val: 'Números em destaque azul elétrico + texto bold branco' },
+      { label: 'Corte', val: 'Dinâmico, ritmo firme — cada custo tem seu corte' },
+      { label: 'Cenário', val: 'Ambiente profissional Equipmed ou CME real' },
+      { label: 'CTA', val: 'Logo + "Análise gratuita" + número WhatsApp na tela' },
+    ],
+    legenda: `Quanto a sua CME está custando além do que deveria?\n\nManutenção corretiva que sai 3x mais cara que a preventiva. Retrabalho por falha no processo. Risco de não conformidade com ANVISA.\n\nEsses custos existem — mas nem sempre aparecem nos relatórios porque estão escondidos em ineficiências que parecem normais.\n\nA Equipmed faz uma análise gratuita da sua CME e mostra exatamente onde está o desperdício.\n\nFala com a gente pelo link na bio.`,
+    hashtags: '#CME #GestãoHospitalar #EquipMed #CustoHospitalar #Esterilização #Manutenção #Reels #SaúdeHospitalar',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: '"Você sabia desses custos invisíveis?" — Reels nos stories' },
+      { tipo: 'CTA', desc: '"Quer uma análise gratuita da sua CME? Arrasta e fala com a Equipmed."' },
+    ]
+  },
+  {
+    id: 108, dia: 21, semana: 3, mes: 'mai', diasem: 'Qui',
+    tipo: ['oferta'], formato: 'Carrossel',
+    titulo: 'Manutenção e calibração: equipamento parado é risco e prejuízo',
+    desc: 'Apresentar o serviço de manutenção e calibração com foco em conformidade e redução de paradas.',
+    status: 'planejado',
+    objetivo: 'Gerar leads para serviço de manutenção e calibração. Fundo de funil. Gestores que já tiveram problemas com parada de equipamento são o público prioritário.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "Equipamento parado na CME não é inconveniência. É risco operacional." Fundo azul navy bold.' },
+      { num: '02', texto: '<strong>O problema:</strong> "Falha de calibração = resultado impreciso = processo fora da norma = risco para o paciente."' },
+      { num: '03', texto: '<strong>Serviço Equipmed:</strong> "Manutenção preventiva e calibração contínua para todos os equipamentos da sua CME."' },
+      { num: '04', texto: '<strong>Inclui:</strong> Visitas técnicas programadas + calibração certificada + documentação para auditoria + suporte emergencial.' },
+      { num: '05', texto: '<strong>Resultado:</strong> "Zero interrupção não programada. Conformidade ANVISA garantida. Operação contínua e segura."' },
+      { num: '06', texto: '<strong>CTA:</strong> "Agende uma vistoria técnica gratuita. A Equipmed avalia sua CME sem compromisso." WhatsApp + logo.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul navy + headline urgente bold branca' },
+      { label: 'Internos', val: 'Fundo branco + ícones de manutenção azul' },
+      { label: 'Destaque', val: 'Azul elétrico nos benefícios-chave' },
+      { label: 'Foto', val: 'Técnico Equipmed em manutenção — foto real' },
+      { label: 'CTA', val: '"Vistoria gratuita" em destaque — fundo azul' },
+      { label: 'Tom', val: 'Técnico, confiável, direto ao benefício' },
+    ],
+    legenda: `Quando foi a última vez que os equipamentos da sua CME passaram por manutenção preventiva?\n\nEquipamento sem calibração não entrega o resultado esperado — e isso compromete o ciclo inteiro de esterilização.\n\nA Equipmed oferece manutenção preventiva, calibração certificada e suporte técnico especializado para todos os equipamentos da sua central.\n\nNada de parada inesperada. Nada de não conformidade. Só operação segura e contínua.\n\nAgende uma vistoria técnica gratuita pelo link na bio.`,
+    hashtags: '#ManutenCME #Calibração #EquipMed #GestãoCME #EquipamentosHospitalares #ANVISA #SaúdeHospitalar',
+    stories: [
+      { tipo: 'Pergunta', desc: '"Qual equipamento da sua CME causa mais dor de cabeça?" Caixinha de perguntas aberta' },
+      { tipo: 'CTA', desc: '"A Equipmed pode resolver. Arrasta e fala com a gente — vistoria gratuita."' },
+    ]
+  },
+  {
+    id: 109, dia: 23, semana: 3, mes: 'mai', diasem: 'Sáb',
+    tipo: ['inst'], formato: 'Carrossel',
+    titulo: 'ISO 9001: o que esse selo garante para a sua instituição?',
+    desc: 'Reforçar o diferencial da certificação ISO 9001 da Equipmed com explicação prática.',
+    status: 'planejado',
+    objetivo: 'Diferenciação competitiva. Reforçar o valor da ISO 9001 para tomadores de decisão que precisam justificar a escolha de um fornecedor perante gestores e auditorias.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "ISO 9001: o que esse selo significa na prática para quem contrata a Equipmed." Fundo azul + destaque no selo.' },
+      { num: '02', texto: '<strong>O que é:</strong> "ISO 9001 é a certificação internacional que valida que nossos processos, produtos e serviços atendem aos mais altos padrões de qualidade."' },
+      { num: '03', texto: '<strong>Na prática 1:</strong> "Processos auditados externamente — não é autoavaliação. É auditoria real por entidade certificadora."' },
+      { num: '04', texto: '<strong>Na prática 2:</strong> "Documentação rigorosa de cada serviço prestado. Rastreabilidade e histórico disponíveis."' },
+      { num: '05', texto: '<strong>Na prática 3:</strong> "Para o seu hospital: menos risco ao contratar, mais segurança na gestão e mais facilidade em auditorias ANVISA."' },
+      { num: '06', texto: '<strong>CTA:</strong> "Quando você escolhe a Equipmed, escolhe um parceiro certificado. Fale com a gente." Logo ISO + logo Equipmed.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul navy + destaque visual no selo ISO 9001' },
+      { label: 'Internos', val: 'Fundo branco + ícones de qualidade e auditoria' },
+      { label: 'Elemento gráfico', val: 'Círculo azul elétrico + selo ISO em destaque' },
+      { label: 'Tom', val: 'Autoridade, seriedade, confiança' },
+      { label: 'CTA', val: 'Duplo logo — ISO + Equipmed — reforço visual de credibilidade' },
+      { label: 'Tipografia', val: 'Bold para os benefícios práticos, regular para explicações' },
+    ],
+    legenda: `A Equipmed é certificada ISO 9001. Mas o que isso significa na prática para você?\n\nSignifica que nossos processos são auditados externamente, nossa documentação é rigorosa, e cada serviço prestado segue padrões internacionais de qualidade.\n\nPara o seu hospital ou clínica: menos risco ao contratar, mais segurança na operação e mais facilidade em passar por auditorias ANVISA.\n\nQualidade não é promessa. É certificação.\n\nFale com a Equipmed e descubra como podemos ser o parceiro estratégico da sua CME.`,
+    hashtags: '#ISO9001 #EquipMed #QualidadeHospitalar #CME #Certificação #GestãoHospitalar #SaúdeHospitalar',
+    stories: [
+      { tipo: 'Enquete', desc: '"Você sabia que a Equipmed é certificada ISO 9001?" Sabia / Não sabia' },
+      { tipo: 'CTA', desc: '"Quer saber o que isso muda na sua CME? Arrasta e fala com a gente."' },
+    ]
+  },
+  {
+    id: 110, dia: 26, semana: 4, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Rastreabilidade: o alicerce da segurança em esterilização hospitalar',
+    desc: 'Carrossel baseado no artigo do blog. Tema já validado no feed com ótimo desempenho.',
+    status: 'planejado',
+    objetivo: 'Autoridade técnica + geração de leads. Tema de alta relevância para gestores de CME. Baseado em artigo do blog com validação prévia no feed.',
+    slides: [
+      { num: '01', texto: '<strong>Capa:</strong> "Rastreabilidade na CME: o alicerce da segurança em esterilização hospitalar." Baseado no título do artigo do blog.' },
+      { num: '02', texto: '<strong>O que é:</strong> "Rastreabilidade é o registro completo de cada instrumento: quem processou, quando, como e por qual equipamento."' },
+      { num: '03', texto: '<strong>Por que é obrigatória:</strong> "RDC 15/2012 e normas ANVISA exigem rastreabilidade completa em CMEs. Não é opcional — é lei."' },
+      { num: '04', texto: '<strong>Sem rastreabilidade:</strong> "Impossível identificar origem de uma infecção. Responsabilidade jurídica do hospital. Auditoria reprovada."' },
+      { num: '05', texto: '<strong>Com o sistema Equipmed:</strong> "Controle automatizado de cada etapa. Relatórios completos. Conformidade ANVISA garantida."' },
+      { num: '06', texto: '<strong>CTA:</strong> "Implante rastreabilidade real na sua CME com a Equipmed. Fale com um especialista." WhatsApp + logo.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul navy + headline bold — estilo artigo do blog adaptado para feed' },
+      { label: 'Dado legal', val: 'Destaque em azul elétrico para a RDC 15/2012' },
+      { label: 'Internos', val: 'Fundo branco + ícone de rastreamento/código de barras' },
+      { label: 'Foto', val: 'Foto real da Equipmed em processo de rastreabilidade' },
+      { label: 'CTA', val: 'Azul sólido + "Especialista disponível" + WhatsApp' },
+      { label: 'Referência', val: 'Artigo publicado em março/26 — versão feed com dados visuais' },
+    ],
+    legenda: `Você tem controle total do que passa pela sua CME?\n\nRastreabilidade não é diferencial — é obrigação legal pela RDC 15/2012 da ANVISA. E mais do que isso: é a única forma de garantir que, em caso de incidente, você saiba exatamente o que aconteceu e com qual instrumento.\n\nA Equipmed oferece sistema completo de rastreabilidade: automatizado, documentado e pronto para auditoria.\n\nSalva esse post e compartilha com quem gerencia CME.`,
+    hashtags: '#Rastreabilidade #CME #ANVISA #RDC15 #EquipMed #GestãoCME #SaúdeHospitalar #Esterilização',
+    stories: [
+      { tipo: 'Quiz', desc: '"Sua CME tem rastreabilidade implementada?" Sim, completa / Parcialmente / Ainda não / Não sabia que era obrigatório' },
+      { tipo: 'CTA', desc: '"Ainda não tem? A Equipmed implementa. Arrasta e fala com a gente."' },
+    ]
+  },
+  {
+    id: 111, dia: 28, semana: 4, mes: 'mai', diasem: 'Qui',
+    tipo: ['edu'], formato: 'Reels',
+    titulo: 'O que a gestão integrada faz que o serviço isolado nunca vai fazer',
+    desc: 'Reels com porta-voz sobre o diferencial da gestão completa Equipmed vs contratação pontual.',
+    status: 'planejado',
+    objetivo: 'Posicionamento de autoridade e diferenciação do modelo de gestão integrada. Tema já validado no feed. Gera lead qualificado para proposta comercial completa.',
+    slides: [
+      { num: '0–4s', texto: '<strong>Gancho:</strong> "Por que hospitais que contratam serviços isolados continuam com os mesmos problemas na CME?" Texto em tela, câmera direta.' },
+      { num: '5–16s', texto: '<strong>Problema:</strong> "Equipamento de um fornecedor, manutenção de outro, treinamento de outro. Quando algo falha, quem é o responsável?"' },
+      { num: '17–28s', texto: '<strong>Diferencial:</strong> "A gestão integrada da Equipmed conecta equipamentos, manutenção, rastreabilidade e treinamento em um único parceiro responsável."' },
+      { num: '29–37s', texto: '<strong>Resultado:</strong> "Menos ruído operacional. Mais eficiência. Responsabilidade clara. CME que funciona como sistema, não como remendo."' },
+      { num: '38–43s', texto: '<strong>CTA:</strong> "Quer entender como funciona na prática? A Equipmed faz uma apresentação gratuita para sua equipe." WhatsApp.' },
+    ],
+    arte: [
+      { label: 'Duração', val: '40 a 45 segundos' },
+      { label: 'Apresentador', val: 'Porta-voz feminina — mesmo enquadramento do feed' },
+      { label: 'Texto em tela', val: 'Bold branco sobre barra azul navy na base' },
+      { label: 'Corte', val: 'Dinâmico — cada bloco tem seu corte limpo' },
+      { label: 'Trilha', val: 'Instrumental corporativo moderno, sem letra' },
+      { label: 'Referência', val: 'Tema "gestão integrada" validado no feed — versão Reels aprofundada' },
+    ],
+    legenda: `"O que a gestão integrada faz que o serviço isolado nunca vai fazer."\n\nQuando você tem equipamento de um fornecedor, manutenção de outro e treinamento de outro, cria-se uma zona cinzenta de responsabilidade — e quem paga o preço é a operação da sua CME.\n\nA Equipmed oferece gestão integrada: equipamentos, manutenção, rastreabilidade e capacitação em um único parceiro.\n\nMenos fornecedor. Mais resultado. Responsabilidade clara.\n\nQuer entender como funciona para o seu hospital? Fala com a gente pelo link na bio.`,
+    hashtags: '#GestãoIntegrada #CME #EquipMed #GestãoHospitalar #Esterilização #SaúdeHospitalar #Reels',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: '"Quantos fornecedores de CME você tem hoje?" — compartilhar Reels com pergunta' },
+      { tipo: 'CTA', desc: '"A Equipmed resolve tudo em um único parceiro. Arrasta e fala com a gente."' },
+    ]
+  },
+  {
+    id: 112, dia: 30, semana: 4, mes: 'mai', diasem: 'Sáb',
+    tipo: ['inst'], formato: 'Foto',
+    titulo: 'Segurança na CME não se compra. Se constrói.',
+    desc: 'Post de posicionamento institucional com frase já validada no feed da Equipmed.',
+    status: 'planejado',
+    objetivo: 'Reforço de posicionamento de marca. Frase já validada no feed com alta performance. Gera identificação e autoridade perante gestores.',
+    slides: [
+      { num: 'Post único', texto: 'Post estático com fundo azul navy sólido. Headline bold branca: "Segurança na CME não se compra. Se constrói com processos, dados e pessoas bem treinadas." Logo Equipmed no rodapé.' },
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Azul navy sólido #1e3a8a — sem foto, só tipografia' },
+      { label: 'Headline', val: 'Bold branca, tamanho grande — frase de impacto centralizada' },
+      { label: 'Subtítulo', val: '"Com processos, dados e pessoas bem treinadas." — regular branco' },
+      { label: 'Elemento', val: 'Círculo azul elétrico decorativo no canto' },
+      { label: 'Logo', val: 'Equipmed azul branco no rodapé centralizado' },
+      { label: 'Referência', val: 'Post tipográfico já publicado no feed — mesmo estilo impactante' },
+    ],
+    legenda: `Segurança na CME não se compra.\n\nSe constrói — com processos bem definidos, dados confiáveis e pessoas que sabem o que estão fazendo.\n\nEssa é a filosofia que guia a Equipmed há mais de 35 anos. E é o que buscamos entregar em cada projeto, cada equipamento e cada treinamento que realizamos.\n\nSua CME está construída sobre essa base?`,
+    hashtags: '#EquipMed #CME #SegurançaHospitalar #GestãoCME #Esterilização #35Anos #SaúdeHospitalar',
+    stories: [
+      { tipo: 'Frase de impacto', desc: 'Story com a mesma frase em fundo azul — formato citação' },
+      { tipo: 'Enquete', desc: '"Sua CME está construída sobre processos sólidos?" Sim / Estamos construindo / Precisamos melhorar' },
+    ]
+  },
+  {
+    id: 113, dia: 31, semana: 5, mes: 'mai', diasem: 'Dom',
+    tipo: ['inst'], formato: 'Reels',
+    titulo: 'Na saúde, confiança não se improvisa — e maio provou isso',
+    desc: 'Reels de encerramento com compilado do mês e teaser de junho.',
+    status: 'planejado',
+    objetivo: 'Encerramento emocional do mês. Reforçar vínculo com seguidores e criar antecipação para junho. Frase de posicionamento já validada no feed.',
+    slides: [
+      { num: '0–5s', texto: '<strong>Abertura:</strong> "Na saúde, confiança não se improvisa." Texto em tela sobre imagens do mês.' },
+      { num: '6–18s', texto: '<strong>Compilado:</strong> Melhores momentos de maio — equipe, equipamentos, eventos, bastidores. Trilha inspiracional.' },
+      { num: '19–27s', texto: '<strong>Mensagem:</strong> "Foram semanas de muito trabalho e um único compromisso: fazer a CME do seu hospital operar com excelência."' },
+      { num: '28–35s', texto: '<strong>Teaser:</strong> "Em junho, tem novidade chegando para a gestão de CME. Fica ligado." Texto + logo Equipmed.' },
+    ],
+    arte: [
+      { label: 'Formato', val: 'Reels 30–38s, ritmo mais lento e emocional' },
+      { label: 'Imagens', val: 'Compilado real do mês — fotos e vídeos da Equipmed' },
+      { label: 'Texto em tela', val: 'Elegante, centralizado, tamanho médio, branco' },
+      { label: 'Trilha', val: 'Instrumental emocional, levemente inspiracional' },
+      { label: 'Encerramento', val: 'Logo Equipmed azul + tagline + "Até junho"' },
+      { label: 'Tom', val: 'Gratidão, propósito, seriedade com calor humano' },
+    ],
+    legenda: `Na saúde, confiança não se improvisa.\n\nMaio foi mais um mês de muito trabalho, aprendizado e — acima de tudo — compromisso com a segurança de quem mais importa: os pacientes.\n\nObrigado a cada gestor, enfermeiro e profissional de saúde que confia na Equipmed para cuidar da CME da sua instituição.\n\nEm junho, tem novidade chegando. Fique ligado.`,
+    hashtags: '#EquipMed #CME #Esterilização #MaioCME #GestãoHospitalar #SaúdeHospitalar #AteJunho',
+    stories: [
+      { tipo: 'Retrospectiva', desc: 'Stories com os melhores momentos de maio da Equipmed — equipe, conteúdo, equipamentos' },
+      { tipo: 'Teaser junho', desc: '"Algo novo chega em junho para gestores de CME. Fique de olho." Com contagem regressiva.' },
+    ]
+  }
+];
+
+
+const POSTS_GESTEC = [
+  {
+    id: 201, dia: 1, semana: 1, mes: 'mai', diasem: 'Sex',
+    tipo: ['data'], formato: 'Foto',
+    titulo: 'Dia do Trabalho — Para quem trabalha para que a saúde nunca pare',
+    desc: 'Homenagem institucional ao Dia do Trabalho conectando com profissionais da saúde.',
+    status: 'planejado',
+    objetivo: 'Homenagem institucional sem apelo comercial. Reforço de posicionamento e humanização da marca Gestec. Alto engajamento esperado por ser feriado nacional.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Foto técnico Gestec em ação, P&B profissional. Overlay escuro 30% opacidade. Texto branco centralizado. Logo canto inferior direito.' },
+      { num: 'Headline', texto: '"DIA DO TRABALHO — Para quem trabalha para que a saúde nunca pare." Tipografia minimalista, peso bold.' },
+    ],
+    arte: [
+      { label: 'Foto', val: 'Técnico Gestec em ação — P&B profissional' },
+      { label: 'Overlay', val: 'Escuro 30% de opacidade sobre a foto' },
+      { label: 'Texto', val: 'Branco centralizado, tipografia clean bold' },
+      { label: 'Logo', val: 'Gestec canto inferior direito' },
+      { label: 'Tom', val: 'Institucional, respeitoso, sem CTA comercial' },
+      { label: 'Horário', val: '9h — respeitar feriado' },
+    ],
+    legenda: `Hoje é dia de quem acorda cedo e volta tarde.\nDe quem carrega responsabilidade silenciosa.\nDe quem cuida da estrutura que salva vidas.\n\nFeliz Dia do Trabalho para:\n→ Técnicos que garantem equipamentos funcionando\n→ Enfermeiros que cuidam sem parar\n→ Médicos que tomam decisões críticas\n→ Equipes de apoio que sustentam operações\n→ Todos os profissionais da saúde\n\nNa Gestec, trabalhamos todos os dias para que o trabalho de vocês nunca seja interrompido por falhas técnicas.\n\nPorque quando a tecnologia funciona, vocês podem focar no que realmente importa: cuidar de vidas.\n\nParabéns a todos os trabalhadores! 🛠️💙`,
+    hashtags: '#Gestec #DiaDo Trabalho #Homenagem #ProfissionaisDaSaúde #Respeito',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story simples com frase do post em fundo azul escuro Gestec. Sem CTA.' },
+      { tipo: 'Bastidores', desc: 'Foto ou vídeo curto da equipe Gestec com mensagem de parabéns.' },
+    ]
+  },
+  {
+    id: 202, dia: 5, semana: 2, mes: 'mai', diasem: 'Seg',
+    tipo: ['edu'], formato: 'Foto',
+    titulo: 'R$ 1.807.000 — Abertura da campanha "Números que Salvam"',
+    desc: 'Post de abertura da campanha do mês com número de impacto centralizado.',
+    status: 'planejado',
+    objetivo: 'Abertura da campanha "Números que Salvam". Topo de funil com número impactante que gera curiosidade e posiciona a Gestec como referência em dados de engenharia clínica.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Fundo branco clean. Número gigante centralizado: "1.807.000". Tipografia bold, azul escuro. Muito espaço em branco.' },
+      { num: 'Copy em tela', texto: '"Reais economizados por ano quando gestão técnica vira estratégia. Cada número conta uma história. Cada dado representa uma vida."' },
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Branco puro — minimalismo extremo' },
+      { label: 'Número', val: '1.807.000 — gigante, centralizado, azul escuro Gestec' },
+      { label: 'Tipografia', val: 'Bold para número, light para texto de apoio' },
+      { label: 'Espaço', val: 'Muito espaço em branco — elegância e impacto' },
+      { label: 'Logo', val: 'Gestec 10 anos — canto inferior' },
+      { label: 'Horário', val: '12h — início de semana com energia' },
+    ],
+    legenda: `Por trás de cada dado que compartilhamos, existe um hospital que opera melhor, uma equipe que trabalha com mais tranquilidade e pacientes que são atendidos sem interrupção.\n\nEste mês vamos mostrar que números frios podem ter impacto humano quente.\n\nR$ 1.807.000 é a economia média anual de hospitais que transformaram gestão técnica reativa em gestão preventiva estratégica.\n\nNão são apenas cifras. São recursos que voltam para o cuidado, para as pessoas, para o que realmente importa.\n\n#NúmerosQueSalvam`,
+    hashtags: '#Gestec #EngenhariaClínica #GestãoHospitalar #DadosQueTransformam #NúmerosQueSalvam',
+    stories: [
+      { tipo: 'Contagem', desc: 'Story com o número 1.807.000 aparecendo progressivamente. "Você sabe o que esse número significa?"' },
+      { tipo: 'Direcionamento', desc: '"Vai no feed e descobre. Mês inteiro de dados que vão mudar como você vê gestão técnica."' },
+    ]
+  },
+  {
+    id: 203, dia: 6, semana: 2, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Cenário A vs Cenário B — Improviso vs Gestão Estratégica',
+    desc: 'Comparativo visual entre gestão reativa e gestão preventiva com dados reais.',
+    status: 'planejado',
+    objetivo: 'Meio de funil. Fazer o gestor se identificar com um dos cenários e despertar necessidade de mudança. Alto potencial de salvamento.',
+    slides: [
+      { num: 'Capa', texto: '<strong>Split screen minimalista:</strong> Lado esquerdo vermelho suave (Cenário A) / Direito verde suave (Cenário B). Título: "A diferença entre improviso e gestão estratégica."' },
+      { num: 'Slide 2', texto: '<strong>Cenário A:</strong> 7h30 → Falha | 8h15 → Parado | 9h00 → Prejuízo → 18 horas parado → R$ 47.000 perdido. Visual caótico, vermelho.' },
+      { num: 'Slide 3', texto: '<strong>Cenário B:</strong> 3h40 → Alerta | 6h20 → Corrigido | 7h30 → Funcionando → Zero impacto → R$ 0 perdido. Visual limpo, verde.' },
+      { num: 'Slide 4', texto: '<strong>CTA:</strong> "Prevenção não é custo. É inteligência aplicada. Qual cenário você prefere viver?" + logo Gestec.' },
+    ],
+    arte: [
+      { label: 'Estilo', val: 'Split screen minimalista — sem poluição visual' },
+      { label: 'Cor A', val: 'Vermelho suave #FEE2E2 — caos, urgência' },
+      { label: 'Cor B', val: 'Verde suave #DCFCE7 — tranquilidade, controle' },
+      { label: 'Tipografia', val: 'Clean, tabular — dados alinhados para comparação' },
+      { label: 'Logo', val: 'Gestec 10 anos no último slide' },
+      { label: 'Horário', val: '19h — engajamento noturno de gestores' },
+    ],
+    legenda: `Duas realidades. Dois hospitais. Uma escolha.\n\nCENÁRIO A (reativo):\n→ Equipamento falha durante expediente\n→ Pacientes em espera\n→ Procedimentos cancelados\n→ Prejuízo financeiro e reputacional\n\nCENÁRIO B (preventivo):\n→ Sistema detecta anomalia antes da falha\n→ Correção feita fora do horário crítico\n→ Operação segue sem interrupção\n→ Ninguém percebe, porque tudo funciona\n\nA diferença não é sorte. É gestão técnica estruturada.\n\nQual cenário você prefere viver?`,
+    hashtags: '#Gestec #ManutençãoPreventiva #GestãoInteligente #EngenhariaClínica #CenárioAvsB',
+    stories: [
+      { tipo: 'Enquete', desc: '"Qual é a realidade da sua instituição hoje?" Cenário A (reativo) / Cenário B (preventivo)' },
+      { tipo: 'Direcionamento', desc: '"Vai no feed e vê os dois cenários em detalhes. Qual é o seu?"' },
+    ]
+  },
+  {
+    id: 204, dia: 7, semana: 2, mes: 'mai', diasem: 'Qua',
+    tipo: ['edu'], formato: 'Reels',
+    titulo: 'Reels: Quanto custa uma falha crítica?',
+    desc: 'Reels educativo rápido mostrando o custo de uma falha vs manutenção preventiva.',
+    status: 'planejado',
+    objetivo: 'Topo de funil. Viralização e novos seguidores. Impacto rápido com dado numérico que choca e educa simultaneamente.',
+    slides: [
+      { num: '0–3s', texto: '<strong>Gancho:</strong> Tela preta. Texto aparece: "Quanto custa uma falha crítica?"' },
+      { num: '3–7s', texto: '<strong>Sequência:</strong> Números aparecem em sequência: "1 equipamento parado" / "6 exames cancelados" / "R$ 47.000 perdidos"' },
+      { num: '7–12s', texto: '<strong>Virada:</strong> Tela branca. "Mas poderia custar apenas..." → "R$ 1.200" → "(manutenção preventiva)"' },
+      { num: '12–15s', texto: '<strong>Encerramento:</strong> Logo Gestec + "Prevenir é mais barato que remediar"' },
+      { num: '15–18s', texto: '<strong>CTA:</strong> "Fale com a Gestec" + link na bio.' },
+    ],
+    arte: [
+      { label: 'Duração', val: '15 a 20 segundos — ritmo de impacto' },
+      { label: 'Estilo', val: 'Texto animado — sem fala, 100% visual' },
+      { label: 'Paleta', val: 'Preto → branco → azul Gestec. Contraste total.' },
+      { label: 'Números', val: 'Tipografia gigante, bold, centralizada' },
+      { label: 'Áudio', val: 'Trending sound do momento ou batida sutil' },
+      { label: 'Horário', val: '12h-14h — pico de alcance para Reels' },
+    ],
+    legenda: `A conta que ninguém quer fazer 💰\n\nMas que todo gestor deveria saber.\n\nManutenção preventiva:\nnão é custo, é economia.\n\n#Gestec #Reels #EngenhariaClínica #DicasHospitalares`,
+    hashtags: '#Gestec #Reels #EngenhariaClínica #ManutençãoPreventiva #GestãoHospitalar #DicasHospitalares',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: '"Assistiu? Esse número vai te surpreender. Vê no feed." + compartilhar Reels nos stories.' },
+      { tipo: 'Enquete', desc: '"Você sabe quanto custa 1 dia de equipamento parado na sua instituição?" Sim / Não faço ideia' },
+    ]
+  },
+  {
+    id: 205, dia: 8, semana: 2, mes: 'mai', diasem: 'Qui',
+    tipo: ['oferta'], formato: 'Foto',
+    titulo: 'Diagnóstico gratuito — Quanto seu hospital está perdendo sem perceber?',
+    desc: 'Oferta de diagnóstico técnico gratuito para hospitais. Fundo de funil com CTA forte.',
+    status: 'planejado',
+    objetivo: 'Captação de leads qualificados. Fundo de funil. CTA direto e urgente para diagnóstico técnico gratuito.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Fundo azul profissional Gestec. Texto branco centralizado. CTA em destaque.' },
+      { num: 'Copy em tela', texto: '"Quanto o seu hospital está perdendo agora sem perceber? Diagnóstico gratuito de custos invisíveis. Descubra em 48h."' },
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Azul escuro profissional — autoridade e seriedade' },
+      { label: 'Texto', val: 'Branco centralizado — hierarquia clara' },
+      { label: 'CTA', val: '"Diagnóstico Gratuito" em destaque — box ou sublinhado' },
+      { label: 'Logo', val: 'Gestec 10 anos em branco no rodapé' },
+      { label: 'Tom', val: 'Direto, urgente, sem ruído visual' },
+      { label: 'Horário', val: '10h — início do expediente hospitalar' },
+    ],
+    legenda: `A maioria dos hospitais perde entre R$ 300 mil e R$ 1,5 milhão por ano com gestão técnica inadequada.\n\nE não sabem disso.\n\nPorque as perdas são silenciosas:\n→ Manutenções corretivas evitáveis\n→ Equipamentos operando abaixo da capacidade\n→ Exames cancelados por paradas inesperadas\n→ Não conformidades em auditorias\n\nA Gestec está oferecendo diagnóstico técnico gratuito para hospitais que querem saber exatamente onde estão perdendo.\n\nO que inclui:\n✓ Análise do parque tecnológico\n✓ Identificação de gaps operacionais\n✓ Cálculo estimado de perdas anuais\n✓ Plano de ação personalizado\n\nSem custo. Sem compromisso.\n\n👉 Vagas limitadas: 10 hospitais este mês\nLink na bio ou WhatsApp`,
+    hashtags: '#Gestec #DiagnósticoGratuito #GestãoHospitalar #EngenhariaClínica #LeadGeneration',
+    stories: [
+      { tipo: 'CTA direto', desc: '"10 vagas. Diagnóstico gratuito. 48h de resposta. Arrasta e garante a sua." + link WhatsApp' },
+      { tipo: 'Contagem', desc: 'Story com contador de vagas: "Restam X vagas para maio"' },
+    ]
+  },
+  {
+    id: 206, dia: 10, semana: 2, mes: 'mai', diasem: 'Sáb',
+    tipo: ['data'], formato: 'Foto',
+    titulo: 'Dia das Mães — Para as mães que cuidam e salvam vidas',
+    desc: 'Post emocional de Dia das Mães conectando maternidade com profissionais da saúde.',
+    status: 'planejado',
+    objetivo: 'Humanização de marca. Alto engajamento por ser data emocional de alto volume. Sem apelo comercial — 100% institucional.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Minimalista e delicado. Fundo branco clean com elemento sutil (flor outline azul). Texto azul escuro centralizado. Logo Gestec canto inferior.' },
+      { num: 'Headline', texto: '"FELIZ DIA DAS MÃES — Para as mães que cuidam. Para as mães que salvam vidas."' },
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Branco clean — delicadeza e leveza' },
+      { label: 'Elemento', val: 'Flor outline azul sutil — sem exagero' },
+      { label: 'Texto', val: 'Azul escuro Gestec, centralizado, tipografia elegante' },
+      { label: 'Tom visual', val: 'Minimalismo emocional — nada comercial na arte' },
+      { label: 'Logo', val: 'Gestec sutil no canto inferior' },
+      { label: 'Horário', val: '9h — sábado de manhã, momento familiar' },
+    ],
+    legenda: `Feliz Dia das Mães para todas as mulheres que fazem a saúde acontecer.\n\nPara as mães enfermeiras que cuidam de filhos de outras pessoas com o mesmo amor que cuidam dos seus.\n\nPara as mães médicas que salvam vidas depois de salvar a vida dos próprios filhos ao trazê-los ao mundo.\n\nPara as mães técnicas que garantem equipamentos funcionando para que outras mães possam ser cuidadas.\n\nPara todas as mães profissionais da saúde que equilibram plantões, cirurgias, emergências com café da manhã, lição de casa e abraços apertados.\n\nVocês são a prova viva de que amor e competência técnica podem coexistir perfeitamente.\n\nFeliz Dia das Mães! 💐💙`,
+    hashtags: '#Gestec #DiaDasMães #MãesDaSaúde #Homenagem #Respeito #ProfissionaisDaSaúde',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story com frase do post em fundo delicado. Sem CTA comercial.' },
+      { tipo: 'Caixinha', desc: '"Tem uma mãe profissional da saúde que você admira? Marca ela aqui 💐"' },
+    ]
+  },
+  {
+    id: 207, dia: 12, semana: 3, mes: 'mai', diasem: 'Seg',
+    tipo: ['data', 'edu'], formato: 'Foto',
+    titulo: 'Dia do Enfermeiro — Vocês dependem de equipamentos funcionando a cada segundo',
+    desc: 'Homenagem técnica ao Dia do Enfermeiro conectando diretamente com o trabalho da Gestec.',
+    status: 'planejado',
+    objetivo: 'Homenagem com conexão técnica ao propósito da Gestec. Engajamento com o público de enfermagem que é influenciador na decisão de compra de equipamentos.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Foto de equipamento hospitalar (bomba de infusão ou monitor) em close profissional. Ambiente hospitalar desfocado ao fundo. Overlay sutil. Texto branco no terço superior.' },
+      { num: 'Copy em tela', texto: '"DIA DO ENFERMEIRO — Vocês dependem de equipamentos funcionando perfeitamente a cada segundo. Nosso trabalho existe para que o de vocês nunca seja interrompido."' },
+    ],
+    arte: [
+      { label: 'Foto', val: 'Equipamento hospitalar em close — bomba de infusão ou monitor cardíaco' },
+      { label: 'Fundo', val: 'Ambiente hospitalar desfocado (bokeh)' },
+      { label: 'Overlay', val: 'Sutil azul escuro para texto ficar legível' },
+      { label: 'Texto', val: 'Branco, terço superior da imagem' },
+      { label: 'Tom', val: 'Técnico + respeitoso + conexão emocional' },
+      { label: 'Horário', val: '8h — segunda-feira, início de semana' },
+    ],
+    legenda: `Hoje é dia de quem não pode esperar equipamento funcionar "mais ou menos".\n\nEnfermeiros dependem de:\n→ Bombas de infusão precisas ao mililitro\n→ Monitores cardíacos que alertam no segundo exato\n→ Ventiladores que não falham nunca\n→ Desfibriladores prontos para emergências\n→ Equipamentos que simplesmente funcionam — sempre\n\nE é exatamente por isso que a Gestec existe.\n\nNosso compromisso é garantir que toda a tecnologia que vocês precisam esteja:\n✓ Calibrada com precisão\n✓ Mantida preventivamente\n✓ Disponível 24/7\n✓ Funcionando quando mais importa\n\nFeliz Dia do Enfermeiro! 💉💙`,
+    hashtags: '#Gestec #DiaDo Enfermeiro #Enfermagem #Homenagem #TecnologiaQueCuida #ProfissionaisDaSaúde',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story com frase de impacto para enfermeiros. "Vocês merecem tecnologia que nunca falha." + logo Gestec.' },
+      { tipo: 'Enquete', desc: '"Você é profissional de enfermagem?" Sim, sou! / Sou gestor / Outra área' },
+    ]
+  },
+  {
+    id: 208, dia: 13, semana: 3, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Cada número tem um rosto — Humanização de dados técnicos',
+    desc: 'Post reflexivo conectando métricas frias a impacto humano real.',
+    status: 'planejado',
+    objetivo: 'Topo de funil. Humanizar a linguagem técnica da Gestec e criar conexão emocional com gestores que precisam de dados com propósito.',
+    slides: [
+      { num: 'Capa', texto: '<strong>Conceito minimalista:</strong> Fundo branco. Tipografia em camadas. Estilo poético. "Cada número tem um rosto. Cada métrica tem uma história."' },
+      { num: 'Slide 2', texto: '"98% de disponibilidade = pacientes atendidos no momento certo."' },
+      { num: 'Slide 3', texto: '"89% menos paradas = equipes trabalhando com tranquilidade."' },
+      { num: 'Slide 4', texto: '"R$ 1,2 milhão economizado = recursos voltando para o cuidado."' },
+      { num: 'Slide 5', texto: '"Na Gestec, entendemos que gestão técnica não é sobre máquinas. É sobre pessoas." + logo.' },
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Branco puro — foco total no texto' },
+      { label: 'Tipografia', val: 'Camadas de peso — bold para número, light para significado' },
+      { label: 'Estilo', val: 'Poético e reflexivo — não técnico, não comercial' },
+      { label: 'Espaçamento', val: 'Muito espaço — respiro entre os elementos' },
+      { label: 'Logo', val: 'Gestec 10 anos no slide final' },
+      { label: 'Horário', val: '19h — tom reflexivo para noite' },
+    ],
+    legenda: `Falamos muito em números — 98% de disponibilidade, 89% de redução em paradas, R$ 1,2 milhão em economia.\n\nMas por trás de cada percentual, existe algo maior:\n\n98% de disponibilidade = pacientes atendidos no momento certo\n89% menos paradas = equipes trabalhando com tranquilidade\nR$ 1,2 milhão economizado = recursos voltando para o cuidado\n\nNa Gestec, entendemos que gestão técnica não é sobre máquinas.\nÉ sobre pessoas — as que operam, as que cuidam e as que são cuidadas.\n\nPor isso transformamos dados frios em impacto humano quente.`,
+    hashtags: '#Gestec #EngenhariaClínica #PropósitoComImpacto #SaúdeHumanizada #NúmerosQueSalvam',
+    stories: [
+      { tipo: 'Reflexão', desc: '"Qual dado da sua gestão representa mais vidas? Pensa nisso." Fundo preto, texto branco.' },
+      { tipo: 'Compartilhar slide', desc: 'Compartilhar slide mais impactante do carrossel nos stories.' },
+    ]
+  },
+  {
+    id: 209, dia: 14, semana: 3, mes: 'mai', diasem: 'Qua',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: '3 indicadores que transformam gestão técnica em estratégia',
+    desc: 'Infográfico educativo sobre MTBF, Disponibilidade e TCO para gestores hospitalares.',
+    status: 'planejado',
+    objetivo: 'Meio de funil. Alto valor educativo para gestores. Grande potencial de salvamento por ser conteúdo de referência técnica.',
+    slides: [
+      { num: 'Capa', texto: '<strong>Infográfico minimalista:</strong> "3 indicadores que transformam gestão técnica em estratégia." Fundo azul escuro Gestec + tipografia branca.' },
+      { num: 'Slide 2', texto: '<strong>MTBF:</strong> "Mean Time Between Failures — Tempo médio entre falhas. > 2.000h = excelente. < 1.000h = hora de renovar." Ícone + fórmula.' },
+      { num: 'Slide 3', texto: '<strong>DISPONIBILIDADE:</strong> "% de tempo operacional. Críticos > 98%. Essenciais > 95%." Gráfico visual simples.' },
+      { num: 'Slide 4', texto: '<strong>TCO:</strong> "Total Cost of Ownership — Custo total ao longo da vida útil. Guia decisão: manter ou substituir?" Escala visual.' },
+      { num: 'Slide 5', texto: '<strong>CTA:</strong> "Sua instituição mede esses indicadores? Fale com a Gestec." + logo.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul escuro Gestec + tipografia branca bold' },
+      { label: 'Slides internos', val: 'Fundo branco + ícone azul + dados em destaque' },
+      { label: 'Cores', val: 'Azul, branco, cinza — identidade Gestec' },
+      { label: 'Estilo', val: 'Infográfico técnico limpo — sem poluição visual' },
+      { label: 'Referência', val: 'Estilo "4 erros" já validado no feed' },
+      { label: 'Horário', val: '10h — engajamento matutino de gestores' },
+    ],
+    legenda: `Sem indicadores, você pilota no escuro.\nCom indicadores certos, você antecipa problemas e otimiza recursos.\n\nNa Engenharia Clínica, 3 KPIs são essenciais:\n\n📊 MTBF (Mean Time Between Failures)\n→ MTBF alto = equipamento confiável\n→ MTBF baixo = hora de renovar\n\n📊 DISPONIBILIDADE\n→ Críticos devem ter > 98%\n→ Essenciais > 95%\n\n📊 TCO (Total Cost of Ownership)\n→ Ajuda decidir: manter ou substituir?\n→ Equipamento "barato" pode custar mais\n\nHospitais que medem esses indicadores tomam decisões baseadas em dados, não em achismos.\n\nQuer saber como implementar isso na sua instituição? Fale com a Gestec.`,
+    hashtags: '#Gestec #Indicadores #KPIs #GestãoBaseadaEmDados #EngenhariaClínica #MTBF #TCO',
+    stories: [
+      { tipo: 'Quiz', desc: '"Você sabe o que é MTBF?" Sei! / Nunca ouvi falar / Ouço mas não calculo' },
+      { tipo: 'Compartilhar slide', desc: 'Slide dos 3 indicadores nos stories com "Salva esse — você vai precisar."' },
+    ]
+  },
+  {
+    id: 210, dia: 15, semana: 3, mes: 'mai', diasem: 'Qui',
+    tipo: ['prova'], formato: 'Foto',
+    titulo: 'Case real: 87% de redução em paradas. R$ 615 mil economizados.',
+    desc: 'Prova social com case de hospital que transformou resultados com a Gestec.',
+    status: 'planejado',
+    objetivo: 'Meio/fundo de funil. Prova social com números reais. Converte gestores que já foram educados pelos posts anteriores.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Quote em destaque com aspas grandes. Visual clean. "Em 12 meses com a Gestec, reduzimos 87% das paradas não programadas. A economia foi de R$ 615 mil. Mas o ganho em tranquilidade não tem preço." — Diretor Administrativo, Hospital Regional.' },
+    ],
+    arte: [
+      { label: 'Estilo', val: 'Quote destacada — aspas grandes em azul Gestec' },
+      { label: 'Fundo', val: 'Branco clean ou foto do hospital (se autorizado)' },
+      { label: 'Tipografia', val: 'Citação em bold, atribuição em italic light' },
+      { label: 'Destaque', val: '87% e R$ 615 mil em azul bold — dados não passam despercebidos' },
+      { label: 'Logo', val: 'Gestec 10 anos no rodapé' },
+      { label: 'Horário', val: '10h — gestores em expediente' },
+    ],
+    legenda: `Case real. Resultados reais.\n\nHospital de 95 leitos que vivia no modelo reativo:\n→ 63 paradas emergenciais/ano\n→ R$ 980 mil em manutenções corretivas\n→ 290 exames cancelados por falha técnica\n\nApós 12 meses com gestão preventiva estruturada da Gestec:\n→ 8 paradas/ano (-87%)\n→ R$ 365 mil em gestão total\n→ 18 exames cancelados (-94%)\n→ Economia líquida: R$ 615 mil/ano\n\nA diferença não foi comprar equipamentos novos.\nFoi gerenciar com inteligência o que já tinham.\n\nSua instituição está pronta para resultados assim?\n\n👉 Fale com a Gestec — link na bio`,
+    hashtags: '#Gestec #CaseDeSucesso #ResultadosReais #EngenhariaClínica #ProvasSocial #ROI',
+    stories: [
+      { tipo: 'Dado isolado', desc: '"87% de redução em paradas. Em 12 meses. Case real." Story simples, dado em destaque.' },
+      { tipo: 'CTA', desc: '"Quer ver o case completo? Vai no feed. E se quiser resultados assim, fala com a Gestec."' },
+    ]
+  },
+  {
+    id: 211, dia: 19, semana: 4, mes: 'mai', diasem: 'Seg',
+    tipo: ['eng'], formato: 'Foto',
+    titulo: 'Teste rápido: você conhece seu parque tecnológico?',
+    desc: 'Checklist interativo para gestores autoavaliarem sua gestão técnica.',
+    status: 'planejado',
+    objetivo: 'Engajamento e conscientização. Topo de funil. O gestor que não consegue responder se qualifica automaticamente como lead.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Checklist minimalista:</strong> Fundo branco. Ícones de check simples. "Teste rápido: você conhece seu parque tecnológico? □ Quantos equipamentos críticos tem □ Qual está com maior risco de falha □ Quantos com calibração vencida □ Histórico completo em 2min. Marcou todos? Você tem gestão. Faltou? Você tem improviso."' },
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Branco puro — foco no checklist' },
+      { label: 'Ícones', val: 'Checkbox simples — vazio e preenchido em azul Gestec' },
+      { label: 'Tipografia', val: 'Clean, espaçada — fácil de ler e interagir' },
+      { label: 'Destaque', val: '"Gestão" em verde, "improviso" em vermelho' },
+      { label: 'Logo', val: 'Gestec no rodapé' },
+      { label: 'Horário', val: '12h — pausa do almoço de gestores' },
+    ],
+    legenda: `A diferença entre gestão técnica e improviso está nas respostas que você consegue dar em 30 segundos.\n\nSe você não sabe:\n❓ Quantos equipamentos críticos tem em operação agora\n❓ Qual tem maior probabilidade de falhar nos próximos 30 dias\n❓ Quantos estão com calibração vencida\n❓ Se consegue acessar histórico técnico em menos de 2 minutos\n\nEntão você não tem gestão técnica — tem reação emergencial.\n\nE reação custa 7x mais caro que prevenção.\n\nA boa notícia? É totalmente solucionável com gestão estruturada.\n\nQuer saber como? A Gestec ajuda hospitais a sair do improviso.`,
+    hashtags: '#Gestec #AutoAvaliação #GestãoTécnica #EngenhariaClínica #TesteRápido #CheckList',
+    stories: [
+      { tipo: 'Enquete', desc: '"Você consegue responder essas 4 perguntas sobre seu parque tecnológico agora?" Sim, fácil / Algumas / Não consigo' },
+      { tipo: 'CTA', desc: '"Não conseguiu? É hora de conversar com a Gestec." + link WhatsApp' },
+    ]
+  },
+  {
+    id: 212, dia: 20, semana: 4, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Foto',
+    titulo: '89% — De redução em paradas quando gestão reativa vira preventiva',
+    desc: 'Dado de impacto com número gigante centralizado. Série "Números que Salvam".',
+    status: 'planejado',
+    objetivo: 'Meio de funil. Dado impactante que consolida a campanha do mês e prepara para o Reels do dia seguinte.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Número gigante "89%" centralizado. Fundo gradiente branco → azul claro Gestec. Tipografia bold de impacto máximo.' },
+      { num: 'Copy', texto: '"De redução em paradas não programadas quando gestão reativa vira gestão preventiva. Não é mágica. É método."' },
+    ],
+    arte: [
+      { label: 'Número', val: '"89%" — gigante, centralizado, azul escuro Gestec' },
+      { label: 'Fundo', val: 'Gradiente suave branco → azul claro' },
+      { label: 'Tipografia', val: 'Bold para número, light para copy de apoio' },
+      { label: 'Referência', val: 'Estilo "CUSTA 5 VEZES MAIS" e "Improviso custa caro" — já validado no feed' },
+      { label: 'Logo', val: 'Gestec 10 anos no rodapé' },
+      { label: 'Horário', val: '19h — impacto no horário de maior engajamento' },
+    ],
+    legenda: `89% é a redução média de paradas emergenciais em hospitais que implementaram gestão preventiva estruturada.\n\nO que isso significa na prática?\n\nANTES:\n→ 47 paradas/ano\n→ Equipes sempre em modo emergência\n→ Pacientes frustrados\n→ Custos imprevisíveis\n\nDEPOIS:\n→ 5 paradas/ano\n→ Operação tranquila e previsível\n→ Atendimento sem interrupções\n→ Orçamento controlado\n\nA transformação acontece quando você sai do ciclo de "apagar incêndios" e entra na gestão que previne o fogo de começar.\n\nPrimeiros resultados aparecem em 90 dias.\n\nQuer saber como implementar? Fale com a Gestec.`,
+    hashtags: '#Gestec #Resultados #ManutençãoPreventiva #EngenhariaClínica #Dados #89porcento',
+    stories: [
+      { tipo: 'Contagem', desc: '"89%. Deixa isso fazer sentido." Story com o número em destaque isolado.' },
+      { tipo: 'Direcionamento', desc: '"Vai no feed e entende o que esse número significa na prática."' },
+    ]
+  },
+  {
+    id: 213, dia: 21, semana: 4, mes: 'mai', diasem: 'Qua',
+    tipo: ['data', 'edu'], formato: 'Foto',
+    titulo: 'Dia do Radiologista — Imagens precisas dependem de equipamentos impecavelmente calibrados',
+    desc: 'Homenagem técnica especializada ao Dia do Profissional de Radiologia.',
+    status: 'planejado',
+    objetivo: 'Homenagem com alto teor técnico. Conecta diretamente o trabalho da Gestec (calibração de equipamentos de imagem) com o público de radiologistas.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Foto de equipamento de radiologia (tomógrafo ou raio-X) em ângulo profissional. Iluminação técnica e dramática. Pode ser P&B. Texto branco ou azul claro.' },
+      { num: 'Copy', texto: '"DIA DO PROFISSIONAL DE RADIOLOGIA — Imagens precisas dependem de equipamentos impecavelmente calibrados. Nosso compromisso: garantir que sua tecnologia esteja sempre pronta."' },
+    ],
+    arte: [
+      { label: 'Foto', val: 'Equipamento de radiologia — tomógrafo ou raio-X em ângulo técnico' },
+      { label: 'Iluminação', val: 'Dramática, técnica — destaca a tecnologia' },
+      { label: 'Estilo', val: 'P&B ou azul frio — seriedade técnica' },
+      { label: 'Texto', val: 'Branco ou azul claro sobre foto escura' },
+      { label: 'Tom', val: 'Técnico especializado + respeitoso' },
+      { label: 'Horário', val: '10h — quarta-feira, meio de semana' },
+    ],
+    legenda: `Feliz Dia do Profissional de Radiologia!\n\nVocês transformam raios-X em diagnósticos.\nTomografias em certezas.\nRessonâncias em respostas que salvam vidas.\n\nMas tudo isso só acontece quando a tecnologia está impecável:\n→ Calibração milimétrica dos sensores\n→ Ajuste perfeito de radiação\n→ Manutenção preventiva rigorosa\n→ Testes de qualidade constantes\n\nUm equipamento de radiologia descalibrado não entrega apenas "imagens ruins".\nEntrega diagnósticos imprecisos que podem mudar — literalmente — o destino de um paciente.\n\nPor isso, na Gestec, tratamos equipamentos de radiologia com o rigor que eles merecem:\n✓ Calibração com rastreabilidade RBC\n✓ Manutenção preventiva baseada em ciclos de uso\n✓ Documentação completa para auditorias\n\nParabéns a todos os profissionais de radiologia! 📡💙`,
+    hashtags: '#Gestec #DiaDo Radiologista #Radiologia #ImagemDiagnóstica #TecnologiaMédica #Homenagem',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story técnico para radiologistas: "Imagem ruim não é azar. É equipamento descalibrado." + logo Gestec.' },
+      { tipo: 'Enquete', desc: '"Você é profissional de radiologia ou diagnóstico por imagem?" Sim! / Sou gestor / Outra área' },
+    ]
+  },
+  {
+    id: 214, dia: 21, semana: 4, mes: 'mai', diasem: 'Qua',
+    tipo: ['edu'], formato: 'Reels',
+    titulo: 'Reels Antes e Depois — Transformação em números reais',
+    desc: 'Reels "antes e depois" mostrando transformação de hospital com gestão Gestec.',
+    status: 'planejado',
+    objetivo: 'Viralização e prova social. Meio de funil. Mostra resultado concreto de forma visual e rápida.',
+    slides: [
+      { num: '0–5s', texto: '<strong>Antes:</strong> "Hospital ANTES da Gestec" — Visual caótico, números vermelhos piscando: "47 paradas/ano", "R$ 980 mil desperdiçado", "Caos operacional".' },
+      { num: '5–10s', texto: '<strong>Transição:</strong> Swipe / efeito de virada limpo.' },
+      { num: '10–18s', texto: '<strong>Depois:</strong> "Hospital DEPOIS da Gestec" — Visual limpo, números verdes: "5 paradas/ano", "R$ 615 mil economizado", "Operação tranquila".' },
+      { num: '18–23s', texto: '<strong>Encerramento:</strong> Logo Gestec + "A diferença é gestão estratégica" + CTA "Fale com a Gestec".' },
+    ],
+    arte: [
+      { label: 'Duração', val: '20 a 25 segundos' },
+      { label: 'Estilo', val: 'Antes/depois — 100% visual, texto animado' },
+      { label: 'Antes', val: 'Visual caótico, vermelho, números piscando' },
+      { label: 'Depois', val: 'Visual clean, verde, números estáveis' },
+      { label: 'Áudio', val: 'Música inspiradora/motivacional trending' },
+      { label: 'Horário', val: '12h-14h — pico de alcance Reels' },
+    ],
+    legenda: `A transformação em números reais 📊\n\nDe caos operacional\npara eficiência estratégica.\n\nCase real de hospital\nque mudou de modelo.\n\n#Gestec #AntesEDepois #Transformação #EngenhariaClínica #Reels`,
+    hashtags: '#Gestec #AntesEDepois #Transformação #EngenhariaClínica #Reels #CaseDeSucesso',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: '"De 47 para 5 paradas. Em 12 meses. Assiste até o final." + compartilhar Reels.' },
+      { tipo: 'CTA', desc: '"Quer essa transformação no seu hospital? Arrasta e fala com a Gestec."' },
+    ]
+  },
+  {
+    id: 215, dia: 22, semana: 4, mes: 'mai', diasem: 'Qui',
+    tipo: ['oferta'], formato: 'Foto',
+    titulo: 'Últimas 3 vagas para diagnóstico gratuito em maio',
+    desc: 'Urgência e escassez para fechar leads do mês. Fundo de funil com CTA imediato.',
+    status: 'planejado',
+    objetivo: 'Conversão imediata por escassez. Fundo de funil. Direciona leads que foram aquecidos durante o mês para ação imediata.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Fundo azul escuro Gestec. Texto branco. Ícone de relógio ou contador. "ÚLTIMAS 3 VAGAS — para diagnóstico gratuito em maio."' },
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Azul escuro — urgência e seriedade' },
+      { label: 'Destaque', val: '"3 VAGAS" em tamanho grande — escassez visível' },
+      { label: 'Ícone', val: 'Relógio ou contador visual de vagas' },
+      { label: 'CTA', val: 'Botão ou seta visual para link na bio' },
+      { label: 'Tom', val: 'Urgente mas profissional — não sensacionalista' },
+      { label: 'Horário', val: '10h — início do expediente para ação imediata' },
+    ],
+    legenda: `⏰ ÚLTIMAS 3 VAGAS PARA MAIO\n\nDiagnóstico Técnico Gratuito para hospitais que querem saber exatamente onde estão perdendo recursos.\n\nO que você recebe:\n✓ Análise completa do parque tecnológico\n✓ Identificação de gaps operacionais\n✓ Cálculo estimado de perdas anuais (geralmente R$ 300k - R$ 1,5 milhão)\n✓ Plano de ação personalizado\n\nTempo de entrega: 48-72 horas\nInvestimento: R$ 0\nCompromisso: nenhum\n\nDas 10 vagas do mês, restam apenas 3.\n\n👉 Garanta a sua agora:\nLink na bio ou WhatsApp`,
+    hashtags: '#Gestec #ÚltimasVagas #DiagnósticoGratuito #GestãoHospitalar #EngenhariaClínica #Urgência',
+    stories: [
+      { tipo: 'Contador', desc: 'Story com "RESTAM 3 VAGAS" em destaque máximo. Link direto WhatsApp.' },
+      { tipo: 'CTA urgência', desc: '"Depois de maio não tem mais. Garante agora." + botão de link.' },
+    ]
+  },
+  {
+    id: 216, dia: 26, semana: 5, mes: 'mai', diasem: 'Seg',
+    tipo: ['edu'], formato: 'Foto',
+    titulo: 'Excelência não é meta. É rotina.',
+    desc: 'Post reflexivo inspiracional sobre consistência em gestão técnica hospitalar.',
+    status: 'planejado',
+    objetivo: 'Topo de funil. Posicionamento de marca e reforço de valores. Tom inspirador que conecta com gestores que buscam excelência operacional.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Minimalismo extremo:</strong> Fundo branco. Texto centralizado. Tipografia elegante. "Excelência não é meta. É rotina. Quando gestão técnica é feita com método, resultados deixam de ser exceção e viram padrão."' },
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Branco puro — minimalismo que já é marca registrada do feed' },
+      { label: 'Tipografia', val: 'Elegante, centralizada — peso variado (bold/light)' },
+      { label: 'Espaçamento', val: 'Muito respiro — o silêncio comunica' },
+      { label: 'Logo', val: 'Gestec 10 anos discreto no rodapé' },
+      { label: 'Referência', val: 'Estilo "Improviso custa caro" — já validado no feed' },
+      { label: 'Horário', val: '19h — tom reflexivo para encerrar segunda-feira' },
+    ],
+    legenda: `Hospitais de excelência não têm "dias bons" e "dias ruins" de gestão técnica.\n\nEles têm consistência.\n\nPorque entenderam que:\n→ Excelência não acontece de vez em quando\n→ Ela é o resultado de processos sólidos, executados todo dia\n→ Sem exceção, sem improviso, sem atalhos\n\nQuando manutenção preventiva é rigorosa,\nquando calibração está sempre em dia,\nquando documentação é impecável,\nquando indicadores são acompanhados —\n\nOs resultados aparecem naturalmente.\n\nNa Gestec, acreditamos que gestão técnica de excelência não é evento especial.\nÉ rotina operacional bem estruturada.`,
+    hashtags: '#Gestec #Excelência #Consistência #GestãoTécnica #EngenhariaClínica #Rotina',
+    stories: [
+      { tipo: 'Frase', desc: '"Excelência não é meta. É rotina." Story fundo preto, texto branco bold. Simples e impactante.' },
+      { tipo: 'Reflexão', desc: '"Sua gestão técnica é consistente ou depende do humor do dia?" Caixinha de perguntas.' },
+    ]
+  },
+  {
+    id: 217, dia: 27, semana: 5, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Mito vs Realidade: equipamento novo não precisa de gestão',
+    desc: 'Desmistificação de crença cara na gestão hospitalar com dado técnico de impacto.',
+    status: 'planejado',
+    objetivo: 'Meio de funil. Desconstrução de crença que impede contratação. Gestor que acredita no mito se qualifica como lead ao ser confrontado com o dado.',
+    slides: [
+      { num: 'Capa', texto: '<strong>Layout Mito vs Realidade:</strong> Duas colunas. Vermelho suave (mito) e verde suave (realidade). "Um dos mitos mais caros da gestão hospitalar."' },
+      { num: 'Slide 2', texto: '<strong>Mito:</strong> "Equipamento novo não precisa de gestão." Ícone de X vermelho.' },
+      { num: 'Slide 3', texto: '<strong>Realidade:</strong> "34% das falhas acontecem nos primeiros 2 anos de uso." Ícone de check verde + dado em destaque.' },
+      { num: 'Slide 4', texto: '<strong>Por quê:</strong> "Parametrização, calibração pós-instalação, adaptação ao fluxo, monitoramento desde o dia 1." Lista técnica.' },
+      { num: 'Slide 5', texto: '<strong>CTA:</strong> "Hospitais que entendem isso economizam milhares em manutenções corretivas evitáveis. Fale com a Gestec." + logo.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Split visual mito/realidade — vermelho #FEE2E2 e verde #DCFCE7' },
+      { label: 'Ícones', val: 'X vermelho para mito, check verde para realidade' },
+      { label: 'Dado', val: '"34%" em destaque bold azul Gestec' },
+      { label: 'Tipografia', val: 'Clean, técnica, sem poluição' },
+      { label: 'CTA', val: 'Slide final azul escuro Gestec + logo' },
+      { label: 'Horário', val: '10h — início do expediente' },
+    ],
+    legenda: `Um dos mitos mais caros da gestão hospitalar:\n\n❌ MITO: "Acabamos de comprar. É novo. Não precisa de nada agora."\n\n✅ REALIDADE: 34% das falhas em equipamentos médicos acontecem nos primeiros 2 anos de uso.\n\nPor quê?\n\nEquipamentos médicos complexos precisam de:\n→ Parametrização adequada ao ambiente\n→ Calibração rigorosa pós-instalação\n→ Adaptação ao fluxo operacional\n→ Monitoramento desde o dia 1\n\nSem essa gestão inicial, você tem um Ferrari sendo usado como caminhão de carga.\n\nE quando a falha vem — e ela vem — não é "azar".\nÉ falta de gestão técnica desde a instalação.`,
+    hashtags: '#Gestec #MitoVsRealidade #EquipamentosNovos #GestãoTécnica #EngenhariaClínica #34porcento',
+    stories: [
+      { tipo: 'Enquete', desc: '"Você acredita que equipamento novo não precisa de gestão?" Sim / Não — resposta revelada nos stories.' },
+      { tipo: 'Revelação', desc: '"34% das falhas nos primeiros 2 anos. Vai no feed e entende por quê."' },
+    ]
+  },
+  {
+    id: 218, dia: 29, semana: 5, mes: 'mai', diasem: 'Qui',
+    tipo: ['oferta'], formato: 'Carrossel',
+    titulo: 'Maio em números — Fechamento da campanha + CTA final',
+    desc: 'Encerramento da campanha "Números que Salvam" com retrospectiva e CTA de conversão.',
+    status: 'planejado',
+    objetivo: 'Fundo de funil. Fechamento do mês com retrospectiva que consolida autoridade e CTA final para conversão antes de junho.',
+    slides: [
+      { num: 'Capa', texto: '<strong>Retrospectiva visual:</strong> "Maio em números: 12 posts educativos · 2 artigos completos · Centenas de dados compartilhados." Estilo montagem ou visual clean.' },
+      { num: 'Slide 2', texto: '"R$ 1,8 milhão economizado quando gestão vira estratégia." Destaque em azul.' },
+      { num: 'Slide 3', texto: '"89% de redução em paradas com manutenção preventiva." Destaque em azul.' },
+      { num: 'Slide 4', texto: '"98% de disponibilidade em hospitais bem gerenciados." Destaque em azul.' },
+      { num: 'Slide 5', texto: '<strong>CTA:</strong> "Junho chega com uma pergunta: sua instituição vai continuar no modelo reativo ou vai transformar gestão técnica em vantagem competitiva?" + WhatsApp.' },
+    ],
+    arte: [
+      { label: 'Capa', val: 'Azul escuro Gestec + tipografia bold branca — encerramento impactante' },
+      { label: 'Slides de dados', val: 'Fundo branco + número gigante azul — recap da campanha' },
+      { label: 'CTA final', val: 'Azul sólido + pergunta provocativa + WhatsApp em destaque' },
+      { label: 'Estilo', val: 'Coerência visual com todos os posts do mês' },
+      { label: 'Logo', val: 'Gestec 10 anos com destaque — encerramento de ciclo' },
+      { label: 'Horário', val: '10h — última quinta do mês, decisões de final de mês' },
+    ],
+    legenda: `Maio foi o mês dos "Números que Salvam".\n\nMostramos que por trás de cada dado existe impacto humano real:\n→ R$ 1,8 milhão economizado quando gestão vira estratégia\n→ 89% de redução em paradas com manutenção preventiva\n→ 98% de disponibilidade em hospitais bem gerenciados\n\nCompartilhamos cases reais, desmistificamos crenças caras e provamos que gestão técnica não é custo — é investimento com ROI de 400-600%.\n\nAgora, junho chega com uma pergunta:\n\nSua instituição vai continuar no modelo reativo?\nOu vai transformar gestão técnica em vantagem competitiva?\n\nSe escolheu a segunda opção, vamos conversar.\n\n👉 Fale com a Gestec — link na bio`,
+    hashtags: '#Gestec #EncerramentoMaio #NúmerosQueSalvam #EngenhariaClínica #GestãoEstratégica #ROI',
+    stories: [
+      { tipo: 'Retrospectiva', desc: 'Stories com os melhores dados do mês — um por slide. "Esse foi maio. E junho?"' },
+      { tipo: 'CTA final', desc: '"Ainda dá tempo. Fala com a Gestec antes de junho." + link WhatsApp.' },
+    ]
+  }
+];
+
+
+const CLIENTES = {
+  biomexx: {
+    nome: 'Biomexx',
+    mes: 'Maio 2026',
+    token: 'bx8f92k',
+    posts: POSTS
+  },
+  equipmed: {
+    nome: 'Equipmed',
+    mes: 'Maio 2026', 
+    token: 'em7k31p',
+    posts: POSTS_EQUIPMED
+  },
+  gestec: {
+    nome: 'Gestec',
+    mes: 'Maio 2026',
+    token: 'gt4x19z',
+    posts: POSTS_GESTEC
+  }
+};
+
+let currentClient = 'biomexx';
+let ACTIVE_POSTS = POSTS;
+
+const TIPOS = {
+  'edu': { label: 'Educativo', cls: 'tag-edu' },
+  'inst': { label: 'Institucional', cls: 'tag-inst' },
+  'eng': { label: 'Engajamento', cls: 'tag-eng' },
+  'prova': { label: 'Prova social', cls: 'tag-prova' },
+  'oferta': { label: 'Oferta/Serviço', cls: 'tag-oferta' },
+  'data': { label: 'Data comemorativa', cls: 'tag-data' },
+};
+
+const CAL_DAYS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+// Maio 2026 começa na sexta (dia da semana 5)
+const MAY_START = 5; // 0=Dom
+const MAY_DAYS = 31;
+
+let currentFilter = 'todos';
+let currentView = 'posts';
+let openCard = null;
+let openTab = {};
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('view-posts').style.display = v === 'posts' ? 'block' : 'none';
+  document.getElementById('view-calendario').style.display = v === 'calendario' ? 'block' : 'none';
+  document.getElementById('view-stories').style.display = v === 'stories' ? 'block' : 'none';
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const idx = ['posts','calendario','stories'].indexOf(v);
+  document.querySelectorAll('.nav-item')[idx].classList.add('active');
+  if (v === 'calendario') renderCalendar();
+  if (v === 'stories') renderStories();
+}
+
+function setTabFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderPosts();
+  updateStats();
+}
+
+function renderPosts() {
+  const list = document.getElementById('posts-list');
+  let filtered = ACTIVE_POSTS;
+  if (currentFilter !== 'todos') filtered = ACTIVE_POSTS.filter(p => p.status === currentFilter);
+  if (filtered.length === 0) { list.innerHTML = '<div class="empty">Nenhum post neste status ainda.</div>'; return; }
+  list.innerHTML = filtered.map(p => renderPost(p)).join('');
+  filtered.forEach(p => {
+    document.getElementById('ph-' + p.id).addEventListener('click', () => toggleCard(p.id));
+    document.querySelectorAll(`#tabs-${p.id} .detail-tab`).forEach((tab, i) => {
+      tab.addEventListener('click', (e) => { e.stopPropagation(); switchTab(p.id, i); });
+    });
+    const sel = document.getElementById('status-' + p.id);
+    if (sel) sel.addEventListener('change', (e) => { e.stopPropagation(); changeStatus(p.id, e.target.value); });
+    const copyBtn = document.getElementById('copy-' + p.id);
+    if (copyBtn) copyBtn.addEventListener('click', (e) => { e.stopPropagation(); copyLegenda(p.id); });
+  });
+}
+
+function renderPost(p) {
+  const tags = p.tipo.map(t => `<span class="tag ${TIPOS[t].cls}">${TIPOS[t].label}</span>`).join('');
+  const statusClass = 'status-' + p.status;
+  const statusLabel = p.status === 'planejado' ? 'Planejado' : p.status === 'aprovado' ? 'Aprovado' : 'Publicado';
+  const slides = p.slides.map(s => `<li class="slide-row"><span class="slide-badge">${s.num}</span><span class="slide-content">${s.texto}</span></li>`).join('');
+  const arte = p.arte.map(a => `<div class="arte-item"><div class="arte-item-label">${a.label}</div><div class="arte-item-val">${a.val}</div></div>`).join('');
+  const isOpen = openCard === p.id;
+  const activeTab = openTab[p.id] || 0;
+  return `<div class="post-card${isOpen ? ' open' : ''}" id="card-${p.id}">
+    <div class="post-card-header" id="ph-${p.id}">
+      <div class="post-date-block">
+        <div class="post-day-num">${p.dia}</div>
+        <div class="post-month">${p.mes}</div>
+        <div class="post-weekday">${p.diasem}</div>
+      </div>
+      <div class="post-main">
+        <div class="post-tags">${tags}<span class="tag tag-format">${p.formato}</span></div>
+        <div class="post-title">${p.titulo}</div>
+        <div class="post-desc-preview">${p.desc}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+        <div class="post-status ${statusClass}"><div class="status-dot"></div><span class="status-label">${statusLabel}</span></div>
+        <select class="status-select" id="status-${p.id}" onclick="event.stopPropagation()">
+          <option value="planejado"${p.status==='planejado'?' selected':''}>Planejado</option>
+          <option value="aprovado"${p.status==='aprovado'?' selected':''}>Aprovado</option>
+          <option value="publicado"${p.status==='publicado'?' selected':''}>Publicado</option>
+        </select>
+      </div>
+      <div class="expand-icon">▾</div>
+    </div>
+    <div class="post-detail">
+      <div class="detail-tabs" id="tabs-${p.id}">
+        <div class="detail-tab${activeTab===0?' active':''}">Briefing</div>
+        <div class="detail-tab${activeTab===1?' active':''}">Estrutura</div>
+        <div class="detail-tab${activeTab===2?' active':''}">Arte</div>
+        <div class="detail-tab${activeTab===3?' active':''}">Legenda</div>
+        <div class="detail-tab${activeTab===4?' active':''}">Stories</div>
+      </div>
+      <div class="detail-panel${activeTab===0?' active':''}" id="panel-${p.id}-0">
+        <div class="briefing-section">
+          <div class="briefing-label">Objetivo do post</div>
+          <div class="briefing-text">${p.objetivo}</div>
+        </div>
+      </div>
+      <div class="detail-panel${activeTab===1?' active':''}" id="panel-${p.id}-1">
+        <div class="briefing-label" style="font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">${p.formato === 'Reels' ? 'Roteiro' : 'Estrutura dos slides'}</div>
+        <ul class="slide-list">${slides}</ul>
+      </div>
+      <div class="detail-panel${activeTab===2?' active':''}" id="panel-${p.id}-2">
+        <div class="arte-grid">${arte}</div>
+      </div>
+      <div class="detail-panel${activeTab===3?' active':''}" id="panel-${p.id}-3">
+        <div class="legenda-box">${p.legenda}<div class="hashtags">${p.hashtags}</div></div>
+        <button class="copy-btn" id="copy-${p.id}">Copiar legenda</button>
+      </div>
+      <div class="detail-panel${activeTab===4?' active':''}" id="panel-${p.id}-4">
+        ${p.stories.map((s,i) => `<div class="briefing-section"><div class="briefing-label">Story ${i+1} — ${s.tipo}</div><div class="briefing-text">${s.desc}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleCard(id) {
+  openCard = openCard === id ? null : id;
+  renderPosts();
+}
+
+function switchTab(id, idx) {
+  openTab[id] = idx;
+  renderPosts();
+}
+
+function changeStatus(id, val) {
+  const p = ACTIVE_POSTS.find(x => x.id === id);
+  if (p) { p.status = val; renderPosts(); updateStats(); }
+}
+
+function copyLegenda(id) {
+  const p = ACTIVE_POSTS.find(x => x.id === id);
+  if (p) {
+    navigator.clipboard.writeText(p.legenda + '\n\n' + p.hashtags).catch(() => {});
+    showToast('Legenda copiada!');
+  }
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = ACTIVE_POSTS.length;
+  document.getElementById('stat-planejado').textContent = ACTIVE_POSTS.filter(p => p.status === 'planejado').length;
+  document.getElementById('stat-aprovado').textContent = ACTIVE_POSTS.filter(p => p.status === 'aprovado').length;
+  document.getElementById('stat-publicado').textContent = ACTIVE_POSTS.filter(p => p.status === 'publicado').length;
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('calendar-grid');
+  const postMap = {};
+  ACTIVE_POSTS.forEach(p => { postMap[p.dia] = postMap[p.dia] || []; postMap[p.dia].push(p); });
+  const dotColors = { 'edu':'dot-blue','inst':'dot-green','eng':'dot-amber','prova':'dot-teal','oferta':'dot-pink','data':'dot-teal' };
+  let html = CAL_DAYS.map(d => `<div class="cal-day-label">${d}</div>`).join('');
+  for (let i = 0; i < MAY_START; i++) html += '<div class="cal-cell empty"></div>';
+  for (let d = 1; d <= MAY_DAYS; d++) {
+    const posts = postMap[d] || [];
+    const hasPost = posts.length > 0;
+    let dotsHtml = posts.map(p => {
+      const tipo = p.tipo[0];
+      return `<div class="cal-post-dot ${dotColors[tipo]||'dot-blue'}">${p.titulo.substring(0,22)}…</div>`;
+    }).join('');
+    html += `<div class="cal-cell${hasPost?' has-post':''}"><div class="cal-num">${d}</div>${dotsHtml}</div>`;
+  }
+  const rem = (MAY_START + MAY_DAYS) % 7;
+  if (rem > 0) for (let i = 0; i < 7 - rem; i++) html += '<div class="cal-cell empty"></div>';
+  grid.innerHTML = html;
+}
+
+function renderStories() {
+  const grid = document.getElementById('stories-grid');
+  const dotColors = { 'edu':'tag-edu','inst':'tag-inst','eng':'tag-eng','prova':'tag-prova','oferta':'tag-oferta','data':'tag-data' };
+  let html = '';
+  ACTIVE_POSTS.forEach(p => {
+    p.stories.forEach((s, i) => {
+      const tipo = p.tipo[0];
+      html += `<div class="story-card">
+        <div class="story-num">${p.dia}/mai — Post ${p.id}</div>
+        <div class="story-type"><span class="tag ${dotColors[tipo]||'tag-edu'}">${s.tipo}</span></div>
+        <div class="story-desc">${s.desc}</div>
+      </div>`;
+    });
+  });
+  grid.innerHTML = html;
+}
+
+function openModal() { document.getElementById('modal').classList.add('open'); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function setPerm(el, type) {
+  document.querySelectorAll('.perm-opt').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+  const link = document.getElementById('share-link');
+  link.textContent = type === 'view'
+    ? 'https://nxtlvl.app/biomexx/maio2026?token=bx8f92k&view=only'
+    : 'https://nxtlvl.app/biomexx/maio2026?token=bx8f92k&perm=approve';
+}
+
+function copyLink() {
+  const link = document.getElementById('share-link').textContent;
+  navigator.clipboard.writeText(link).catch(() => {});
+  showToast('Link copiado!');
+  closeModal();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function selectClient(id) {
+  document.querySelectorAll('.client-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  if (id === 'novo') {
+    showToast('Funcionalidade de novo cliente em breve!');
+    return;
+  }
+  currentClient = id;
+  const c = CLIENTES[id];
+  ACTIVE_POSTS = c.posts;
+  document.getElementById('client-name-top').textContent = c.nome;
+  document.getElementById('share-link').textContent = `https://nxtlvl.app/${id}/${c.mes.toLowerCase().replace(' ','/')}?token=${c.token}`;
+  openCard = null;
+  openTab = {};
+  currentFilter = 'todos';
+  document.querySelectorAll('.view-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  renderPosts();
+  updateStats();
+  if (currentView === 'calendario') renderCalendar();
+  if (currentView === 'stories') renderStories();
+}
+
+renderPosts();
+updateStats();
+</script>
+</body>
+</html>
