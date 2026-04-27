@@ -2367,6 +2367,7 @@ function gerarPDF() {
 </script>
 <script>
 
+
 // ============================================================
 // DETECÇÃO DE ACESSO DO CLIENTE POR TOKEN
 // ============================================================
@@ -2453,7 +2454,10 @@ function gerarPDF() {
   '</div>';
 
   function cpFilter(val, label, active) {
-    return '<button onclick="cpFilter2(this,''+val+'')" style="padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid '+(active?'#aaff00':'rgba(255,255,255,0.1)')+';background:'+(active?'rgba(170,255,0,0.1)':'transparent')+';color:'+(active?'#aaff00':'#9090a8')+';font-family:DM Sans,sans-serif;transition:all 0.15s;" data-filter="'+val+'">' + label + '</button>';
+    var bc = active ? '#aaff00' : 'rgba(255,255,255,0.1)';
+    var bg = active ? 'rgba(170,255,0,0.1)' : 'transparent';
+    var cl = active ? '#aaff00' : '#9090a8';
+    return '<button data-filter="' + val + '" onclick="cpFilter2(this,this.getAttribute(\"data-filter\"))" style="padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid ' + bc + ';background:' + bg + ';color:' + cl + ';font-family:DM Sans,sans-serif;transition:all 0.15s;">' + label + '</button>';
   }
 
   // Posts
@@ -2595,6 +2599,7 @@ function gerarPDF() {
   }
 
 })();
+
 
 </script>
 </body>
