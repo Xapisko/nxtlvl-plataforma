@@ -917,6 +917,32 @@ const POSTS = [
       { tipo: 'Retrospectiva', desc: 'Stories com os melhores momentos do mês — equipe, conteúdo, bastidores' },
       { tipo: 'Teaser junho', desc: '"Algo novo chega em junho. Você vai querer saber." Com contagem regressiva.' },
     ]
+  },
+  {
+    id: 14, dia: 1, semana: 1, mes: 'mai', diasem: 'Sex',
+    tipo: ['data'], formato: 'Foto',
+    titulo: 'Dia do Trabalho — Para quem trabalha para que a saúde nunca pare',
+    desc: 'Homenagem institucional ao Dia do Trabalho conectando com profissionais da saúde.',
+    status: 'planejado',
+    objetivo: 'Homenagem institucional sem apelo comercial. Reforço de posicionamento e humanização da marca Biomexx em data de alto engajamento.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Foto de profissional de saúde em atividade. Overlay azul escuro 30%. Texto branco centralizado. Logo Biomexx canto inferior.' },
+      { num: 'Headline', texto: '"01/05 — Para quem trabalha para que a saúde nunca pare." Tipografia bold, tom respeitoso.' }
+    ],
+    arte: [
+      { label: 'Foto', val: 'Profissional de saúde em ambiente de trabalho real' },
+      { label: 'Overlay', val: 'Azul escuro #185FA5 a 30% sobre a foto' },
+      { label: 'Texto', val: 'Branco centralizado, bold clean' },
+      { label: 'Logo', val: 'Biomexx canto inferior direito' },
+      { label: 'Tom', val: 'Institucional, respeitoso, sem CTA comercial' },
+      { label: 'Horário', val: '9h — respeitar o feriado' }
+    ],
+    legenda: 'Hoje é dia de quem não para.\n\nDe quem garante que hospitais, clínicas e centros cirúrgicos funcionem mesmo nos feriados.\nDe quem cuida da estrutura que salva vidas — todos os dias.\n\nFeliz Dia do Trabalho para:\n→ Técnicos que garantem equipamentos funcionando\n→ Enfermeiros que estão na linha de frente\n→ Médicos que tomam decisões críticas\n→ Todos os profissionais da saúde\n\nA Biomexx existe para que o trabalho de vocês nunca seja interrompido.\n\nParabéns a todos os trabalhadores!',
+    hashtags: '#Biomexx #DiaDo Trabalho #Homenagem #ProfissionaisDaSaúde #CME',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story com frase do post em fundo azul Biomexx. Sem CTA.' },
+      { tipo: 'Bastidores', desc: 'Foto da equipe Biomexx com mensagem de parabéns.' }
+    ]
   }
 ];
 
@@ -1297,6 +1323,32 @@ const POSTS_EQUIPMED = [
     stories: [
       { tipo: 'Retrospectiva', desc: 'Stories com os melhores momentos de maio da Equipmed — equipe, conteúdo, equipamentos' },
       { tipo: 'Teaser junho', desc: '"Algo novo chega em junho para gestores de CME. Fique de olho." Com contagem regressiva.' },
+    ]
+  },
+  {
+    id: 114, dia: 1, semana: 1, mes: 'mai', diasem: 'Sex',
+    tipo: ['data'], formato: 'Foto',
+    titulo: 'Dia do Trabalho — Nos hospitais, o trabalho não para',
+    desc: 'Homenagem institucional ao Dia do Trabalho conectando com profissionais da saúde e tecnologia hospitalar.',
+    status: 'planejado',
+    objetivo: 'Homenagem institucional sem apelo comercial. Humanização da marca Equipmed em data de alto engajamento nacional.',
+    slides: [
+      { num: 'Post único', texto: '<strong>Conceito:</strong> Foto técnico Equipmed em campo. P&B profissional ou overlay azul navy. Texto branco centralizado. Logo Equipmed canto inferior.' },
+      { num: 'Headline', texto: '"01/05 — Nos hospitais, o trabalho não para. E a Equipmed também não." Tipografia bold.' }
+    ],
+    arte: [
+      { label: 'Foto', val: 'Técnico Equipmed em atividade ou equipamento hospitalar' },
+      { label: 'Estilo', val: 'P&B profissional ou overlay azul navy #1e3a8a' },
+      { label: 'Texto', val: 'Branco centralizado, bold impactante' },
+      { label: 'Logo', val: 'Equipmed canto inferior direito' },
+      { label: 'Tom', val: 'Institucional, propósito, sem CTA comercial' },
+      { label: 'Horário', val: '9h — respeitar feriado nacional' }
+    ],
+    legenda: 'Hoje é feriado. Mas nos hospitais, o trabalho não para.\n\nE é por isso que a Equipmed também não para.\n\nPor trás de cada equipamento funcionando, existe um profissional que garante que a tecnologia hospitalar esteja sempre pronta para quem mais precisa.\n\nFeliz Dia do Trabalho para:\n→ Técnicos que mantêm equipamentos calibrados\n→ Enfermeiros que dependem de tecnologia que não falha\n→ Gestores que tomam decisões com dados confiáveis\n→ Todos os profissionais da saúde\n\nVocês fazem a diferença. A Equipmed existe para que vocês nunca tenham que improvisar.\n\nParabéns!',
+    hashtags: '#EquipMed #DiaDo Trabalho #Homenagem #ProfissionaisDaSaúde #GestaoHospitalar',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story: \"Nos hospitais, o trabalho não para. E a Equipmed também não.\" Fundo azul navy.' },
+      { tipo: 'Bastidores', desc: 'Foto da equipe Equipmed com mensagem de parabéns.' }
     ]
   }
 ];
@@ -2367,48 +2419,33 @@ function gerarPDF() {
 </script>
 
 <script>
-// Mostrar loader imediatamente se tiver token
+
+
 (function() {
   if (window.location.search.indexOf('token=') === -1) return;
   document.body.style.background = '#0a0a0f';
   var loader = document.createElement('div');
   loader.id = 'cp-loader';
   loader.style.cssText = 'position:fixed;inset:0;background:#0a0a0f;display:flex;align-items:center;justify-content:center;z-index:99999;';
-  loader.innerHTML = '<div style="text-align:center;"><div style="width:40px;height:40px;border:3px solid rgba(170,255,0,0.2);border-top-color:#aaff00;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div><div style="font-family:DM Sans,sans-serif;font-size:13px;color:#9090a8;">Carregando planejamento...</div></div>';
-  var style = document.createElement('style');
-  style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
-  document.head.appendChild(style);
+  loader.innerHTML = '<div style="text-align:center;"><div style="width:36px;height:36px;border:3px solid rgba(170,255,0,0.2);border-top-color:#aaff00;border-radius:50%;animation:cpspin 0.8s linear infinite;margin:0 auto 14px;"></div><div style="font-family:DM Sans,sans-serif;font-size:13px;color:#9090a8;">Carregando planejamento...</div></div>';
+  var st = document.createElement('style');
+  st.textContent = '@keyframes cpspin{to{transform:rotate(360deg)}} .cp-tab{padding:9px 16px;background:transparent;border:none;cursor:pointer;font-family:DM Sans,sans-serif;font-size:12px;font-weight:500;color:#9090a8;border-bottom:2px solid transparent;transition:all 0.15s;} .cp-tab.active{color:#aaff00;border-bottom-color:#aaff00;} .cp-finput{width:100%;background:#1e1e28;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f0f0f5;font-family:DM Sans,sans-serif;font-size:13px;padding:10px 14px;outline:none;box-sizing:border-box;transition:border-color 0.15s;} .cp-finput:focus{border-color:#aaff00;} .cp-ftextarea{resize:vertical;min-height:100px;}';
+  document.head.appendChild(st);
   document.body.appendChild(loader);
 })();
 
-// Executar após tudo carregado
 window.addEventListener('load', function() {
   var params = new URLSearchParams(window.location.search);
   var token = params.get('token');
-  
-  // Remover loader
   var loader = document.getElementById('cp-loader');
-  
-  if (!token) {
-    if (loader) loader.remove();
-    return;
-  }
+  if (!token) { if(loader) loader.remove(); return; }
 
-  // Aguardar CLIENTES estar disponível
   function init() {
-    if (typeof CLIENTES === 'undefined') {
-      setTimeout(init, 50);
-      return;
-    }
+    if (typeof CLIENTES === 'undefined') { setTimeout(init, 50); return; }
 
-    // Buscar cliente pelo token
-    var clientId = null;
-    var clientData = null;
+    var clientId = null, clientData = null;
     Object.keys(CLIENTES).forEach(function(id) {
-      if (CLIENTES[id].token === token) {
-        clientId = id;
-        clientData = CLIENTES[id];
-      }
+      if (CLIENTES[id].token === token) { clientId = id; clientData = CLIENTES[id]; }
     });
 
     if (loader) loader.remove();
@@ -2418,53 +2455,62 @@ window.addEventListener('load', function() {
       return;
     }
 
-    // Ocultar interface da agência
     var sidebar = document.querySelector('.sidebar');
     var main = document.querySelector('.main');
     if (sidebar) sidebar.style.display = 'none';
     if (main) main.style.display = 'none';
     document.body.style.overflow = 'auto';
 
-    var isApprove = params.get('perm') === 'approve';
     var posts = clientData.posts;
+    var isApprove = params.get('perm') === 'approve';
+    var cpOpenCard = null;
+    var cpEditId = null;
 
-    // Criar painel
+    // Logo
+    var logoImg = document.querySelector('.sidebar-logo img');
+    var logoSrc = logoImg ? logoImg.src : '';
+
+    // TIPOS
+    var TMAP = {edu:'Educativo',inst:'Institucional',eng:'Engajamento',prova:'Prova social',oferta:'Oferta/Serviço',off:'Oferta/Serviço',data:'Data comemorativa'};
+    var TCLS = {edu:'tag-edu',inst:'tag-inst',eng:'tag-eng',prova:'tag-prova',oferta:'tag-off',off:'tag-off',data:'tag-data'};
+
+    // ===================== PANEL =====================
     var panel = document.createElement('div');
     panel.style.cssText = 'min-height:100vh;background:#0a0a0f;font-family:DM Sans,sans-serif;color:#f0f0f5;';
 
-    // ---- Header ----
-    var logoSrc = document.querySelector('.sidebar-logo img') ? document.querySelector('.sidebar-logo img').src : '';
-    var headerEl = document.createElement('div');
-    headerEl.style.cssText = 'position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;';
-    headerEl.innerHTML = (logoSrc ? '<img src="'+logoSrc+'" style="height:26px;" alt="nextlvl">' : '<div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:#f0f0f5;">nextlvl</div>') +
-      '<div style="text-align:right;">' +
-        '<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#f0f0f5;">'+clientData.nome+'</div>' +
-        '<div style="font-size:11px;color:#9090a8;">Planejamento &middot; '+clientData.mes+'</div>' +
-      '</div>';
-    panel.appendChild(headerEl);
+    // HEADER
+    var hdr = document.createElement('div');
+    hdr.style.cssText = 'position:sticky;top:0;z-index:200;background:rgba(10,10,15,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;';
+    hdr.innerHTML = (logoSrc ? '<img src="'+logoSrc+'" style="height:26px;">' : '<span style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;">nextlvl</span>') +
+      '<div style="text-align:right;"><div style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;">'+clientData.nome+'</div><div style="font-size:11px;color:#9090a8;">Planejamento &middot; '+clientData.mes+'</div></div>';
+    panel.appendChild(hdr);
 
-    // ---- Conteúdo ----
+    // CONTENT
     var content = document.createElement('div');
-    content.style.cssText = 'max-width:860px;margin:0 auto;padding:36px 24px;';
+    content.style.cssText = 'max-width:900px;margin:0 auto;padding:36px 24px;';
 
     // Welcome
-    content.innerHTML += '<div style="text-align:center;margin-bottom:36px;">' +
-      '<h2 style="font-family:Syne,sans-serif;font-size:24px;font-weight:800;margin:0 0 8px;color:#f0f0f5;">Planejamento de '+clientData.mes+'</h2>' +
-      '<p style="font-size:13px;color:#9090a8;margin:0;">'+(isApprove ? 'Confira e aprove os conteúdos planejados para o mês.' : 'Confira os conteúdos planejados para o mês.')+'</p>' +
-    '</div>';
+    var welcome = document.createElement('div');
+    welcome.style.cssText = 'text-align:center;margin-bottom:36px;';
+    welcome.innerHTML = '<h2 style="font-family:Syne,sans-serif;font-size:24px;font-weight:800;margin:0 0 8px;">Planejamento de '+clientData.mes+'</h2><p style="font-size:13px;color:#9090a8;margin:0;">Confira, edite e aprove os conteúdos planejados para o mês.</p>';
+    content.appendChild(welcome);
 
-    // Stats
-    var ap = posts.filter(function(p){return p.status==='aprovado';}).length;
-    var pd = posts.filter(function(p){return p.status==='planejado';}).length;
-    var pb = posts.filter(function(p){return p.status==='publicado';}).length;
-    content.innerHTML += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;">' +
-      mkStat(posts.length,'Posts no mês','#aaff00') +
-      mkStat(ap,'Aprovados','#4ade80') +
-      mkStat(pd,'Aguardando','#fbbf24') +
-      mkStat(pb,'Publicados','#34d399') +
-    '</div>';
+    // STATS
+    function countStatus(s) { return posts.filter(function(p){return p.status===s;}).length; }
+    var statsDiv = document.createElement('div');
+    statsDiv.id = 'cp-stats';
+    statsDiv.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;';
+    function renderStats() {
+      statsDiv.innerHTML =
+        mkStat(posts.length,'Posts no mês','#aaff00') +
+        mkStat(countStatus('aprovado'),'Aprovados','#4ade80') +
+        mkStat(countStatus('planejado'),'Aguardando','#fbbf24') +
+        mkStat(countStatus('publicado'),'Publicados','#34d399');
+    }
+    renderStats();
+    content.appendChild(statsDiv);
 
-    // Filtros
+    // FILTROS
     var filterDiv = document.createElement('div');
     filterDiv.id = 'cpf';
     filterDiv.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;';
@@ -2475,26 +2521,71 @@ window.addEventListener('load', function() {
       btn.style.cssText = 'padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid '+(f[2]?'#aaff00':'rgba(255,255,255,0.1)')+';background:'+(f[2]?'rgba(170,255,0,0.1)':'transparent')+';color:'+(f[2]?'#aaff00':'#9090a8')+';font-family:DM Sans,sans-serif;transition:all 0.15s;';
       btn.onclick = function() {
         document.querySelectorAll('#cpf button').forEach(function(b){ b.style.borderColor='rgba(255,255,255,0.1)';b.style.background='transparent';b.style.color='#9090a8'; });
-        btn.style.borderColor='#aaff00'; btn.style.background='rgba(170,255,0,0.1)'; btn.style.color='#aaff00';
-        var fval = btn.getAttribute('data-f');
-        document.querySelectorAll('.cp-card').forEach(function(c){ c.style.display=(fval==='todos'||c.getAttribute('data-s')===fval)?'block':'none'; });
+        btn.style.borderColor='#aaff00';btn.style.background='rgba(170,255,0,0.1)';btn.style.color='#aaff00';
+        var fv = btn.getAttribute('data-f');
+        document.querySelectorAll('.cp-card').forEach(function(c){ c.style.display=(fv==='todos'||c.getAttribute('data-s')===fv)?'block':'none'; });
       };
       filterDiv.appendChild(btn);
     });
     content.appendChild(filterDiv);
 
-    // Label posts
+    // LABEL
     var lbl = document.createElement('div');
     lbl.style.cssText = 'font-size:11px;font-weight:500;color:#5a5a72;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;';
     lbl.textContent = 'Posts do mês';
     content.appendChild(lbl);
 
-    // Posts
-    var TMAP = {edu:'Educativo',inst:'Institucional',eng:'Engajamento',prova:'Prova social',oferta:'Oferta/Serviço',off:'Oferta/Serviço',data:'Data comemorativa'};
-    var TCLS = {edu:'tag-edu',inst:'tag-inst',eng:'tag-eng',prova:'tag-prova',oferta:'tag-off',off:'tag-off',data:'tag-data'};
-    var cpOpen = null;
+    // POSTS CONTAINER
+    var postsWrap = document.createElement('div');
+    postsWrap.id = 'cp-posts';
+    content.appendChild(postsWrap);
 
-    posts.forEach(function(p) {
+    // FOOTER
+    var footer = document.createElement('div');
+    footer.style.cssText = 'text-align:center;padding:40px 0 24px;border-top:1px solid rgba(255,255,255,0.07);margin-top:32px;';
+    footer.innerHTML = (logoSrc?'<img src="'+logoSrc+'" style="height:20px;opacity:0.3;">':'') + '<div style="font-size:11px;color:#5a5a72;margin-top:8px;">Plataforma de gestão de conteúdo &middot; nextlvl.com.br</div>';
+    content.appendChild(footer);
+
+    panel.appendChild(content);
+    document.body.appendChild(panel);
+
+    // MODAL EDIÇÃO
+    var editModal = document.createElement('div');
+    editModal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;';
+    editModal.innerHTML =
+      '<div style="background:#111118;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:28px;width:90%;max-width:580px;max-height:88vh;overflow-y:auto;position:relative;">' +
+        '<button id="cp-modal-close" style="position:absolute;top:14px;right:14px;background:#18181f;border:1px solid rgba(255,255,255,0.1);color:#9090a8;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;">&#x2715;</button>' +
+        '<div style="font-family:Syne,sans-serif;font-size:17px;font-weight:700;margin-bottom:20px;">Solicitar alteração</div>' +
+        '<div style="margin-bottom:14px;"><label style="font-size:10px;font-weight:500;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:5px;">Título</label><input class="cp-finput" id="cp-edit-titulo" type="text"></div>' +
+        '<div style="margin-bottom:14px;"><label style="font-size:10px;font-weight:500;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:5px;">Legenda</label><textarea class="cp-finput cp-ftextarea" id="cp-edit-legenda"></textarea></div>' +
+        '<div style="margin-bottom:14px;"><label style="font-size:10px;font-weight:500;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:5px;">Hashtags</label><input class="cp-finput" id="cp-edit-hashtags" type="text"></div>' +
+        '<div style="margin-bottom:20px;"><label style="font-size:10px;font-weight:500;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;display:block;margin-bottom:5px;">Comentário / Observação para a agência</label><textarea class="cp-finput cp-ftextarea" id="cp-edit-obs" placeholder="Descreva o que precisa ser alterado..."></textarea></div>' +
+        '<button id="cp-edit-save" style="width:100%;padding:11px;background:#aaff00;border:none;border-radius:8px;color:#0a0a0f;font-family:DM Sans,sans-serif;font-size:13px;font-weight:500;cursor:pointer;">Enviar solicitação</button>' +
+      '</div>';
+    document.body.appendChild(editModal);
+    document.getElementById('cp-modal-close').onclick = function() { editModal.style.display='none'; };
+
+    document.getElementById('cp-edit-save').onclick = function() {
+      var p = posts.filter(function(x){return x.id===cpEditId;})[0];
+      if (!p) return;
+      p.titulo = document.getElementById('cp-edit-titulo').value;
+      p.legenda = document.getElementById('cp-edit-legenda').value;
+      p.hashtags = document.getElementById('cp-edit-hashtags').value;
+      p.comentario = document.getElementById('cp-edit-obs').value;
+      p.status = 'planejado';
+      editModal.style.display = 'none';
+      renderPosts();
+      renderStats();
+      cpToast('Solicitação enviada!');
+    };
+
+    // ===================== RENDER POSTS =====================
+    function renderPosts() {
+      postsWrap.innerHTML = '';
+      posts.forEach(function(p) { postsWrap.appendChild(buildCard(p)); });
+    }
+
+    function buildCard(p) {
       var card = document.createElement('div');
       card.className = 'cp-card';
       card.setAttribute('data-s', p.status);
@@ -2502,111 +2593,221 @@ window.addEventListener('load', function() {
 
       var sc = p.status==='aprovado'?'#4ade80':p.status==='publicado'?'#34d399':'#fbbf24';
       var sl = p.status==='aprovado'?'Aprovado':p.status==='publicado'?'Publicado':'Aguardando';
+      var tags = p.tipo.map(function(t){return '<span class="tag '+(TCLS[t]||'tag-edu')+'">'+(TMAP[t]||t)+'</span>';}).join('');
+      var isOpen = cpOpenCard === p.id;
 
-      var tags = p.tipo.map(function(t){ return '<span class="tag '+(TCLS[t]||'tag-edu')+'">'+(TMAP[t]||t)+'</span>'; }).join('');
-
-      // Header do card
+      // --- HEADER DO CARD ---
       var ph = document.createElement('div');
-      ph.style.cssText = 'padding:16px 20px;display:flex;align-items:flex-start;gap:16px;cursor:pointer;';
+      ph.style.cssText = 'padding:16px 20px;display:flex;align-items:flex-start;gap:16px;cursor:pointer;user-select:none;';
       ph.innerHTML =
-        '<div style="min-width:44px;text-align:center;">' +
-          '<div style="font-family:Syne,sans-serif;font-size:20px;font-weight:800;line-height:1;color:#f0f0f5;">'+p.dia+'</div>' +
+        '<div style="min-width:48px;text-align:center;">' +
+          '<div style="font-family:Syne,sans-serif;font-size:22px;font-weight:800;line-height:1;">'+p.dia+'</div>' +
           '<div style="font-size:10px;color:#5a5a72;text-transform:uppercase;">'+p.mes+'</div>' +
           '<div style="font-size:10px;color:#5a5a72;">'+p.diasem+'</div>' +
         '</div>' +
-        '<div style="flex:1;">' +
+        '<div style="flex:1;min-width:0;">' +
           '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">'+tags+'<span class="tag tag-format">'+p.formato+'</span></div>' +
-          '<div style="font-size:14px;font-weight:500;color:#f0f0f5;margin-bottom:3px;line-height:1.3;">'+p.titulo+'</div>' +
+          '<div style="font-size:14px;font-weight:500;color:#f0f0f5;margin-bottom:3px;line-height:1.35;">'+p.titulo+'</div>' +
           '<div style="font-size:12px;color:#9090a8;line-height:1.5;">'+p.desc+'</div>' +
         '</div>' +
         '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">' +
           '<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:'+sc+';">' +
-            '<div style="width:6px;height:6px;border-radius:50%;background:'+sc+';"></div>'+sl +
+            '<div style="width:6px;height:6px;border-radius:50%;background:'+sc+';flex-shrink:0;"></div>'+sl +
           '</div>' +
-          '<div class="cp-arrow" style="color:#5a5a72;font-size:16px;transition:transform 0.2s;">&#9662;</div>' +
+          '<div id="cparr-'+p.id+'" style="color:#5a5a72;font-size:16px;transition:transform 0.2s;">'+(isOpen?'&#9652;':'&#9662;')+'</div>' +
         '</div>';
 
-      // Detalhe do card
+      ph.onclick = function() { toggleCard(p.id, card); };
+
+      // --- DETALHE DO CARD ---
       var det = document.createElement('div');
-      det.style.cssText = 'display:none;border-top:1px solid rgba(255,255,255,0.07);padding:20px;';
+      det.id = 'cpdet-'+p.id;
+      det.style.cssText = 'display:'+(isOpen?'block':'none')+';border-top:1px solid rgba(255,255,255,0.07);';
 
-      var appBtn = isApprove ? (
-        '<div style="margin-top:12px;">' +
-          '<textarea class="cp-txt" placeholder="Comentário ou ajuste (opcional)..." style="width:100%;background:#18181f;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f0f0f5;font-family:DM Sans,sans-serif;font-size:13px;padding:10px 14px;resize:vertical;min-height:68px;outline:none;box-sizing:border-box;margin-bottom:8px;"></textarea>' +
-          '<div style="display:flex;gap:8px;">' +
-            '<button class="cp-approve-btn" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:'+(p.status==='aprovado'?'rgba(74,222,128,0.15)':'#aaff00')+';color:'+(p.status==='aprovado'?'#4ade80':'#0a0a0f')+';font-family:DM Sans,sans-serif;">'+(p.status==='aprovado'?'✓ Aprovado':'Aprovar este post')+'</button>' +
-            '<button class="cp-change-btn" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#9090a8;font-family:DM Sans,sans-serif;">Solicitar ajuste</button>' +
-          '</div>' +
-        '</div>'
-      ) : '';
+      // TABS
+      var tabsEl = document.createElement('div');
+      tabsEl.style.cssText = 'display:flex;border-bottom:1px solid rgba(255,255,255,0.07);padding:0 20px;';
+      var tabNames = ['Briefing','Estrutura','Arte','Legenda','Stories'];
+      var curTab = 0;
 
-      det.innerHTML =
-        '<div style="font-size:10px;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;">Legenda pronta</div>' +
-        '<div style="background:#18181f;border-radius:8px;padding:14px 16px;font-size:13px;color:#9090a8;line-height:1.75;white-space:pre-wrap;margin-bottom:10px;">'+p.legenda+'<div style="color:#aaff00;font-size:12px;margin-top:8px;">'+p.hashtags+'</div></div>' +
-        '<button class="cp-copy-btn" style="padding:7px 14px;background:#18181f;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#9090a8;font-size:12px;font-family:DM Sans,sans-serif;cursor:pointer;">Copiar legenda</button>' +
-        appBtn;
+      tabNames.forEach(function(name, idx) {
+        var tb = document.createElement('button');
+        tb.className = 'cp-tab' + (idx===0?' active':'');
+        tb.id = 'cptab-'+p.id+'-'+idx;
+        tb.textContent = name;
+        tb.onclick = function(e) {
+          e.stopPropagation();
+          curTab = idx;
+          tabNames.forEach(function(_,i) {
+            var t = document.getElementById('cptab-'+p.id+'-'+i);
+            var pn = document.getElementById('cppanel-'+p.id+'-'+i);
+            if(t) t.className = 'cp-tab'+(i===idx?' active':'');
+            if(pn) pn.style.display = i===idx?'block':'none';
+          });
+        };
+        tabsEl.appendChild(tb);
+      });
+      det.appendChild(tabsEl);
 
-      // Eventos
-      ph.onclick = function() {
-        var isOpen = det.style.display !== 'none';
-        if (cpOpen && cpOpen !== det) { cpOpen.style.display='none'; cpOpen.previousSibling && (cpOpen.previousSibling.querySelector('.cp-arrow').style.transform='rotate(0deg)'); }
-        det.style.display = isOpen ? 'none' : 'block';
-        ph.querySelector('.cp-arrow').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-        card.style.borderColor = isOpen ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.2)';
-        cpOpen = isOpen ? null : det;
-      };
+      // PANELS
+      var panelWrap = document.createElement('div');
+      panelWrap.style.cssText = 'padding:20px;';
 
-      det.querySelector('.cp-copy-btn').onclick = function(e) {
+      // Panel 0 — Briefing
+      var p0 = mkPanel(p.id,0,true);
+      p0.innerHTML = '<div style="font-size:10px;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">Objetivo do post</div>' +
+        '<div style="font-size:13px;color:#9090a8;line-height:1.7;">'+p.objetivo+'</div>';
+
+      // Panel 1 — Estrutura
+      var p1 = mkPanel(p.id,1);
+      var slidesHTML = p.slides.map(function(s) {
+        return '<div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);">' +
+          '<span style="background:rgba(170,255,0,0.12);color:#8acc00;font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;min-width:32px;text-align:center;height:fit-content;flex-shrink:0;">'+s.num+'</span>' +
+          '<span style="font-size:12px;color:#9090a8;line-height:1.55;">'+s.texto+'</span>' +
+        '</div>';
+      }).join('');
+      p1.innerHTML = '<div style="font-size:10px;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">'+(p.formato==='Reels'?'Roteiro':'Estrutura dos slides')+'</div>' + slidesHTML;
+
+      // Panel 2 — Arte
+      var p2 = mkPanel(p.id,2);
+      var arteHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+        p.arte.map(function(a) {
+          return '<div style="background:#18181f;border-radius:8px;padding:10px 12px;">' +
+            '<div style="font-size:10px;color:#5a5a72;margin-bottom:3px;">'+a.label+'</div>' +
+            '<div style="font-size:12px;color:#f0f0f5;font-weight:500;">'+a.val+'</div>' +
+          '</div>';
+        }).join('') + '</div>';
+      p2.innerHTML = arteHTML;
+
+      // Panel 3 — Legenda
+      var p3 = mkPanel(p.id,3);
+      p3.innerHTML =
+        '<div style="background:#18181f;border-radius:8px;padding:14px 16px;font-size:13px;color:#9090a8;line-height:1.75;white-space:pre-wrap;margin-bottom:12px;">'+p.legenda+'<div style="color:#aaff00;font-size:12px;margin-top:8px;">'+p.hashtags+'</div></div>' +
+        '<button id="cpcopy-'+p.id+'" style="padding:7px 14px;background:#18181f;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#9090a8;font-size:12px;font-family:DM Sans,sans-serif;cursor:pointer;margin-right:8px;">Copiar legenda</button>';
+
+      // Panel 4 — Stories
+      var p4 = mkPanel(p.id,4);
+      var storiesHTML = p.stories.map(function(s,i) {
+        return '<div style="margin-bottom:14px;">' +
+          '<div style="font-size:10px;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">Story '+(i+1)+' — '+s.tipo+'</div>' +
+          '<div style="font-size:13px;color:#9090a8;line-height:1.6;">'+s.desc+'</div>' +
+        '</div>';
+      }).join('');
+      p4.innerHTML = storiesHTML;
+
+      panelWrap.appendChild(p0);
+      panelWrap.appendChild(p1);
+      panelWrap.appendChild(p2);
+      panelWrap.appendChild(p3);
+      panelWrap.appendChild(p4);
+      det.appendChild(panelWrap);
+
+      // AÇÕES
+      var actDiv = document.createElement('div');
+      actDiv.style.cssText = 'padding:0 20px 20px;display:flex;gap:8px;flex-wrap:wrap;';
+
+      // Botão copiar legenda
+      var copyBtn = document.createElement('button');
+      copyBtn.textContent = 'Copiar legenda';
+      copyBtn.style.cssText = 'padding:9px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:#18181f;color:#9090a8;font-family:DM Sans,sans-serif;transition:all 0.15s;';
+      copyBtn.onclick = function(e) {
         e.stopPropagation();
         navigator.clipboard.writeText(p.legenda+'\n\n'+p.hashtags).catch(function(){});
         cpToast('Legenda copiada!');
       };
+      actDiv.appendChild(copyBtn);
 
       if (isApprove) {
-        det.querySelector('.cp-approve-btn').onclick = function(e) {
+        // Botão aprovar
+        var apBtn = document.createElement('button');
+        apBtn.id = 'cpap-'+p.id;
+        apBtn.style.cssText = 'flex:1;padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:DM Sans,sans-serif;transition:all 0.15s;background:'+(p.status==='aprovado'?'rgba(74,222,128,0.15)':'#aaff00')+';color:'+(p.status==='aprovado'?'#4ade80':'#0a0a0f')+';';
+        apBtn.textContent = p.status==='aprovado' ? '✓ Aprovado' : 'Aprovar post';
+        apBtn.onclick = function(e) {
           e.stopPropagation();
           p.status = 'aprovado';
           card.setAttribute('data-s','aprovado');
-          this.textContent = '✓ Aprovado';
-          this.style.background = 'rgba(74,222,128,0.15)';
-          this.style.color = '#4ade80';
+          apBtn.textContent = '✓ Aprovado';
+          apBtn.style.background = 'rgba(74,222,128,0.15)';
+          apBtn.style.color = '#4ade80';
+          renderStats();
           cpToast('Post aprovado! ✓');
         };
-        det.querySelector('.cp-change-btn').onclick = function(e) {
+        actDiv.appendChild(apBtn);
+
+        // Botão solicitar alteração
+        var edBtn = document.createElement('button');
+        edBtn.style.cssText = 'padding:9px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:#18181f;color:#9090a8;font-family:DM Sans,sans-serif;transition:all 0.15s;';
+        edBtn.textContent = 'Solicitar alteração';
+        edBtn.onmouseenter = function(){ edBtn.style.borderColor='#fbbf24';edBtn.style.color='#fbbf24'; };
+        edBtn.onmouseleave = function(){ edBtn.style.borderColor='rgba(255,255,255,0.12)';edBtn.style.color='#9090a8'; };
+        edBtn.onclick = function(e) {
           e.stopPropagation();
-          cpToast('Ajuste registrado!');
+          cpEditId = p.id;
+          document.getElementById('cp-edit-titulo').value = p.titulo;
+          document.getElementById('cp-edit-legenda').value = p.legenda;
+          document.getElementById('cp-edit-hashtags').value = p.hashtags;
+          document.getElementById('cp-edit-obs').value = p.comentario || '';
+          editModal.style.display = 'flex';
         };
+        actDiv.appendChild(edBtn);
       }
 
+      det.appendChild(actDiv);
       card.appendChild(ph);
       card.appendChild(det);
-      content.appendChild(card);
-    });
+      return card;
+    }
 
-    // Footer
-    content.innerHTML += '<div style="text-align:center;padding:40px 0 20px;border-top:1px solid rgba(255,255,255,0.07);margin-top:32px;">' +
-      (logoSrc ? '<img src="'+logoSrc+'" style="height:20px;opacity:0.35;">' : '') +
-      '<div style="font-size:11px;color:#5a5a72;margin-top:8px;">Plataforma de gestão de conteúdo &middot; nextlvl.com.br</div>' +
-    '</div>';
+    function mkPanel(pid, idx, active) {
+      var el = document.createElement('div');
+      el.id = 'cppanel-'+pid+'-'+idx;
+      el.style.display = active ? 'block' : 'none';
+      return el;
+    }
 
-    panel.appendChild(content);
-    document.body.appendChild(panel);
-  }
+    function toggleCard(id, card) {
+      if (cpOpenCard === id) {
+        cpOpenCard = null;
+        document.getElementById('cpdet-'+id).style.display = 'none';
+        var arr = document.getElementById('cparr-'+id);
+        if(arr) arr.innerHTML = '&#9662;';
+        card.style.borderColor = 'rgba(255,255,255,0.07)';
+      } else {
+        if (cpOpenCard !== null) {
+          document.getElementById('cpdet-'+cpOpenCard).style.display = 'none';
+          var parr = document.getElementById('cparr-'+cpOpenCard);
+          if(parr) parr.innerHTML = '&#9662;';
+          var prevCard = document.querySelector('[data-card-id="'+cpOpenCard+'"]');
+          if(prevCard) prevCard.style.borderColor='rgba(255,255,255,0.07)';
+        }
+        cpOpenCard = id;
+        document.getElementById('cpdet-'+id).style.display = 'block';
+        var arr2 = document.getElementById('cparr-'+id);
+        if(arr2) arr2.innerHTML = '&#9652;';
+        card.style.borderColor = 'rgba(255,255,255,0.2)';
+      }
+    }
 
-  function mkStat(v,l,c) {
-    return '<div style="background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;text-align:center;"><div style="font-family:Syne,sans-serif;font-size:24px;font-weight:700;color:'+(c||'#aaff00')+';">'+v+'</div><div style="font-size:11px;color:#9090a8;margin-top:4px;">'+l+'</div></div>';
-  }
+    function mkStat(v,l,c) {
+      return '<div style="background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;text-align:center;"><div style="font-family:Syne,sans-serif;font-size:24px;font-weight:700;color:'+(c||'#aaff00')+';">'+v+'</div><div style="font-size:11px;color:#9090a8;margin-top:4px;">'+l+'</div></div>';
+    }
 
-  function cpToast(msg) {
-    var t = document.createElement('div');
-    t.textContent = msg;
-    t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#18181f;border:1px solid rgba(255,255,255,0.15);color:#f0f0f5;padding:12px 20px;border-radius:8px;font-size:13px;font-family:DM Sans,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
-    document.body.appendChild(t);
-    setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 2500);
+    function cpToast(msg) {
+      var t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#18181f;border:1px solid rgba(255,255,255,0.15);color:#f0f0f5;padding:12px 20px;border-radius:8px;font-size:13px;font-family:DM Sans,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
+      document.body.appendChild(t);
+      setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 2500);
+    }
+
+    renderPosts();
   }
 
   init();
 });
+
+
 </script>
 </body>
 </html>
