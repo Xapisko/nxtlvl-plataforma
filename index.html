@@ -2365,242 +2365,248 @@ function gerarPDF() {
 }
 
 </script>
+
 <script>
+// Mostrar loader imediatamente se tiver token
+(function() {
+  if (window.location.search.indexOf('token=') === -1) return;
+  document.body.style.background = '#0a0a0f';
+  var loader = document.createElement('div');
+  loader.id = 'cp-loader';
+  loader.style.cssText = 'position:fixed;inset:0;background:#0a0a0f;display:flex;align-items:center;justify-content:center;z-index:99999;';
+  loader.innerHTML = '<div style="text-align:center;"><div style="width:40px;height:40px;border:3px solid rgba(170,255,0,0.2);border-top-color:#aaff00;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div><div style="font-family:DM Sans,sans-serif;font-size:13px;color:#9090a8;">Carregando planejamento...</div></div>';
+  var style = document.createElement('style');
+  style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(style);
+  document.body.appendChild(loader);
+})();
 
-
-// ============================================================
-// DETECÇÃO DE ACESSO DO CLIENTE POR TOKEN
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
+// Executar após tudo carregado
+window.addEventListener('load', function() {
   var params = new URLSearchParams(window.location.search);
   var token = params.get('token');
-  if (!token) return; // Acesso da agência — interface normal
-
-  // Encontrar cliente pelo token
-  var clientId = null;
-  var clientData = null;
-  Object.keys(CLIENTES).forEach(function(id) {
-    if (CLIENTES[id].token === token) {
-      clientId = id;
-      clientData = CLIENTES[id];
-    }
-  });
-
-  if (!clientData) {
-    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:DM Sans,sans-serif;color:#666;">Link inválido ou expirado.</div>';
+  
+  // Remover loader
+  var loader = document.getElementById('cp-loader');
+  
+  if (!token) {
+    if (loader) loader.remove();
     return;
   }
 
-  // Ocultar toda a interface da agência
-  document.body.style.background = '#0a0a0f';
-  var agency = document.querySelector('.sidebar');
-  var main = document.querySelector('.main');
-  if (agency) agency.style.display = 'none';
-  if (main) { main.style.marginLeft = '0'; main.style.display = 'none'; }
+  // Aguardar CLIENTES estar disponível
+  function init() {
+    if (typeof CLIENTES === 'undefined') {
+      setTimeout(init, 50);
+      return;
+    }
 
-  // Renderizar painel exclusivo do cliente
-  var panel = document.createElement('div');
-  panel.id = 'client-panel';
-  panel.style.cssText = 'position:fixed;inset:0;overflow-y:auto;z-index:9999;background:#0a0a0f;font-family:"DM Sans",sans-serif;color:#f0f0f5;';
-  
-  var posts = clientData.posts;
-  var isApproveMode = params.get('perm') === 'approve';
+    // Buscar cliente pelo token
+    var clientId = null;
+    var clientData = null;
+    Object.keys(CLIENTES).forEach(function(id) {
+      if (CLIENTES[id].token === token) {
+        clientId = id;
+        clientData = CLIENTES[id];
+      }
+    });
 
-  // Header
-  var headerHTML = '<div style="position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;">' +
-    '<img src="data:image/png;base64,' + logo_b64 + '" style="height:28px;" alt="nextlvl">' +
-    '<div style="text-align:right;">' +
-      '<div style="font-family:Syne,sans-serif;font-size:15px;font-weight:700;">' + clientData.nome + '</div>' +
-      '<div style="font-size:11px;color:#9090a8;">Planejamento de conteúdo &middot; ' + clientData.mes + '</div>' +
-    '</div>' +
-  '</div>';
+    if (loader) loader.remove();
 
-  // Stats
-  var total = posts.length;
-  var aprovados = posts.filter(function(p){ return p.status==='aprovado'; }).length;
-  var pendentes = posts.filter(function(p){ return p.status==='planejado'; }).length;
-  var publicados = posts.filter(function(p){ return p.status==='publicado'; }).length;
+    if (!clientData) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:DM Sans,sans-serif;font-size:14px;color:#9090a8;background:#0a0a0f;">Link inválido ou expirado.</div>';
+      return;
+    }
 
-  var statsHTML = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:36px;">' +
-    stat(total, 'Posts no mês') +
-    stat(aprovados, 'Aprovados', '#4ade80') +
-    stat(pendentes, 'Aguardando', '#fbbf24') +
-    stat(publicados, 'Publicados', '#34d399') +
-  '</div>';
+    // Ocultar interface da agência
+    var sidebar = document.querySelector('.sidebar');
+    var main = document.querySelector('.main');
+    if (sidebar) sidebar.style.display = 'none';
+    if (main) main.style.display = 'none';
+    document.body.style.overflow = 'auto';
 
-  function stat(v, l, c) {
-    return '<div style="background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:18px;text-align:center;">' +
-      '<div style="font-family:Syne,sans-serif;font-size:26px;font-weight:700;color:'+(c||'#aaff00')+'">' + v + '</div>' +
-      '<div style="font-size:11px;color:#9090a8;margin-top:4px;">' + l + '</div>' +
+    var isApprove = params.get('perm') === 'approve';
+    var posts = clientData.posts;
+
+    // Criar painel
+    var panel = document.createElement('div');
+    panel.style.cssText = 'min-height:100vh;background:#0a0a0f;font-family:DM Sans,sans-serif;color:#f0f0f5;';
+
+    // ---- Header ----
+    var logoSrc = document.querySelector('.sidebar-logo img') ? document.querySelector('.sidebar-logo img').src : '';
+    var headerEl = document.createElement('div');
+    headerEl.style.cssText = 'position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;';
+    headerEl.innerHTML = (logoSrc ? '<img src="'+logoSrc+'" style="height:26px;" alt="nextlvl">' : '<div style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:#f0f0f5;">nextlvl</div>') +
+      '<div style="text-align:right;">' +
+        '<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#f0f0f5;">'+clientData.nome+'</div>' +
+        '<div style="font-size:11px;color:#9090a8;">Planejamento &middot; '+clientData.mes+'</div>' +
+      '</div>';
+    panel.appendChild(headerEl);
+
+    // ---- Conteúdo ----
+    var content = document.createElement('div');
+    content.style.cssText = 'max-width:860px;margin:0 auto;padding:36px 24px;';
+
+    // Welcome
+    content.innerHTML += '<div style="text-align:center;margin-bottom:36px;">' +
+      '<h2 style="font-family:Syne,sans-serif;font-size:24px;font-weight:800;margin:0 0 8px;color:#f0f0f5;">Planejamento de '+clientData.mes+'</h2>' +
+      '<p style="font-size:13px;color:#9090a8;margin:0;">'+(isApprove ? 'Confira e aprove os conteúdos planejados para o mês.' : 'Confira os conteúdos planejados para o mês.')+'</p>' +
     '</div>';
-  }
 
-  // Welcome
-  var welcomeHTML = '<div style="text-align:center;margin-bottom:40px;">' +
-    '<h2 style="font-family:Syne,sans-serif;font-size:26px;font-weight:800;margin:0 0 8px;">Planejamento de ' + clientData.mes + '</h2>' +
-    '<p style="font-size:13px;color:#9090a8;margin:0;">' +
-      (isApproveMode
-        ? 'Confira os conteúdos planejados. Você pode aprovar ou solicitar ajustes em cada post.'
-        : 'Confira todos os conteúdos planejados para o seu mês.') +
-    '</p>' +
-  '</div>';
+    // Stats
+    var ap = posts.filter(function(p){return p.status==='aprovado';}).length;
+    var pd = posts.filter(function(p){return p.status==='planejado';}).length;
+    var pb = posts.filter(function(p){return p.status==='publicado';}).length;
+    content.innerHTML += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;">' +
+      mkStat(posts.length,'Posts no mês','#aaff00') +
+      mkStat(ap,'Aprovados','#4ade80') +
+      mkStat(pd,'Aguardando','#fbbf24') +
+      mkStat(pb,'Publicados','#34d399') +
+    '</div>';
 
-  // Filtros
-  var filterHTML = '<div style="display:flex;gap:8px;margin-bottom:20px;" id="cp-filters">' +
-    cpFilter('todos','Todos', true) +
-    cpFilter('planejado','Aguardando') +
-    cpFilter('aprovado','Aprovados') +
-    cpFilter('publicado','Publicados') +
-  '</div>';
+    // Filtros
+    var filterDiv = document.createElement('div');
+    filterDiv.id = 'cpf';
+    filterDiv.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;';
+    [['todos','Todos',true],['planejado','Aguardando'],['aprovado','Aprovados'],['publicado','Publicados']].forEach(function(f) {
+      var btn = document.createElement('button');
+      btn.textContent = f[1];
+      btn.setAttribute('data-f', f[0]);
+      btn.style.cssText = 'padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid '+(f[2]?'#aaff00':'rgba(255,255,255,0.1)')+';background:'+(f[2]?'rgba(170,255,0,0.1)':'transparent')+';color:'+(f[2]?'#aaff00':'#9090a8')+';font-family:DM Sans,sans-serif;transition:all 0.15s;';
+      btn.onclick = function() {
+        document.querySelectorAll('#cpf button').forEach(function(b){ b.style.borderColor='rgba(255,255,255,0.1)';b.style.background='transparent';b.style.color='#9090a8'; });
+        btn.style.borderColor='#aaff00'; btn.style.background='rgba(170,255,0,0.1)'; btn.style.color='#aaff00';
+        var fval = btn.getAttribute('data-f');
+        document.querySelectorAll('.cp-card').forEach(function(c){ c.style.display=(fval==='todos'||c.getAttribute('data-s')===fval)?'block':'none'; });
+      };
+      filterDiv.appendChild(btn);
+    });
+    content.appendChild(filterDiv);
 
-  function cpFilter(val, label, active) {
-    var bc = active ? '#aaff00' : 'rgba(255,255,255,0.1)';
-    var bg = active ? 'rgba(170,255,0,0.1)' : 'transparent';
-    var cl = active ? '#aaff00' : '#9090a8';
-    return '<button data-filter="' + val + '" onclick="cpFilter2(this,this.getAttribute(\"data-filter\"))" style="padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid ' + bc + ';background:' + bg + ';color:' + cl + ';font-family:DM Sans,sans-serif;transition:all 0.15s;">' + label + '</button>';
-  }
+    // Label posts
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'font-size:11px;font-weight:500;color:#5a5a72;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;';
+    lbl.textContent = 'Posts do mês';
+    content.appendChild(lbl);
 
-  // Posts
-  var TIPOS_MAP = { edu:'Educativo', inst:'Institucional', eng:'Engajamento', prova:'Prova social', oferta:'Oferta/Serviço', off:'Oferta/Serviço', data:'Data comemorativa' };
-  var TIPOS_CLS = { edu:'tag-edu', inst:'tag-inst', eng:'tag-eng', prova:'tag-prova', oferta:'tag-off', off:'tag-off', data:'tag-data' };
+    // Posts
+    var TMAP = {edu:'Educativo',inst:'Institucional',eng:'Engajamento',prova:'Prova social',oferta:'Oferta/Serviço',off:'Oferta/Serviço',data:'Data comemorativa'};
+    var TCLS = {edu:'tag-edu',inst:'tag-inst',eng:'tag-eng',prova:'tag-prova',oferta:'tag-off',off:'tag-off',data:'tag-data'};
+    var cpOpen = null;
 
-  function renderClientPost(p) {
-    var tags = p.tipo.map(function(t){ return '<span class="tag '+(TIPOS_CLS[t]||'tag-edu')+'">'+(TIPOS_MAP[t]||t)+'</span>'; }).join('');
-    var sc = p.status==='aprovado' ? '#4ade80' : p.status==='publicado' ? '#34d399' : '#fbbf24';
-    var sl = p.status==='aprovado' ? 'Aprovado' : p.status==='publicado' ? 'Publicado' : 'Aguardando aprovação';
-    var approveBtn = isApproveMode ? (
-      '<div style="display:flex;gap:8px;margin-top:10px;">' +
-        '<button onclick="cpApprove('+p.id+')" id="cpbtn-'+p.id+'" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:'+(p.status==='aprovado'?'rgba(74,222,128,0.15)':'#aaff00')+';color:'+(p.status==='aprovado'?'#4ade80':'#0a0a0f')+';font-family:DM Sans,sans-serif;">' +
-          (p.status==='aprovado' ? '✓ Aprovado' : 'Aprovar este post') +
-        '</button>' +
-        '<button onclick="cpChange('+p.id+')" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#9090a8;font-family:DM Sans,sans-serif;">Solicitar ajuste</button>' +
-      '</div>' +
-      '<textarea id="cptxt-'+p.id+'" placeholder="Descreva o ajuste necessário (opcional)..." style="width:100%;background:#18181f;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f0f0f5;font-family:DM Sans,sans-serif;font-size:13px;padding:10px 14px;resize:vertical;min-height:70px;outline:none;margin-top:8px;box-sizing:border-box;"></textarea>'
-    ) : '';
-    return '<div class="cp-post" data-status="'+p.status+'" id="cpcard-'+p.id+'" style="background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:border-color 0.15s;">' +
-      '<div onclick="toggleCPCard('+p.id+')" style="padding:16px 20px;display:flex;align-items:flex-start;gap:16px;cursor:pointer;">' +
+    posts.forEach(function(p) {
+      var card = document.createElement('div');
+      card.className = 'cp-card';
+      card.setAttribute('data-s', p.status);
+      card.style.cssText = 'background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:border-color 0.15s;';
+
+      var sc = p.status==='aprovado'?'#4ade80':p.status==='publicado'?'#34d399':'#fbbf24';
+      var sl = p.status==='aprovado'?'Aprovado':p.status==='publicado'?'Publicado':'Aguardando';
+
+      var tags = p.tipo.map(function(t){ return '<span class="tag '+(TCLS[t]||'tag-edu')+'">'+(TMAP[t]||t)+'</span>'; }).join('');
+
+      // Header do card
+      var ph = document.createElement('div');
+      ph.style.cssText = 'padding:16px 20px;display:flex;align-items:flex-start;gap:16px;cursor:pointer;';
+      ph.innerHTML =
         '<div style="min-width:44px;text-align:center;">' +
-          '<div style="font-family:Syne,sans-serif;font-size:22px;font-weight:800;line-height:1;">'+p.dia+'</div>' +
+          '<div style="font-family:Syne,sans-serif;font-size:20px;font-weight:800;line-height:1;color:#f0f0f5;">'+p.dia+'</div>' +
           '<div style="font-size:10px;color:#5a5a72;text-transform:uppercase;">'+p.mes+'</div>' +
           '<div style="font-size:10px;color:#5a5a72;">'+p.diasem+'</div>' +
         '</div>' +
         '<div style="flex:1;">' +
           '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">'+tags+'<span class="tag tag-format">'+p.formato+'</span></div>' +
-          '<div style="font-size:14px;font-weight:500;color:#f0f0f5;margin-bottom:3px;">'+p.titulo+'</div>' +
+          '<div style="font-size:14px;font-weight:500;color:#f0f0f5;margin-bottom:3px;line-height:1.3;">'+p.titulo+'</div>' +
           '<div style="font-size:12px;color:#9090a8;line-height:1.5;">'+p.desc+'</div>' +
         '</div>' +
-        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">' +
+        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">' +
           '<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:'+sc+';">' +
-            '<div style="width:6px;height:6px;border-radius:50%;background:'+sc+';flex-shrink:0;"></div>' + sl +
+            '<div style="width:6px;height:6px;border-radius:50%;background:'+sc+';"></div>'+sl +
           '</div>' +
-          '<div style="color:#5a5a72;font-size:16px;transition:transform 0.2s;" id="cparrow-'+p.id+'">&#9662;</div>' +
-        '</div>' +
-      '</div>' +
-      '<div id="cpdetail-'+p.id+'" style="display:none;border-top:1px solid rgba(255,255,255,0.07);padding:20px;">' +
+          '<div class="cp-arrow" style="color:#5a5a72;font-size:16px;transition:transform 0.2s;">&#9662;</div>' +
+        '</div>';
+
+      // Detalhe do card
+      var det = document.createElement('div');
+      det.style.cssText = 'display:none;border-top:1px solid rgba(255,255,255,0.07);padding:20px;';
+
+      var appBtn = isApprove ? (
+        '<div style="margin-top:12px;">' +
+          '<textarea class="cp-txt" placeholder="Comentário ou ajuste (opcional)..." style="width:100%;background:#18181f;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f0f0f5;font-family:DM Sans,sans-serif;font-size:13px;padding:10px 14px;resize:vertical;min-height:68px;outline:none;box-sizing:border-box;margin-bottom:8px;"></textarea>' +
+          '<div style="display:flex;gap:8px;">' +
+            '<button class="cp-approve-btn" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:'+(p.status==='aprovado'?'rgba(74,222,128,0.15)':'#aaff00')+';color:'+(p.status==='aprovado'?'#4ade80':'#0a0a0f')+';font-family:DM Sans,sans-serif;">'+(p.status==='aprovado'?'✓ Aprovado':'Aprovar este post')+'</button>' +
+            '<button class="cp-change-btn" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.12);background:transparent;color:#9090a8;font-family:DM Sans,sans-serif;">Solicitar ajuste</button>' +
+          '</div>' +
+        '</div>'
+      ) : '';
+
+      det.innerHTML =
         '<div style="font-size:10px;color:#5a5a72;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;">Legenda pronta</div>' +
         '<div style="background:#18181f;border-radius:8px;padding:14px 16px;font-size:13px;color:#9090a8;line-height:1.75;white-space:pre-wrap;margin-bottom:10px;">'+p.legenda+'<div style="color:#aaff00;font-size:12px;margin-top:8px;">'+p.hashtags+'</div></div>' +
-        '<button onclick="cpCopy('+p.id+')" style="padding:7px 14px;background:#18181f;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#9090a8;font-size:12px;font-family:DM Sans,sans-serif;cursor:pointer;">Copiar legenda</button>' +
-        approveBtn +
-      '</div>' +
+        '<button class="cp-copy-btn" style="padding:7px 14px;background:#18181f;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#9090a8;font-size:12px;font-family:DM Sans,sans-serif;cursor:pointer;">Copiar legenda</button>' +
+        appBtn;
+
+      // Eventos
+      ph.onclick = function() {
+        var isOpen = det.style.display !== 'none';
+        if (cpOpen && cpOpen !== det) { cpOpen.style.display='none'; cpOpen.previousSibling && (cpOpen.previousSibling.querySelector('.cp-arrow').style.transform='rotate(0deg)'); }
+        det.style.display = isOpen ? 'none' : 'block';
+        ph.querySelector('.cp-arrow').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+        card.style.borderColor = isOpen ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.2)';
+        cpOpen = isOpen ? null : det;
+      };
+
+      det.querySelector('.cp-copy-btn').onclick = function(e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(p.legenda+'\n\n'+p.hashtags).catch(function(){});
+        cpToast('Legenda copiada!');
+      };
+
+      if (isApprove) {
+        det.querySelector('.cp-approve-btn').onclick = function(e) {
+          e.stopPropagation();
+          p.status = 'aprovado';
+          card.setAttribute('data-s','aprovado');
+          this.textContent = '✓ Aprovado';
+          this.style.background = 'rgba(74,222,128,0.15)';
+          this.style.color = '#4ade80';
+          cpToast('Post aprovado! ✓');
+        };
+        det.querySelector('.cp-change-btn').onclick = function(e) {
+          e.stopPropagation();
+          cpToast('Ajuste registrado!');
+        };
+      }
+
+      card.appendChild(ph);
+      card.appendChild(det);
+      content.appendChild(card);
+    });
+
+    // Footer
+    content.innerHTML += '<div style="text-align:center;padding:40px 0 20px;border-top:1px solid rgba(255,255,255,0.07);margin-top:32px;">' +
+      (logoSrc ? '<img src="'+logoSrc+'" style="height:20px;opacity:0.35;">' : '') +
+      '<div style="font-size:11px;color:#5a5a72;margin-top:8px;">Plataforma de gestão de conteúdo &middot; nextlvl.com.br</div>' +
     '</div>';
+
+    panel.appendChild(content);
+    document.body.appendChild(panel);
   }
 
-  var postsHTML = '<div style="font-size:11px;font-weight:500;color:#5a5a72;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;">Posts do mês</div>' +
-    '<div id="cp-posts-container">' +
-    posts.map(function(p){ return renderClientPost(p); }).join('') +
-    '</div>';
-
-  // Rodapé
-  var footerHTML = '<div style="text-align:center;padding:40px 0 20px;border-top:1px solid rgba(255,255,255,0.07);margin-top:40px;">' +
-    '<img src="data:image/png;base64,' + logo_b64 + '" style="height:22px;opacity:0.4;" alt="nextlvl">' +
-    '<div style="font-size:11px;color:#5a5a72;margin-top:8px;">Plataforma de gestão de conteúdo &middot; nextlvl.com.br</div>' +
-  '</div>';
-
-  panel.innerHTML = headerHTML +
-    '<div style="max-width:860px;margin:0 auto;padding:40px 32px;">' +
-      welcomeHTML + statsHTML + filterHTML + postsHTML + footerHTML +
-    '</div>';
-
-  document.body.appendChild(panel);
-
-  // JS do painel do cliente
-  var cpOpenCard = null;
-
-  window.toggleCPCard = function(id) {
-    var detail = document.getElementById('cpdetail-'+id);
-    var arrow = document.getElementById('cparrow-'+id);
-    var card = document.getElementById('cpcard-'+id);
-    if (cpOpenCard === id) {
-      detail.style.display = 'none';
-      if(arrow) arrow.style.transform = 'rotate(0deg)';
-      if(card) card.style.borderColor = 'rgba(255,255,255,0.07)';
-      cpOpenCard = null;
-    } else {
-      if (cpOpenCard !== null) {
-        var prev = document.getElementById('cpdetail-'+cpOpenCard);
-        var parrow = document.getElementById('cparrow-'+cpOpenCard);
-        var pcard = document.getElementById('cpcard-'+cpOpenCard);
-        if(prev) prev.style.display = 'none';
-        if(parrow) parrow.style.transform = 'rotate(0deg)';
-        if(pcard) pcard.style.borderColor = 'rgba(255,255,255,0.07)';
-      }
-      detail.style.display = 'block';
-      if(arrow) arrow.style.transform = 'rotate(180deg)';
-      if(card) card.style.borderColor = 'rgba(255,255,255,0.2)';
-      cpOpenCard = id;
-    }
-  };
-
-  window.cpApprove = function(id) {
-    var p = posts.filter(function(x){ return x.id===id; })[0];
-    if (!p) return;
-    p.status = 'aprovado';
-    var btn = document.getElementById('cpbtn-'+id);
-    if (btn) { btn.textContent = '✓ Aprovado'; btn.style.background = 'rgba(74,222,128,0.15)'; btn.style.color = '#4ade80'; }
-    var card = document.getElementById('cpcard-'+id);
-    if (card) {
-      var statusEl = card.querySelector('[style*="font-size:11px"]');
-      // Atualizar dot e label de status
-    }
-    cpToast('Post aprovado! ✓');
-  };
-
-  window.cpChange = function(id) {
-    var txt = document.getElementById('cptxt-'+id);
-    cpToast('Solicitação registrada!');
-  };
-
-  window.cpCopy = function(id) {
-    var p = posts.filter(function(x){ return x.id===id; })[0];
-    if (p) { navigator.clipboard.writeText(p.legenda+'\n\n'+p.hashtags).catch(function(){}); cpToast('Legenda copiada!'); }
-  };
-
-  window.cpFilter2 = function(el, val) {
-    document.querySelectorAll('#cp-filters button').forEach(function(b) {
-      b.style.borderColor = 'rgba(255,255,255,0.1)';
-      b.style.background = 'transparent';
-      b.style.color = '#9090a8';
-    });
-    el.style.borderColor = '#aaff00';
-    el.style.background = 'rgba(170,255,0,0.1)';
-    el.style.color = '#aaff00';
-    document.querySelectorAll('.cp-post').forEach(function(card) {
-      var status = card.getAttribute('data-status');
-      card.style.display = (val === 'todos' || status === val) ? 'block' : 'none';
-    });
-  };
+  function mkStat(v,l,c) {
+    return '<div style="background:#111118;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;text-align:center;"><div style="font-family:Syne,sans-serif;font-size:24px;font-weight:700;color:'+(c||'#aaff00')+';">'+v+'</div><div style="font-size:11px;color:#9090a8;margin-top:4px;">'+l+'</div></div>';
+  }
 
   function cpToast(msg) {
     var t = document.createElement('div');
     t.textContent = msg;
-    t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#18181f;border:1px solid rgba(255,255,255,0.12);color:#f0f0f5;padding:12px 20px;border-radius:8px;font-size:13px;font-family:DM Sans,sans-serif;z-index:9999;';
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#18181f;border:1px solid rgba(255,255,255,0.15);color:#f0f0f5;padding:12px 20px;border-radius:8px;font-size:13px;font-family:DM Sans,sans-serif;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
     document.body.appendChild(t);
-    setTimeout(function(){ document.body.removeChild(t); }, 2500);
+    setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 2500);
   }
 
+  init();
 });
-
-
 </script>
 </body>
 </html>
