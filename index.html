@@ -3023,8 +3023,8 @@ function setTabFilter(f) {
 
 function renderPosts() {
   const list = document.getElementById('posts-list');
-  let filtered = ACTIVE_POSTS;
-  if (currentFilter !== 'todos') filtered = ACTIVE_POSTS.filter(p => p.status === currentFilter);
+  let filtered = ACTIVE_POSTS.slice().sort(function(a,b){ return a.dia - b.dia; });
+  if (currentFilter !== 'todos') filtered = filtered.filter(p => p.status === currentFilter);
   if (filtered.length === 0) { list.innerHTML = '<div class="empty">Nenhum post neste status ainda.</div>'; return; }
   list.innerHTML = filtered.map(p => renderPost(p)).join('');
   filtered.forEach(p => {
@@ -3133,7 +3133,7 @@ function updateStats() {
 function renderCalendar() {
   const grid = document.getElementById('calendar-grid');
   const postMap = {};
-  ACTIVE_POSTS.forEach(p => { postMap[p.dia] = postMap[p.dia] || []; postMap[p.dia].push(p); });
+  ACTIVE_POSTS.slice().sort(function(a,b){ return a.dia - b.dia; }).forEach(p => { postMap[p.dia] = postMap[p.dia] || []; postMap[p.dia].push(p); });
   const dotColors = { 'edu':'dot-blue','inst':'dot-green','eng':'dot-amber','prova':'dot-teal','oferta':'dot-pink','data':'dot-teal' };
   let html = CAL_DAYS.map(d => `<div class="cal-day-label">${d}</div>`).join('');
   for (let i = 0; i < MAY_START; i++) html += '<div class="cal-cell empty"></div>';
@@ -3155,7 +3155,7 @@ function renderStories() {
   const grid = document.getElementById('stories-grid');
   const dotColors = { 'edu':'tag-edu','inst':'tag-inst','eng':'tag-eng','prova':'tag-prova','oferta':'tag-oferta','data':'tag-data' };
   let html = '';
-  ACTIVE_POSTS.forEach(p => {
+  ACTIVE_POSTS.slice().sort(function(a,b){ return a.dia - b.dia; }).forEach(p => {
     p.stories.forEach((s, i) => {
       const tipo = p.tipo[0];
       html += `<div class="story-card">
@@ -3314,7 +3314,7 @@ renderPosts = function() {
   var si = document.getElementById('search-input');
   var q = si ? si.value.toLowerCase().trim() : '';
   var list = document.getElementById('posts-list');
-  var filtered = ACTIVE_POSTS.slice();
+  var filtered = ACTIVE_POSTS.slice().sort(function(a,b){ return a.dia - b.dia; });
   if (currentFilter !== 'todos') filtered = filtered.filter(function(p){ return p.status === currentFilter; });
   if (q) filtered = filtered.filter(function(p){ return (p.titulo+p.desc+p.legenda).toLowerCase().indexOf(q) >= 0; });
   if (!filtered.length) { list.innerHTML = '<div class="empty">Nenhum post encontrado.</div>'; return; }
@@ -3585,7 +3585,7 @@ window.addEventListener('load', function() {
     if (main) main.style.display = 'none';
     document.body.style.overflow = 'auto';
 
-    var posts = clientData.posts;
+    var posts = clientData.posts.slice().sort(function(a,b){ return a.dia - b.dia; });
     var isApprove = params.get('perm') === 'approve';
     var cpOpenCard = null;
     var cpEditId = null;
