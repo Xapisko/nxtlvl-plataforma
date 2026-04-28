@@ -435,6 +435,10 @@ select.status-select {
       <div class="client-avatar" style="background:rgba(124,58,237,0.25);color:#a78bfa;">AG</div>
       <div class="client-name">AG Consultoria</div>
     </div>
+    <div class="client-item" onclick="selectClient('servprol')">
+      <div class="client-avatar" style="background:rgba(22,163,74,0.25);color:#4ade80;">SP</div>
+      <div class="client-name">Servprol</div>
+    </div>
     <div class="client-item" onclick="openNewClient()">
       <div class="client-avatar" style="background:var(--bg4);color:var(--text3);font-size:18px;font-weight:300;">+</div>
       <div class="client-name" style="color:var(--text3);">Adicionar cliente</div>
@@ -2534,6 +2538,336 @@ const POSTS_AG_EXTRAS = [
 ];
 
 
+const POSTS_SERVPROL = [
+  {
+    id: 401, dia: 1, semana: 1, mes: 'mai', diasem: 'Sex',
+    tipo: ['data'], formato: 'Foto',
+    titulo: 'Dia do Trabalho — Para quem mantém a saúde funcionando',
+    desc: 'Homenagem institucional ao Dia do Trabalho conectando com técnicos e profissionais da saúde.',
+    status: 'planejado',
+    objetivo: 'Homenagem institucional sem apelo comercial. Humanização da marca Servprol em data de alto engajamento. Reforço do propósito da empresa.',
+    slides: [
+      { num: 'Post único', texto: '\u003Cstrong\u003EConceito:\u003C/strong\u003E Fundo bege clean ou foto de técnico Servprol em campo. Frase bold em verde: "Para quem mantém a saúde funcionando mesmo nos feriados." Logo Servprol no canto inferior.' },
+      { num: 'Copy', texto: '"01/05 — Dia do Trabalho. Para quem acorda cedo, vai até o hospital e garante que nenhum equipamento pare. Parabéns a todos os técnicos e profissionais da saúde." Servprol.' }
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Bege clean #F5F0E8 ou foto técnico em campo' },
+      { label: 'Destaque', val: 'Verde institucional Servprol na frase principal' },
+      { label: 'Tipografia', val: 'Bold para headline, regular para corpo' },
+      { label: 'Logo', val: 'Servprol canto inferior + servprol.com.br' },
+      { label: 'Tom', val: 'Institucional, respeitoso, zero CTA comercial' },
+      { label: 'Horário', val: '9h — respeitar feriado nacional' }
+    ],
+    legenda: 'Hoje é feriado.\n\nMas nos hospitais, clínicas e centros de saúde, o trabalho não para.\n\nE por trás de cada equipamento funcionando, existe alguém que trabalha para que isso seja possível.\n\nFeliz Dia do Trabalho para:\n→ Técnicos de manutenção que garantem equipamentos operando\n→ Enfermeiros que dependem de tecnologia que não falha\n→ Médicos que tomam decisões com equipamentos precisos\n→ Todos os profissionais que fazem a saúde acontecer\n\nA Servprol existe para que o trabalho de vocês nunca seja interrompido por falha técnica.\n\nParabéns a todos os trabalhadores!',
+    hashtags: '#Servprol #DiaDo Trabalho #EquipamentosHospitalares #ManutençãoHospitalar #ProfissionaisDaSaúde #JoãoPessoa',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story com frase bold em verde sobre fundo bege. "Para quem trabalha para que a saúde não pare." Logo Servprol. Sem CTA.' },
+      { tipo: 'Bastidores', desc: 'Foto ou vídeo curto da equipe Servprol com mensagem de Feliz Dia do Trabalho.' }
+    ]
+  },
+  {
+    id: 402, dia: 5, semana: 1, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Manutenção preventiva custa 3x menos que corretiva',
+    desc: 'Dado de impacto comparando custo preventivo vs corretivo. Estilo já validado no feed.',
+    status: 'planejado',
+    objetivo: 'Topo de funil. Educar gestores hospitalares sobre custo-benefício da manutenção preventiva. Alto potencial de salvamento. Posiciona Servprol como referência técnica.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003EHeadline:\u003C/strong\u003E "Manutenção preventiva custa 3x menos que corretiva." Número grande em verde. Fundo branco clean.' },
+      { num: 'Slide 2', texto: '\u003Cstrong\u003EPreventiva:\u003C/strong\u003E Visita técnica programada. Peças substituídas no prazo. Equipamento funcionando sem interrupção. Custo previsível e controlado.' },
+      { num: 'Slide 3', texto: '\u003Cstrong\u003ECorretiva:\u003C/strong\u003E Parada emergencial. Procedimentos cancelados. Peças de urgência (frete expresso). Equipe ociosa. Custo imprevisível e alto.' },
+      { num: 'Slide 4', texto: '\u003Cstrong\u003EConsequência:\u003C/strong\u003E "O melhor conserto é o que não precisa acontecer." Frase já validada no feed. CTA para agendar visita preventiva.' }
+    ],
+    arte: [
+      { label: 'Capa', val: 'Fundo branco + "3x" gigante em verde Servprol' },
+      { label: 'Slides', val: 'Fundo branco clean + ícones técnicos verdes' },
+      { label: 'Tipografia', val: 'Bold para dados, regular para descrições' },
+      { label: 'Referência', val: 'Estilo "Manutenção bem feita é aquela que evita o problema" já validado' },
+      { label: 'Logo', val: 'Servprol + servprol.com.br no rodapé' },
+      { label: 'Horário', val: '12h terça' }
+    ],
+    legenda: 'O gestor que espera o equipamento quebrar para chamar o técnico paga até 3 vezes mais.\n\nNão é exagero. É conta.\n\nMANUTENÇÃO PREVENTIVA:\n→ Visita técnica programada\n→ Peças substituídas no prazo\n→ Equipamento funcionando sem interrupção\n→ Custo previsível e controlado\n\nMANUTENÇÃO CORRETIVA:\n→ Parada emergencial\n→ Procedimentos cancelados\n→ Peças de urgência (frete expresso)\n→ Equipe técnica mobilizada às pressas\n→ Custo imprevisível e alto\n\nO melhor conserto é o que não precisa acontecer.\n\nAgende a visita preventiva da Servprol e mantenha seus equipamentos sempre operando.\n\nServprol — servprol.com.br',
+    hashtags: '#Servprol #ManutençãoPreventiva #EquipamentosHospitalares #GestãoHospitalar #ManutençãoHospitalar #Dräger #Baumer',
+    stories: [
+      { tipo: 'Dado', desc: '"Manutenção preventiva custa 3x menos. Você já agendou a sua?" Compartilhar slide da capa nos stories.' },
+      { tipo: 'Enquete', desc: '"Como você faz manutenção hoje?" Só quando quebra / Preventiva programada / Misto' }
+    ]
+  },
+  {
+    id: 403, dia: 7, semana: 1, mes: 'mai', diasem: 'Qui',
+    tipo: ['inst'], formato: 'Reels',
+    titulo: 'Por trás de cada equipamento funcionando, existe técnica',
+    desc: 'Reels com técnico Servprol em campo mostrando manutenção real de equipamento hospitalar.',
+    status: 'planejado',
+    objetivo: 'Alcance orgânico + humanização da marca. Mostrar a expertise real da equipe Servprol em ação. Topo de funil com alto potencial de compartilhamento.',
+    slides: [
+      { num: '0–5s', texto: '\u003Cstrong\u003EGancho:\u003C/strong\u003E Texto em tela: "Equipamento funcionando não é sorte." Frase já validada no feed. Técnico abrindo equipamento hospitalar.' },
+      { num: '5–20s', texto: '\u003Cstrong\u003EBastidores:\u003C/strong\u003E Técnico Servprol realizando manutenção real — bancada, multímetro, diagnóstico. Texto: "É técnica. É experiência. É Servprol."' },
+      { num: '20–30s', texto: '\u003Cstrong\u003EEncerramento:\u003C/strong\u003E Equipamento ligado e funcionando. Texto: "Mais de 35 anos garantindo que hospitais e clínicas nunca parem." Logo Servprol + servprol.com.br.' }
+    ],
+    arte: [
+      { label: 'Duração', val: '30 a 45 segundos' },
+      { label: 'Cenário', val: 'Bancada técnica real Servprol ou hospital/clínica em campo' },
+      { label: 'Texto em tela', val: 'Bold branco sobre fundo escuro ou verde — estilo feed atual' },
+      { label: 'Corte', val: 'Dinâmico, mostrando o processo técnico em etapas' },
+      { label: 'Trilha', val: 'Instrumental técnico — sem letra, sem exagero' },
+      { label: 'Horário', val: '12h quinta' }
+    ],
+    legenda: 'Equipamento funcionando não é sorte.\n\nÉ manutenção bem feita.\n\nPor trás de cada monitor cardíaco calibrado, cada ventilador operando com precisão, cada autoclave no ciclo certo — existe um técnico Servprol que conhece cada detalhe do equipamento.\n\nMais de 35 anos de experiência em manutenção de equipamentos médico-hospitalares.\nJoão Pessoa e região.\n\nServprol — servprol.com.br',
+    hashtags: '#Servprol #ManutençãoHospitalar #EquipamentosMédicos #Bastidores #TécnicoBiomédico #JoãoPessoa',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: '"Equipamento funcionando não é sorte. Assiste até o final." Compartilhar Reels nos stories.' },
+      { tipo: 'CTA', desc: '"Precisa de manutenção técnica especializada? Fala com a Servprol." Link WhatsApp.' }
+    ]
+  },
+  {
+    id: 404, dia: 10, semana: 2, mes: 'mai', diasem: 'Sáb',
+    tipo: ['data'], formato: 'Foto',
+    titulo: 'Dia das Mães — Para as mães que cuidam de quem cuida',
+    desc: 'Homenagem às mães profissionais da saúde. Zero comercial, 100% institucional.',
+    status: 'planejado',
+    objetivo: 'Engajamento máximo em data emocional. Humanização da marca. Conectar o propósito Servprol com a missão das mães profissionais da saúde.',
+    slides: [
+      { num: 'Post único', texto: '\u003Cstrong\u003EConceito:\u003C/strong\u003E Fundo branco clean com detalhe verde suave. Tipografia elegante e espaçada. "Feliz Dia das Mães — Para as mães que cuidam de quem cuida." Logo Servprol discreto no rodapé.' }
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Branco clean ou bege muito suave — delicado' },
+      { label: 'Detalhe', val: 'Verde Servprol suave — não agressivo' },
+      { label: 'Tipografia', val: 'Elegante e espaçada — não bold pesado' },
+      { label: 'Tom', val: 'Emocional, leve, respeitoso — zero comercial' },
+      { label: 'Logo', val: 'Servprol discreto no rodapé' },
+      { label: 'Horário', val: '9h sábado' }
+    ],
+    legenda: 'Feliz Dia das Mães.\n\nPara as mães enfermeiras que administram medicamento de manhã e beijo de boa noite.\nPara as mães médicas que salvam vidas durante o plantão e histórias antes de dormir.\nPara as mães técnicas que calibram equipamentos no hospital e equilibram tudo em casa.\n\nVocês cuidam de quem cuida.\nE a Servprol existe para que os equipamentos nunca as deixem na mão.\n\nFeliz Dia das Mães de toda a equipe Servprol.',
+    hashtags: '#Servprol #DiaDasMães #MãesDaSaúde #Homenagem #ProfissionaisDaSaúde #JoãoPessoa',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story com frase do post em fundo clean. "Para as mães que cuidam de quem cuida." Sem CTA.' },
+      { tipo: 'Caixinha', desc: '"Tem uma mãe profissional da saúde que você admira? Marca ela aqui 💐"' }
+    ]
+  },
+  {
+    id: 405, dia: 12, semana: 2, mes: 'mai', diasem: 'Ter',
+    tipo: ['data', 'edu'], formato: 'Foto',
+    titulo: 'Dia do Enfermeiro — O equipamento que não falha é responsabilidade nossa',
+    desc: 'Homenagem técnica ao enfermeiro conectando diretamente com o papel da Servprol.',
+    status: 'planejado',
+    objetivo: 'Homenagem com conexão técnica direta. Engajamento com profissionais de enfermagem que são influenciadores na decisão de manutenção.',
+    slides: [
+      { num: 'Post único', texto: '\u003Cstrong\u003EConceito:\u003C/strong\u003E Foto de equipamento hospitalar em close (bomba de infusão ou monitor cardíaco). Overlay verde suave. Texto: "Dia do Enfermeiro — Vocês dependem de equipamentos que nunca falham. Nosso trabalho garante isso." Logo Servprol.' }
+    ],
+    arte: [
+      { label: 'Foto', val: 'Equipamento hospitalar real em close — bomba de infusão, monitor, ventilador' },
+      { label: 'Overlay', val: 'Verde Servprol suave — para texto ficar legível' },
+      { label: 'Texto', val: 'Branco bold — hierarquia clara' },
+      { label: 'Tom', val: 'Técnico + respeitoso + propósito claro' },
+      { label: 'Logo', val: 'Servprol no canto inferior + servprol.com.br' },
+      { label: 'Horário', val: '8h terça — início do dia' }
+    ],
+    legenda: 'Hoje é Dia do Enfermeiro.\n\nE a gente sabe que vocês não podem depender de um "mais ou menos".\n\nBomba de infusão precisa ser precisa ao mililitro.\nMonitor cardíaco precisa alertar no segundo exato.\nVentilador mecânico precisa funcionar — sem exceção.\n\nO trabalho da Servprol existe para que vocês nunca precisem improvisar por falha técnica.\n\nParabéns a todos os profissionais de enfermagem que estão na linha de frente todos os dias.\n\nServprol — garantindo que a tecnologia esteja sempre do seu lado.',
+    hashtags: '#Servprol #DiaDo Enfermeiro #Enfermagem #Homenagem #EquipamentosHospitalares #ManutençãoHospitalar',
+    stories: [
+      { tipo: 'Homenagem', desc: '"Dia do Enfermeiro. Vocês merecem equipamentos que nunca falham. A Servprol garante isso." Fundo verde + texto branco.' },
+      { tipo: 'Enquete', desc: '"Você é profissional de enfermagem?" Sim! / Sou gestor / Outra área' }
+    ]
+  },
+  {
+    id: 406, dia: 14, semana: 2, mes: 'mai', diasem: 'Qui',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: '5 sinais de que seu equipamento vai falhar antes de falhar',
+    desc: 'Carrossel técnico com alertas que gestores hospitalares costumam ignorar.',
+    status: 'planejado',
+    objetivo: 'Alto potencial de salvamento por gestores. Gera urgência de contato preventivo. Posiciona Servprol como referência técnica no setor.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003E5 SINAIS de que seu equipamento vai falhar antes de falhar.\u003C/strong\u003E (E você ainda não percebeu.) Fundo verde bold. Número em branco.' },
+      { num: 'Sinal 1', texto: '\u003Cstrong\u003ERuído diferente:\u003C/strong\u003E Equipamento fazendo barulho incomum. Motor, compressor ou bomba com som diferente do padrão é o primeiro aviso.' },
+      { num: 'Sinal 2', texto: '\u003Cstrong\u003EVariação de temperatura:\u003C/strong\u003E Superaquecimento ou operando mais frio que o normal. Sinal claro de componente desgastado.' },
+      { num: 'Sinal 3', texto: '\u003Cstrong\u003EAlarmes frequentes:\u003C/strong\u003E Alarmes que aparecem e somem sem causa aparente. Não é defeito no alarme — é o equipamento pedindo socorro.' },
+      { num: 'Sinal 4', texto: '\u003Cstrong\u003EVariação de resultado:\u003C/strong\u003E Resultados inconsistentes ou fora do padrão esperado. Equipamento descalibrado compromete diagnóstico.' },
+      { num: 'Sinal 5', texto: '\u003Cstrong\u003EÚltima manutenção há mais de 6 meses:\u003C/strong\u003E Se você não lembra quando foi a última visita técnica, esse é o maior sinal. Chame agora.' },
+      { num: 'CTA', texto: 'Reconheceu algum? \u003Cstrong\u003ENão espere o equipamento parar para chamar a Servprol.\u003C/strong\u003E Agendamento preventivo: servprol.com.br ou WhatsApp.' }
+    ],
+    arte: [
+      { label: 'Capa', val: 'Verde Servprol bold + número em branco grande' },
+      { label: 'Slides', val: 'Fundo branco + ícone técnico verde por sinal' },
+      { label: 'Tipografia', val: 'Título bold, descrição regular' },
+      { label: 'CTA', val: 'Verde Servprol + WhatsApp/site em destaque' },
+      { label: 'Referência', val: 'Estilo carrosséis técnicos já validados no feed' },
+      { label: 'Horário', val: '12h quinta' }
+    ],
+    legenda: 'Equipamento não quebra do nada.\n\nEle dá sinais. E quem sabe reconhecer, evita a parada emergencial.\n\n5 sinais que gestores hospitalares costumam ignorar:\n\n1. Ruído diferente do padrão\n2. Variação de temperatura\n3. Alarmes frequentes sem causa aparente\n4. Resultados inconsistentes\n5. Última manutenção há mais de 6 meses\n\nSe você reconheceu algum desses sinais nos seus equipamentos, não espere o problema virar emergência.\n\nAgende a visita preventiva da Servprol agora.\nservprol.com.br',
+    hashtags: '#Servprol #ManutençãoPreventiva #EquipamentosHospitalares #GestãoHospitalar #EngenhariaClínica #ManutençãoBiomédica',
+    stories: [
+      { tipo: 'Quiz', desc: '"Quantos sinais você identificou nos equipamentos da sua instituição?" 0 / 1-2 / 3 ou mais / Não sei avaliar' },
+      { tipo: 'CTA', desc: '"Identificou algum? Fala com a Servprol antes que vire emergência." Link WhatsApp.' }
+    ]
+  },
+  {
+    id: 407, dia: 19, semana: 3, mes: 'mai', diasem: 'Ter',
+    tipo: ['inst'], formato: 'Reels',
+    titulo: 'Autoclave Baumer: manutenção feita por quem entende',
+    desc: 'Reels mostrando manutenção real de autoclave Baumer — Servprol como distribuidor autorizado.',
+    status: 'planejado',
+    objetivo: 'Autoridade técnica + geração de leads. Servprol como distribuidor e técnico autorizado Baumer. Conteúdo de bastidores que gera confiança.',
+    slides: [
+      { num: '0–5s', texto: '\u003Cstrong\u003EGancho:\u003C/strong\u003E "Autoclave parada é CME parada. Isso não pode acontecer." Texto em tela sobre autoclave Baumer.' },
+      { num: '5–20s', texto: '\u003Cstrong\u003EBastidores:\u003C/strong\u003E Técnico Servprol realizando manutenção real na autoclave Baumer — verificação de pressão, vedações, ciclos. Texto: "Técnico especializado Baumer. Aqui na Servprol."' },
+      { num: '20–30s', texto: '\u003Cstrong\u003EEncerramento:\u003C/strong\u003E Autoclave em operação após manutenção. Logo Baumer + Logo Servprol. "Distribuidor e assistência técnica Baumer — João Pessoa e região." + servprol.com.br' }
+    ],
+    arte: [
+      { label: 'Duração', val: '30 a 45 segundos' },
+      { label: 'Cenário', val: 'Autoclave Baumer real em manutenção — bancada Servprol' },
+      { label: 'Texto em tela', val: 'Bold branco + verde — estilo já validado no feed' },
+      { label: 'Logos', val: 'Baumer + Servprol aparecem juntos no encerramento' },
+      { label: 'Trilha', val: 'Instrumental técnico limpo' },
+      { label: 'Horário', val: '12h terça' }
+    ],
+    legenda: 'Autoclave parada é CME parada.\n\nE CME parada compromete toda a operação hospitalar.\n\nA Servprol é distribuidora e assistência técnica autorizada Baumer em João Pessoa e região.\n\nIsso significa:\n→ Técnicos treinados e certificados pela Baumer\n→ Peças originais com procedência\n→ Tempo de resposta rápido\n→ Manutenção preventiva e corretiva\n\nSua autoclave Baumer precisa de atenção? Fala com a Servprol.\n\nservprol.com.br',
+    hashtags: '#Servprol #Baumer #AutoclavesBaumer #ManutençãoCME #EquipamentosHospitalares #CME #JoãoPessoa',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: '"Distribuidor Baumer em João Pessoa — assiste o processo real de manutenção." Reels nos stories.' },
+      { tipo: 'CTA', desc: '"Sua autoclave Baumer está em dia? Fala com a Servprol." Link WhatsApp.' }
+    ]
+  },
+  {
+    id: 408, dia: 21, semana: 3, mes: 'mai', diasem: 'Qui',
+    tipo: ['data', 'edu'], formato: 'Foto',
+    titulo: 'Dia do Radiologista — Diagnóstico preciso começa no equipamento calibrado',
+    desc: 'Homenagem técnica ao radiologista conectando precisão diagnóstica com calibração dos equipamentos.',
+    status: 'planejado',
+    objetivo: 'Homenagem com alta relevância técnica para radiologistas e gestores de diagnóstico por imagem. Conecta diretamente o trabalho da Servprol.',
+    slides: [
+      { num: 'Post único', texto: '\u003Cstrong\u003EConceito:\u003C/strong\u003E Foto de equipamento de radiologia (tomógrafo ou raio-X) em ângulo técnico. Overlay verde Servprol. Texto: "Dia do Radiologista — Diagnóstico preciso começa no equipamento calibrado. A Servprol garante isso." Logo Servprol.' }
+    ],
+    arte: [
+      { label: 'Foto', val: 'Equipamento de radiologia — tomógrafo, raio-X ou ultrassom em ângulo profissional' },
+      { label: 'Overlay', val: 'Verde Servprol suave para legibilidade do texto' },
+      { label: 'Texto', val: 'Branco bold — hierarquia direta' },
+      { label: 'Tom', val: 'Técnico especializado + respeitoso' },
+      { label: 'Logo', val: 'Servprol + servprol.com.br' },
+      { label: 'Horário', val: '10h quinta' }
+    ],
+    legenda: 'Feliz Dia do Profissional de Radiologia!\n\nVocês transformam imagens em diagnósticos.\nRaio-X em certeza.\nTomografia em resposta que muda o tratamento.\n\nMas tudo isso só funciona quando o equipamento está impecavelmente calibrado.\n\nUm sensor fora de calibração não gera imagem ruim.\nGera diagnóstico impreciso.\nE diagnóstico impreciso muda — literalmente — o destino do paciente.\n\nA Servprol cuida da calibração e manutenção dos equipamentos de imagem para que o seu diagnóstico seja sempre preciso.\n\nParabéns a todos os profissionais de radiologia!',
+    hashtags: '#Servprol #DiaDo Radiologista #Radiologia #ImagemDiagnóstica #Calibração #EquipamentosHospitalares #ManutençãoHospitalar',
+    stories: [
+      { tipo: 'Homenagem', desc: '"Feliz Dia do Radiologista. Diagnóstico preciso começa no equipamento calibrado." Fundo técnico + logo Servprol.' },
+      { tipo: 'Enquete', desc: '"Você é profissional de radiologia ou diagnóstico por imagem?" Sim! / Sou gestor / Outro setor' }
+    ]
+  },
+  {
+    id: 409, dia: 23, semana: 3, mes: 'mai', diasem: 'Sáb',
+    tipo: ['oferta'], formato: 'Carrossel',
+    titulo: 'Manutenção em equipamentos de fisioterapia com quem entende',
+    desc: 'Apresentar o serviço de manutenção em equipamentos de fisioterapia — nicho validado no feed.',
+    status: 'planejado',
+    objetivo: 'Gerar leads de clínicas de fisioterapia. Nicho já validado no feed com alto engajamento. Fundo de funil.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003E"Manutenção em equipamentos de fisioterapia com quem entende."\u003C/strong\u003E Headline já validada no feed. Foto de equipamento de eletroterapia ou laser. Fundo branco + verde.' },
+      { num: 'Slide 2', texto: '\u003Cstrong\u003EEquipamentos atendidos:\u003C/strong\u003E Eletroterapia (TENS, FES, corrente russa) · Ultrassom terapêutico · Laser e LED terapêutico · Ondas de choque · Equipamentos de pressoterapia.' },
+      { num: 'Slide 3', texto: '\u003Cstrong\u003EO que a Servprol garante:\u003C/strong\u003E Calibração técnica correta · Potência real entregue ao paciente · Protocolo de tratamento confiável · Conformidade com normas ANVISA.' },
+      { num: 'CTA', texto: 'Equipamento de fisioterapia descalibrado não trata o paciente — trata a impressão. \u003Cstrong\u003EAgende a manutenção com a Servprol.\u003C/strong\u003E servprol.com.br' }
+    ],
+    arte: [
+      { label: 'Capa', val: 'Foto equipamento fisioterapia + headline bold verde' },
+      { label: 'Slides', val: 'Fundo branco + lista técnica + ícones verdes' },
+      { label: 'Referência', val: 'Estilo "Manutenção em equipamentos de fisioterapia" já publicado no feed' },
+      { label: 'CTA', val: 'Slide verde bold + site + WhatsApp' },
+      { label: 'Logo', val: 'Servprol + servprol.com.br' },
+      { label: 'Horário', val: '10h sábado' }
+    ],
+    legenda: 'Equipamento de fisioterapia descalibrado não trata o paciente.\n\nTrata a impressão de estar tratando.\n\nA potência real entregue pelo eletrodo pode ser completamente diferente do que o equipamento está indicando no display.\n\nIsso compromete:\n→ O protocolo de tratamento\n→ O resultado clínico\n→ A confiança do paciente na clínica\n\nA Servprol realiza manutenção técnica especializada em equipamentos de fisioterapia:\n→ Eletroterapia (TENS, FES, corrente russa)\n→ Ultrassom terapêutico\n→ Laser e LED terapêutico\n→ Ondas de choque\n\nAgende a visita técnica.\nservprol.com.br',
+    hashtags: '#Servprol #EquipamentosFisioterapia #Fisioterapia #ManutençãoFisioterapia #ClinicaFisio #Calibração #JoãoPessoa',
+    stories: [
+      { tipo: 'Enquete', desc: '"Quando foi a última manutenção dos equipamentos da sua clínica?" Esse mês / Há menos de 6 meses / Não lembro / Nunca fiz' },
+      { tipo: 'CTA', desc: '"Equipamento descalibrado não trata — prejudica. Agenda a Servprol." Link WhatsApp.' }
+    ]
+  },
+  {
+    id: 410, dia: 26, semana: 4, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Ventilador mecânico Dräger: manutenção que não aceita improviso',
+    desc: 'Carrossel técnico sobre criticidade da manutenção de ventiladores Dräger. Servprol como representante autorizado.',
+    status: 'planejado',
+    objetivo: 'Autoridade técnica máxima. Servprol como único representante autorizado Dräger na região. Gera leads de UTI e centros cirúrgicos.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003E"Ventilador mecânico Dräger: manutenção que não aceita improviso."\u003C/strong\u003E Foto Dräger em ambiente de UTI. Verde bold.' },
+      { num: 'Slide 2', texto: '\u003Cstrong\u003EPor que é crítico:\u003C/strong\u003E O ventilador mecânico mantém pacientes respirando. Uma falha não é inconveniência técnica — é risco de vida imediato.' },
+      { num: 'Slide 3', texto: '\u003Cstrong\u003EO que exige técnico autorizado:\u003C/strong\u003E Calibração de sensores de fluxo e pressão · Verificação de alarmes de segurança · Teste de circuito de expiração · Atualização de firmware · Documentação técnica para auditoria.' },
+      { num: 'Slide 4', texto: '\u003Cstrong\u003EServprol + Dräger:\u003C/strong\u003E Representante autorizado Dräger em João Pessoa e região. Técnicos certificados. Peças originais. Tempo de resposta rápido.' },
+      { num: 'CTA', texto: 'Seu Dräger precisa de manutenção? \u003Cstrong\u003EFale com quem é autorizado.\u003C/strong\u003E Servprol — servprol.com.br' }
+    ],
+    arte: [
+      { label: 'Capa', val: 'Foto Dräger em UTI real + headline bold verde' },
+      { label: 'Slides', val: 'Fundo branco + ícones técnicos + verde Servprol' },
+      { label: 'Logos', val: 'Dräger + Servprol juntos nos slides relevantes' },
+      { label: 'Tom', val: 'Técnico sério — a criticidade do equipamento exige isso' },
+      { label: 'CTA', val: 'Verde bold + "Representante Autorizado" em destaque' },
+      { label: 'Horário', val: '12h terça' }
+    ],
+    legenda: 'Ventilador mecânico não é equipamento comum.\n\nÉ o que mantém pacientes críticos respirando.\n\nE manutenção de ventilador mecânico não aceita:\n→ Técnico não certificado\n→ Peça não original\n→ Calibração aproximada\n→ Documentação incompleta\n\nA Servprol é representante autorizada Dräger em João Pessoa e região.\n\nIsso significa técnicos certificados pela Dräger, peças originais com procedência e documentação técnica completa para auditoria.\n\nSeu Dräger precisa de manutenção?\nFale com quem é autorizado.\n\nservprol.com.br',
+    hashtags: '#Servprol #Dräger #VentiladorMecânico #UTI #ManutençãoHospitalar #EquipamentosHospitalares #JoãoPessoa #RepresentanteAutorizado',
+    stories: [
+      { tipo: 'Dado', desc: '"Você sabia que a Servprol é representante autorizada Dräger em JP?" Sabia / Não sabia' },
+      { tipo: 'CTA', desc: '"Dräger precisa de técnico certificado. A Servprol tem. Fala com a gente." Link WhatsApp.' }
+    ]
+  },
+  {
+    id: 411, dia: 28, semana: 4, mes: 'mai', diasem: 'Qui',
+    tipo: ['eng'], formato: 'Reels',
+    titulo: 'Equipamento parado não pode esperar — a Servprol entende isso',
+    desc: 'Reels de urgência mostrando agilidade da Servprol no atendimento emergencial.',
+    status: 'planejado',
+    objetivo: 'Engajamento e geração de lead por urgência. Frase já validada no feed. Gera identificação imediata com gestores que já passaram por emergência técnica.',
+    slides: [
+      { num: '0–5s', texto: '\u003Cstrong\u003EGancho:\u003C/strong\u003E "Equipamento parado não pode esperar." Texto em tela grande. Fundo preto ou verde Servprol. Corte direto.' },
+      { num: '5–20s', texto: '\u003Cstrong\u003ESituação:\u003C/strong\u003E "Procedimento cancelado. Paciente em espera. Equipe parada." Números ou texto em sequência rápida — urgência visual.' },
+      { num: '20–30s', texto: '\u003Cstrong\u003ESolução:\u003C/strong\u003E "Atendimento técnico rápido e confiável. Servprol." Técnico em deslocamento ou em campo. Logo + WhatsApp + servprol.com.br.' }
+    ],
+    arte: [
+      { label: 'Duração', val: '30 segundos — ritmo urgente' },
+      { label: 'Abertura', val: 'Fundo preto ou verde com texto grande — impacto máximo' },
+      { label: 'Ritmo', val: 'Cortes rápidos — urgência no timing' },
+      { label: 'Texto em tela', val: 'Bold branco — sem adorno' },
+      { label: 'CTA', val: 'WhatsApp em tela + servprol.com.br no encerramento' },
+      { label: 'Horário', val: '12h quinta' }
+    ],
+    legenda: 'Equipamento parado não pode esperar.\n\nProcedimento cancelado.\nPaciente aguardando.\nEquipe parada.\n\nÉ exatamente nesses momentos que a Servprol está.\n\nAtendimento técnico rápido, confiável e especializado em equipamentos médico-hospitalares.\n\nJoão Pessoa e região.\n\nservprol.com.br',
+    hashtags: '#Servprol #AtendimentoUrgente #ManutençãoHospitalar #EquipamentosHospitalares #ManutençãoRápida #JoãoPessoa',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: '"Equipamento parado não pode esperar. Assiste esse Reels." Compartilhar nos stories.' },
+      { tipo: 'CTA direto', desc: '"Emergência técnica? Fala agora com a Servprol." Link WhatsApp direto.' }
+    ]
+  },
+  {
+    id: 412, dia: 30, semana: 4, mes: 'mai', diasem: 'Sáb',
+    tipo: ['oferta'], formato: 'Carrossel',
+    titulo: 'Checklist: seus equipamentos estão prontos para junho?',
+    desc: 'Carrossel de encerramento com checklist de manutenção preventiva. Alto salvamento e CTA para agendamento.',
+    status: 'planejado',
+    objetivo: 'Encerramento de mês com conversão. Checklist gera auto-avaliação e urgência de contato. Alto potencial de salvamento.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003ECHECKLIST:\u003C/strong\u003E Seus equipamentos estão prontos para junho? → Fundo verde bold + ícone de checklist.' },
+      { num: 'Slide 2', texto: '□ Última manutenção preventiva há menos de 6 meses?\n□ Calibração em dia?\n□ Documentação técnica atualizada?\n□ Nenhum sinal de ruído ou variação de temperatura?\n□ Contrato de manutenção ativo?' },
+      { num: 'Slide 3', texto: '\u003Cstrong\u003ERespondeu NÃO para algum?\u003C/strong\u003E Não espere junho para resolver. Agende agora a visita técnica da Servprol e entre no próximo mês com tudo funcionando.' },
+      { num: 'CTA', texto: '\u003Cstrong\u003EAgende a visita preventiva.\u003C/strong\u003E servprol.com.br | WhatsApp | João Pessoa e região. Servprol — mais de 35 anos cuidando de equipamentos hospitalares.' }
+    ],
+    arte: [
+      { label: 'Capa', val: 'Verde bold Servprol + ícone checklist + headline branca' },
+      { label: 'Slide checklist', val: 'Fundo branco + caixas de checklist verdes + tipografia clean' },
+      { label: 'CTA', val: 'Verde bold + dados de contato em destaque' },
+      { label: 'Urgência', val: '"Não espere junho" em destaque — urgência real' },
+      { label: 'Logo', val: 'Servprol + "35 anos" em destaque' },
+      { label: 'Horário', val: '10h sábado — último do mês' }
+    ],
+    legenda: 'Maio acabou. E junho chega em dias.\n\nAvante da virada de mês, a pergunta é:\nSeus equipamentos estão prontos para mais um mês?\n\nChecklist rápido:\n□ Manutenção preventiva há menos de 6 meses?\n□ Calibração em dia?\n□ Documentação técnica atualizada?\n□ Nenhum sinal de ruído ou variação?\n□ Contrato de manutenção ativo?\n\nRespondeu NÃO para algum?\nAgende agora a visita técnica da Servprol.\n\nMais de 35 anos cuidando de equipamentos médico-hospitalares em João Pessoa e região.\n\nservprol.com.br',
+    hashtags: '#Servprol #Checklist #ManutençãoPreventiva #EquipamentosHospitalares #GestãoHospitalar #JoãoPessoa #35Anos',
+    stories: [
+      { tipo: 'Checklist story', desc: 'Story com as 5 perguntas do checklist — uma por story ou todas juntas. "Respondeu NÃO? Fala com a Servprol."' },
+      { tipo: 'CTA final', desc: '"Último dia de maio. Agenda a manutenção antes de junho." Link WhatsApp + servprol.com.br.' }
+    ]
+  }
+];
+
+
 const CLIENTES = {
   biomexx: {
     nome: 'Biomexx',
@@ -2558,6 +2892,12 @@ const CLIENTES = {
     mes: 'Maio 2026',
     token: 'ag2m26k',
     posts: POSTS_AG.concat(POSTS_AG_EXTRAS)
+  },
+  servprol: {
+    nome: 'Servprol',
+    mes: 'Maio 2026',
+    token: 'sp3v26x',
+    posts: POSTS_SERVPROL
   }
 };
 
