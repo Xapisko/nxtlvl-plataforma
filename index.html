@@ -514,6 +514,10 @@ select.status-select {
       <div class="client-avatar" style="background:rgba(22,163,74,0.25);color:#4ade80;">SP</div>
       <div class="client-name">Servprol</div>
     </div>
+    <div class="client-item" onclick="selectClient('aleena')">
+      <div class="client-avatar" style="background:rgba(184,212,184,0.3);color:#4a8a4a;">AL</div>
+      <div class="client-name">Aleena</div>
+    </div>
     <div class="client-item" onclick="openNewClient()">
       <div class="client-avatar" style="background:var(--bg4);color:var(--text3);font-size:18px;font-weight:300;">+</div>
       <div class="client-name" style="color:var(--text3);">Adicionar cliente</div>
@@ -2946,6 +2950,233 @@ const POSTS_SERVPROL = [
 ];
 
 
+const POSTS_ALEENA = [
+  {
+    id: 501, dia: 6, semana: 2, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Por que você não dorme bem? A resposta pode estar no seu prato',
+    desc: 'Conexão entre sono e alimentação. Conteúdo educativo de autoridade para público feminino.',
+    status: 'planejado',
+    objetivo: 'Educação + autoridade. Gerar identificação com público que sofre de insônia e má qualidade do sono. Topo de funil.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003E"Por que você não dorme bem?"\u003C/strong\u003E A resposta pode estar no seu prato. Fundo pistache suave + tipografia Montserrat bold.' },
+      { num: 'Slide 2', texto: '\u003Cstrong\u003EO problema:\u003C/strong\u003E Você evita cafeína, dorme cedo — mas ainda acorda no meio da noite. O que poucas pessoas sabem: o que você come nas últimas 3 horas antes de dormir muda tudo.' },
+      { num: 'Slide 3', texto: '\u003Cstrong\u003EAlimentos que atrapalham:\u003C/strong\u003E Açúcar refinado, ultraprocessados, álcool, cafeína depois das 14h, refeição pesada à noite.' },
+      { num: 'Slide 4', texto: '\u003Cstrong\u003EAlimentos que ajudam:\u003C/strong\u003E Banana, kiwi, aveia, castanhas, leite morno, chá de camomila. Ricos em triptofano e magnésio — precursores da melatonina.' },
+      { num: 'CTA', texto: '\u003Cstrong\u003ECTA:\u003C/strong\u003E "Quer um plano alimentar que melhore seu sono e sua energia?" Agende uma consulta. Logo Aleena + @clinica.aleena.' }
+    ],
+    arte: [
+      { label: 'Paleta', val: 'Verde pistache #B8D4B8 + off-white #FAF9F6 + dourado #D4AF37' },
+      { label: 'Tipografia', val: 'Headlines: Montserrat Bold · Corpo: Inter Regular' },
+      { label: 'Estilo', val: 'Clean, sofisticado, feminino — sem exageros' },
+      { label: 'Ícones', val: 'Minimalistas — alimentos e lua/sono' },
+      { label: 'Logo', val: 'Aleena canto inferior + @clinica.aleena' },
+      { label: 'Horário', val: '18h terça' }
+    ],
+    legenda: 'Você faz tudo certo: sem cafeína à noite, deita cedo, tela do celular desligada...\n\nMas ainda não consegue dormir bem.\n\nO que poucas pessoas sabem:\nO que você come nas últimas 3 horas antes de dormir muda completamente a qualidade do sono.\n\nAlimentos que ATRAPALHAM:\n→ Açúcar refinado (dispara cortisol)\n→ Ultraprocessados (inflamam o intestino)\n→ Álcool (fragmenta o sono profundo)\n→ Refeições pesadas (sobrecarregam a digestão)\n\nAlimentos que AJUDAM:\n→ Banana e kiwi (ricos em triptofano)\n→ Aveia e castanhas (magnésio que relaxa)\n→ Camomila e maracujá (ação calmante natural)\n→ Leite morno (precursor de melatonina)\n\nO sono não começa quando você fecha os olhos.\nComeça no prato.\n\nQuer um plano alimentar que melhore seu sono e sua energia?\nAgende uma avaliação nutricional.\n\nDra. Aleska Araújo | Nutricionista\nAleena — João Pessoa/PB',
+    hashtags: '#Aleena #NutriçãoESono #SonoSaudável #NutricionistaJP #JoãoPessoa #AlimentaçãoSaudável #InsôniaTem Solução #DraAleska #NutriçãoFuncional #BemEstarFeminino',
+    stories: [
+      { tipo: 'Enquete', desc: '"Você dorme bem?" Sim, ótimo / Não, acordo durante a noite / Demoro para dormir' },
+      { tipo: 'CTA', desc: 'Compartilhar slide da capa com "Você sabia disso? Vai ver o carrossel completo." Link para o post.' }
+    ]
+  },
+  {
+    id: 502, dia: 10, semana: 2, mes: 'mai', diasem: 'Sáb',
+    tipo: ['data', 'inst'], formato: 'Foto',
+    titulo: 'Dia das Mães — Cuidar de si não é egoísmo. É responsabilidade.',
+    desc: 'Post emocional para o Dia das Mães conectando autocuidado com os serviços da Aleena.',
+    status: 'planejado',
+    objetivo: 'Conexão emocional + promoção sazonal. Humanização da marca. Alto engajamento esperado.',
+    slides: [
+      { num: 'Post único', texto: '\u003Cstrong\u003EConceito:\u003C/strong\u003E Foto elegante de mulher em momento de autocuidado. Overlay pistache suave. Frase bold. Zero apelo comercial explícito.' },
+      { num: 'Copy', texto: '"Cuidar de si não é egoísmo. É responsabilidade." Tipografia elegante + logo Aleena discreto.' }
+    ],
+    arte: [
+      { label: 'Foto', val: 'Mulher em momento de paz — xícara, luz natural, sem mostrar rosto (elegância)' },
+      { label: 'Overlay', val: 'Verde pistache suave a 20% — delicado' },
+      { label: 'Tipografia', val: 'Montserrat, elegante, espaçada — não bold pesado' },
+      { label: 'Tom', val: '100% emocional — zero CTA comercial direto' },
+      { label: 'Logo', val: 'Aleena discreto no rodapé' },
+      { label: 'Horário', val: '19h sábado' }
+    ],
+    legenda: 'Para a mãe que coloca todo mundo na frente.\n\nQue acorda cedo, dorme tarde, e ainda acha que podia ter feito mais.\n\nQue cuida dos filhos, da casa, do trabalho — e esquece de colocar o próprio nome na lista.\n\nCuidar de si não é egoísmo.\nÉ responsabilidade.\n\nPorque você não consegue cuidar de quem ama\nse não cuidar de você primeiro.\n\nFeliz Dia das Mães de toda a equipe Aleena.\nVocê merece esse cuidado.\n\nAleena — Nutrição · Fisioterapia · Estética\nJoão Pessoa/PB',
+    hashtags: '#Aleena #DiaDasMães #Autocuidado #CuidarDeSi #MãesSaudáveis #BemEstarFeminino #NutricionistaJP #JoãoPessoa #SaúdeFeminina #EuMereço',
+    stories: [
+      { tipo: 'Homenagem', desc: 'Story com frase do post. "Para todas as mães que se esqueceram de colocar o próprio nome na lista." Tom emocional.' },
+      { tipo: 'Promoção sutil', desc: '"Que tal presentear a mamãe (ou a si mesma) com uma avaliação na Aleena?" Link agendamento.' }
+    ]
+  },
+  {
+    id: 503, dia: 13, semana: 3, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu', 'eng'], formato: 'Carrossel',
+    titulo: 'Cardápio Ozempic/Monjaro/Saxenda — Seu cardápio precisa mudar',
+    desc: 'Post viral com gatilho ManyChat. Prioridade máxima do mês. Alto potencial de viralização e captura de leads.',
+    status: 'planejado',
+    objetivo: 'Viralização + captura de leads via ManyChat + autoridade. Gatilho: comentar "CARDAPIO" para receber PDF automático via direct. Meta: 300-500 comentários, 250-400 PDFs enviados, 10-20 consultas agendadas.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003E"Usando injeção? Seu cardápio precisa ser PROTEICO"\u003C/strong\u003E Fundo pistache + tipografia bold impactante. Logo Aleena.' },
+      { num: 'Slide 2 — Problema', texto: '\u003Cstrong\u003EO problema:\u003C/strong\u003E "Come menos, mas não come melhor." A medicação reduz o apetite — mas não garante nutrição adequada. Resultado: perda de músculo, não só de gordura.' },
+      { num: 'Slide 3 — Consequências', texto: '\u003Cstrong\u003EConsecuências da falta de proteína:\u003C/strong\u003E → Perda de massa muscular → Queda de cabelo → Flacidez → Cansaço crônico → Efeito sanfona após parar.' },
+      { num: 'Slide 4 — Solução', texto: '\u003Cstrong\u003EA solução:\u003C/strong\u003E Proteína + nutrientes essenciais em cada refeição. Meta: 1,5 a 2g de proteína por kg de peso. Mesmo comendo menos, priorizar qualidade.' },
+      { num: 'Slide 5 — Exemplo', texto: '\u003Cstrong\u003EExemplo de dia alimentar:\u003C/strong\u003E Café: omelete 3 ovos + iogurte grego. Almoço: frango 150g + salada + arroz integral pequeno. Lanche: shake proteico. Jantar: salmão 150g + legumes.' },
+      { num: 'Slide 6 — CTA', texto: '\u003Cstrong\u003ECTA viral:\u003C/strong\u003E "💬 COMENTA: CARDAPIO" e eu te envio o PDF grátis com cardápio proteico de 7 dias no direct! Logo Aleena + @clinica.aleena.' }
+    ],
+    arte: [
+      { label: 'Capa', val: 'Verde pistache bold + tipografia Montserrat ExtraBold — impacto máximo' },
+      { label: 'Slides 2-5', val: 'Off-white #FAF9F6 + elementos pistache + ícones minimalistas de alimentos' },
+      { label: 'Slide 3 alertas', val: 'Vermelho suave #E8B4B4 nos ícones de consequências' },
+      { label: 'CTA (slide 6)', val: 'Verde pistache bold + "COMENTA: CARDAPIO" em destaque máximo + dourado' },
+      { label: 'ManyChat', val: 'Gatilho: comentário contém "CARDAPIO" → envia PDF automaticamente no direct' },
+      { label: 'Horário', val: '19h terça — PRIORIDADE MÁXIMA DO MÊS' }
+    ],
+    legenda: 'Usando Ozempic, Monjaro ou Saxenda?\n\nSeu cardápio precisa mudar — urgente.\n\nA medicação reduz o apetite. Mas não garante que o que você come seja suficiente para preservar sua saúde.\n\nO problema mais comum:\nComer menos, mas não comer melhor.\n\nE quando a proteína cai:\n→ Você perde músculo, não só gordura\n→ O cabelo começa a cair\n→ O corpo fica flácido\n→ O cansaço aumenta\n→ E quando parar a medicação? Efeito sanfona.\n\nA solução é simples — mas precisa de estratégia:\nProteína em CADA refeição. 1,5 a 2g por kg de peso.\n\nMesmo comendo pouco, precisa ser nutritivo.\n\n💬 COMENTA "CARDAPIO" aqui embaixo\ne eu te envio GRÁTIS o PDF com cardápio proteico de 7 dias especial para quem usa injeção!\n\nDra. Aleska Araújo | Nutricionista\nAleena — João Pessoa/PB',
+    hashtags: '#Ozempic #Monjaro #Saxenda #EmagrecimentoSaudável #DietaProteica #NutriçãoQueTransforma #Aleena #NutricionistaJP #ProteinaAlta #CardapioSaudavel #InjeçãoParaEmagrecer #JoãoPessoa #NutriçãoFuncional #DraAleska #ResultadosReais #SemEfeitoSanfona',
+    stories: [
+      { tipo: 'Teaser 9h', desc: '"Hoje às 19h tem novidade no feed 👀 Quem usa Ozempic, Monjaro ou Saxenda precisa ver." Urgência + curiosidade.' },
+      { tipo: 'Repost 19h', desc: 'Repost do carrossel com sticker "COMENTA CARDAPIO" em destaque.' },
+      { tipo: 'Prova social 20h', desc: '"Já enviamos X cardápios! 🎉" Urgência social — mostrar volume de respostas.' },
+      { tipo: 'Última chance 22h', desc: '"Última chance de pegar o PDF hoje! Comenta CARDAPIO no post 👇"' }
+    ]
+  },
+  {
+    id: 504, dia: 17, semana: 3, mes: 'mai', diasem: 'Sáb',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Cansada o tempo todo? Seu corpo pode estar pedindo ajuda',
+    desc: 'Carrossel educativo sobre cansaço crônico e deficiências nutricionais. Alto potencial de identificação.',
+    status: 'planejado',
+    objetivo: 'Educação + conversão. Alto potencial de identificação com público feminino. Gatilho de dor real.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003E"Cansada o tempo todo?"\u003C/strong\u003E Seu corpo pode estar pedindo ajuda. Fundo off-white + tipografia Montserrat bold pistache.' },
+      { num: 'Slide 2', texto: '\u003Cstrong\u003EO que você acha:\u003C/strong\u003E "É o ritmo de vida, é o estresse, é a idade..." O que pode ser na verdade: deficiência de ferro, vitamina D, B12, magnésio — silenciosas e tratáveis.' },
+      { num: 'Slide 3', texto: '\u003Cstrong\u003ESinais de alerta:\u003C/strong\u003E Acordar já cansada. Queda de cabelo. Unhas quebradiças. Dificuldade de concentração. Queda de imunidade. Irritabilidade sem motivo.' },
+      { num: 'Slide 4 — CTA', texto: '\u003Cstrong\u003ECTA:\u003C/strong\u003E "Cansaço crônico tem solução — começa no prato." Agende sua avaliação nutricional. Logo + @clinica.aleena.' }
+    ],
+    arte: [
+      { label: 'Capa', val: 'Off-white + "Cansada o tempo todo?" em pistache bold' },
+      { label: 'Slides', val: 'Clean, minimalista — ícones de sinais de alerta em vermelho suave' },
+      { label: 'Tom', val: 'Empático, não alarmista — existe solução' },
+      { label: 'Logo', val: 'Aleena + @clinica.aleena' },
+      { label: 'Horário', val: '9h sábado' }
+    ],
+    legenda: '"É o estresse."\n"É o ritmo de vida."\n"É a idade."\n\nTalvez. Mas talvez seja outra coisa.\n\nO cansaço crônico é um dos sintomas mais comuns — e mais ignorados — de deficiências nutricionais silenciosas.\n\nFerro baixo. Vitamina D insuficiente. B12 abaixo do ideal. Magnésio no limite.\n\nNenhum deles aparece no espelho.\nTodos eles aparecem na sua disposição.\n\nSinais de que seu corpo está pedindo ajuda:\n→ Você acorda já cansada\n→ O cabelo está caindo mais que o normal\n→ Unhas quebradiças\n→ Dificuldade de concentração\n→ Imunidade baixa toda hora\n→ Irritabilidade sem motivo claro\n\nCansaço crônico tem solução — e começa no prato.\n\nAgende sua avaliação nutricional.\n\nDra. Aleska Araújo | Nutricionista\nAleena — João Pessoa/PB',
+    hashtags: '#Aleena #CansaçoCrônico #DeficiênciaNutricional #NutricionistaJP #JoãoPessoa #SaúdeFeminina #VitaminaD #FerroEmDia #DraAleska #NutriçãoFuncional #BemEstarFeminino',
+    stories: [
+      { tipo: 'Enquete', desc: '"Você se sente cansada com frequência?" Sim, todo dia / Às vezes / Não, tenho boa energia' },
+      { tipo: 'CTA', desc: '"Identificou algum sinal? Pode ser deficiência nutricional. Marca alguém que precisa ver isso." Link post.' }
+    ]
+  },
+  {
+    id: 505, dia: 20, semana: 4, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu', 'inst'], formato: 'Reels',
+    titulo: 'Manchas na pele: o que realmente funciona?',
+    desc: 'Reels educativo sobre tratamento de manchas. Alto potencial de viralização + conversão para estética.',
+    status: 'planejado',
+    objetivo: 'Viralização + conversão para consulta de estética. Desmistificar soluções caseiras e posicionar Aleena como referência.',
+    slides: [
+      { num: '0–5s', texto: '\u003Cstrong\u003EGancho:\u003C/strong\u003E "Passou protetor, usou vitamina C, foi na farmácia... e a mancha continua? Vou te explicar o que funciona de verdade." Dra. Natascha ou Dra. Aleska olha direto para a câmera.' },
+      { num: '5–15s', texto: '\u003Cstrong\u003EO problema:\u003C/strong\u003E Manchas têm origens diferentes — sol, hormônio, acne, medicamento. O que funciona para uma não funciona para outra. Tratamento sem diagnóstico = desperdício de dinheiro.' },
+      { num: '15–20s', texto: '\u003Cstrong\u003ESoluções reais:\u003C/strong\u003E Microagulhamento, peelings, laser, despigmentantes profissionais — indicados conforme o tipo de mancha e tom de pele.' },
+      { num: '20–25s', texto: '\u003Cstrong\u003ECTA:\u003C/strong\u003E "Avaliação facial gratuita na Aleena. Descobre o que sua pele realmente precisa." Link na bio.' }
+    ],
+    arte: [
+      { label: 'Formato', val: 'Reels vertical 9:16 — 20 a 25 segundos' },
+      { label: 'Cenário', val: 'Ambiente da Aleena — clean, iluminado, profissional' },
+      { label: 'Apresentadora', val: 'Dra. Natascha Marques (estética facial) — especialista no tema' },
+      { label: 'Texto em tela', val: 'Montserrat bold sobre fundo suave — pistache ou off-white' },
+      { label: 'Tom', val: 'Direto, educativo, sem julgamento — existe solução' },
+      { label: 'Horário', val: '19h terça' }
+    ],
+    legenda: 'Passou protetor todo dia.\nUsou vitamina C sérica.\nComprou o despigmentante da farmácia.\n\nE a mancha continua.\n\nO problema não é você. É que manchas têm origens diferentes — e o que funciona para uma não funciona para outra.\n\nMancha de sol ≠ Melasma hormonal ≠ Mancha de acne.\nCada uma pede um protocolo específico.\n\nO que realmente funciona para manchas:\n→ Diagnóstico correto do tipo de mancha\n→ Protocolo personalizado para o seu tom de pele\n→ Microagulhamento + despigmentantes profissionais\n→ Peeling químico na concentração certa\n→ Fotoproteção como parte do tratamento (sempre)\n\nTratamento sem avaliação = desperdício de tempo e dinheiro.\n\nNa Aleena, a avaliação facial é o primeiro passo — e ela muda tudo.\n\nDra. Natascha Marques | Estética Facial Avançada\nAleena — João Pessoa/PB\n📲 Link na bio para agendar',
+    hashtags: '#Aleena #ManchasNaPele #Melasma #EstéticaFacial #TratamentoDePele #NatashaMarques #JoãoPessoa #MicroagulhamentoBH #PeelingQuímico #SkinCareJP #PeleSaudável #EstéticaAvançada #DermocosméticosReais',
+    stories: [
+      { tipo: 'Compartilhar Reels', desc: '"Passa isso pra quem vive gastando com produto e a mancha não sai." Reels nos stories.' },
+      { tipo: 'CTA', desc: '"Avaliação facial na Aleena — descobre o que sua pele precisa de verdade." Link agendamento.' }
+    ]
+  },
+  {
+    id: 506, dia: 24, semana: 4, mes: 'mai', diasem: 'Sáb',
+    tipo: ['edu', 'eng'], formato: 'Foto',
+    titulo: 'Compulsão alimentar não é falta de controle',
+    desc: 'Post de identificação emocional profunda. Alto potencial de compartilhamento e conversão.',
+    status: 'planejado',
+    objetivo: 'Identificação + conversão. Quebrar o estigma da compulsão alimentar e posicionar nutrição como solução. Alto potencial de salvamento.',
+    slides: [
+      { num: 'Post único', texto: '\u003Cstrong\u003EConceito:\u003C/strong\u003E Tipografia pura. Fundo off-white. Frase bold em pistache. Zero imagem de comida. O texto é o criativo.' },
+      { num: 'Copy', texto: '"Compulsão alimentar não é falta de controle.\nÉ falta de nutrição adequada, sono ruim, estresse crônico e emoções não processadas.\nO problema nunca foi a sua força de vontade." Aleena.' }
+    ],
+    arte: [
+      { label: 'Conceito', val: 'Tipografia pura — o texto é o elemento visual principal' },
+      { label: 'Fundo', val: 'Off-white #FAF9F6 — clean, sem distração' },
+      { label: 'Destaque', val: '"Compulsão alimentar não é falta de controle." em pistache bold grande' },
+      { label: 'Corpo', val: 'Inter regular, menor — explicação em cinza escuro' },
+      { label: 'Logo', val: 'Aleena discreto no rodapé' },
+      { label: 'Horário', val: '10h sábado' }
+    ],
+    legenda: 'Compulsão alimentar não é falta de controle.\n\nÉ o seu corpo desesperadamente tentando equilibrar algo que está desequilibrado.\n\nPode ser:\n→ Deficiência de serotonina (que o açúcar tenta compensar)\n→ Cortisol alto demais pelo estresse crônico\n→ Sono ruim (que bagunça grelina e leptina — hormônios da fome)\n→ Restrição excessiva durante o dia\n→ Emoções não processadas buscando alívio rápido\n\nO problema nunca foi sua força de vontade.\nFoi a falta de suporte certo.\n\nNutrição funcional + acompanhamento especializado mudam a relação com a comida — de dentro pra fora.\n\nSe você se identificou, esse post é pra você.\nE existe ajuda profissional para isso.\n\nDra. Aleska Araújo | Nutricionista\nAleena — João Pessoa/PB',
+    hashtags: '#Aleena #CompulsãoAlimentar #RelacaoComAComida #NutriçãoConsciente #NutricionistaJP #JoãoPessoa #SaúdeEmocional #AlimentaçãoIntuitiva #DraAleska #SemDieta #BemEstarFeminino #NutriçãoFuncional',
+    stories: [
+      { tipo: 'Compartilhar', desc: '"Manda pra quem precisa ouvir isso hoje." CTA de compartilhamento emocional.' },
+      { tipo: 'Caixinha', desc: '"Você já sentiu isso? Me conta aqui 💚" Caixinha de perguntas — engajamento e escuta ativa.' }
+    ]
+  },
+  {
+    id: 507, dia: 27, semana: 5, mes: 'mai', diasem: 'Ter',
+    tipo: ['edu'], formato: 'Carrossel',
+    titulo: 'Pós-parto: o corpo pede cuidado (e você merece esse tempo)',
+    desc: 'Carrossel educativo sobre fisioterapia pós-parto. Nicho específico com alto valor de conversão.',
+    status: 'planejado',
+    objetivo: 'Educação + conversão para fisioterapia pós-parto. Nicho de alto valor — mães recentes com demanda real e urgente.',
+    slides: [
+      { num: 'Capa', texto: '\u003Cstrong\u003E"Pós-parto: o corpo pede cuidado."\u003C/strong\u003E E você merece esse tempo. Fundo pistache suave + tipografia Montserrat.' },
+      { num: 'Slide 2', texto: '\u003Cstrong\u003EO que ninguém fala:\u003C/strong\u003E O pós-parto pode durar meses. Diástase abdominal, disfunção do assoalho pélvico, dores lombares, incontinência urinária — são comuns e tratáveis.' },
+      { num: 'Slide 3', texto: '\u003Cstrong\u003EO que a fisioterapia faz:\u003C/strong\u003E Reabilita o assoalho pélvico. Fecha a diástase. Alivia dores lombares. Recupera a postura. Devolve autonomia e qualidade de vida.' },
+      { num: 'Slide 4', texto: '\u003Cstrong\u003EQuando começar:\u003C/strong\u003E Parto normal: a partir de 30 dias. Cesárea: a partir de 45 dias. Quanto antes, melhores os resultados.' },
+      { num: 'CTA', texto: '\u003Cstrong\u003ECTA:\u003C/strong\u003E "Você cuidou de todo mundo. Agora é a sua vez." Agende avaliação de fisioterapia pós-parto. Logo + @clinica.aleena.' }
+    ],
+    arte: [
+      { label: 'Paleta', val: 'Pistache suave + off-white + dourado discreto — acolhedor e feminino' },
+      { label: 'Capa', val: 'Foto de mãe em momento sereno OU tipografia pura — sem bebê (foco na mãe)' },
+      { label: 'Tom', val: 'Acolhedor, empático, encorajador — "você merece esse cuidado"' },
+      { label: 'Tipografia', val: 'Montserrat bold para dados + Inter regular para corpo' },
+      { label: 'Logo', val: 'Aleena + @clinica.aleena' },
+      { label: 'Horário', val: '18h terça' }
+    ],
+    legenda: 'Você passou 9 meses construindo uma vida.\n\nE depois do parto, todo mundo pergunta pelo bebê.\nNinguém pergunta como você está.\n\nO pós-parto muda o corpo de formas que poucas pessoas falam abertamente:\n\n→ Diástase abdominal (separação dos músculos)\n→ Assoalho pélvico enfraquecido\n→ Dores lombares que não passam\n→ Incontinência urinária\n→ Postura alterada pelo peso da amamentação\n\nTudo isso é comum.\nE tudo isso tem tratamento.\n\nA fisioterapia pós-parto existe para isso:\nPara devolver seu corpo a você.\nCom segurança, cuidado e no seu tempo.\n\nParto normal: iniciar a partir de 30 dias.\nCesárea: iniciar a partir de 45 dias.\n\nVocê cuidou de todo mundo.\nAgora é a sua vez.\n\nDra. Alessandra Araújo | Fisioterapeuta Dermato-funcional\nAleena — João Pessoa/PB',
+    hashtags: '#Aleena #FisioterapiaPósParto #AloalhoPélvico #Diástase #MamaeFit #RecuperaçãoPósParto #FisioterapeutaJP #JoãoPessoa #SaúdeFeminina #CuidadoMaterno #IncontinênciaUrinária #FisioterapiaPélvica',
+    stories: [
+      { tipo: 'Enquete', desc: '"Você sabia que fisioterapia pós-parto existe?" Sim, já fiz / Sabia mas não fiz / Não sabia!' },
+      { tipo: 'CTA', desc: '"Manda pra uma mamãe que merece esse cuidado 💚" Compartilhamento + link agendamento.' }
+    ]
+  },
+  {
+    id: 508, dia: 31, semana: 5, mes: 'mai', diasem: 'Dom',
+    tipo: ['data', 'edu'], formato: 'Foto',
+    titulo: '31 de maio — Como a nutrição ajuda quem está parando de fumar',
+    desc: 'Post de relevância social no Dia Mundial Sem Tabaco. Conexão entre parar de fumar e nutrição.',
+    status: 'planejado',
+    objetivo: 'Relevância social + autoridade. Posicionar Aleena como referência além da estética — saúde real e preventiva.',
+    slides: [
+      { num: 'Post único', texto: '\u003Cstrong\u003EConceito:\u003C/strong\u003E Fundo off-white limpo. Ícone de pulmão + folha pistache. Tipografia clean. Tag "31/05 · Dia Mundial Sem Tabaco".' },
+      { num: 'Copy', texto: '"Parar de fumar é um dos maiores presentes que você pode dar ao seu corpo. A nutrição pode tornar esse processo mais leve." Aleena.' }
+    ],
+    arte: [
+      { label: 'Fundo', val: 'Off-white clean — leveza, esperança' },
+      { label: 'Ícone', val: 'Pulmão + folha verde pistache — renovação, não medo' },
+      { label: 'Tom', val: 'Encorajador, não alarmista — foco no que é possível' },
+      { label: 'Tag', val: '"31/05 · Dia Mundial Sem Tabaco" discreta no topo' },
+      { label: 'Logo', val: 'Aleena rodapé' },
+      { label: 'Horário', val: '9h domingo' }
+    ],
+    legenda: '31 de maio. Dia Mundial Sem Tabaco.\n\nParar de fumar é um dos maiores presentes que você pode dar ao seu corpo.\nE a nutrição pode tornar esse processo mais leve.\n\nO que acontece com o corpo quando você para de fumar:\n→ O apetite aumenta (a nicotina suprimia a fome)\n→ O paladar melhora (você começa a sentir sabores de novo)\n→ A ansiedade pode aumentar temporariamente\n→ O metabolismo se ajusta\n\nComo a nutrição ajuda nessa fase:\n→ Alimentos ricos em vitamina C (reparação do tecido pulmonar)\n→ Magnésio e triptofano (reduzem ansiedade e vontade de fumar)\n→ Fibras e antioxidantes (desintoxicação mais rápida)\n→ Hidratação adequada (elimina toxinas)\n→ Refeições regulares (evitam a compulsão de substituição)\n\nSe você está pensando em parar ou já começou essa jornada:\nExiste suporte profissional para tornar esse processo mais seguro e sustentável.\n\nDra. Aleska Araújo | Nutricionista\nAleena — João Pessoa/PB',
+    hashtags: '#Aleena #DiaMundialSemTabaco #PararDeFumar #NutriçãoAntitabagismo #SaúdePreventiva #NutricionistaJP #JoãoPessoa #SaúdeIntegrativa #DraAleska #VidaSemFumo #NutriçãoFuncional',
+    stories: [
+      { tipo: 'Data', desc: '"31/05 — Dia Mundial Sem Tabaco. A nutrição pode tornar esse processo mais leve. Vai no feed ver como." Link post.' },
+      { tipo: 'Enquete', desc: '"Você ou alguém próximo está tentando parar de fumar?" Sim / Não / Já parei! 🎉' }
+    ]
+  }
+];
+
+
 const CLIENTES = {
   biomexx: {
     nome: 'Biomexx',
@@ -2976,6 +3207,12 @@ const CLIENTES = {
     mes: 'Maio 2026',
     token: 'sp3v26x',
     posts: POSTS_SERVPROL
+  },
+  aleena: {
+    nome: 'Aleena',
+    mes: 'Maio 2026',
+    token: 'al4n26w',
+    posts: POSTS_ALEENA
   }
 };
 
